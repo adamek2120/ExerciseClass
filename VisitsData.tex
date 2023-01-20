@@ -1,0 +1,2242 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{book}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Data Processing - Visits \& QR},
+  pdfauthor={John F. Adamek},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs}
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+\usepackage{booktabs}
+\usepackage[]{natbib}
+\bibliographystyle{apalike}
+
+\title{Data Processing - Visits \& QR}
+\author{John F. Adamek}
+\date{2020-11-03}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{1}
+\tableofcontents
+}
+\hypertarget{data-processing---qr-data}{%
+\chapter{Data Processing - QR Data}\label{data-processing---qr-data}}
+
+Downloading Raw files from Qualtrics
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Downloaded the raw data files from Qualtrics:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Projects -\textgreater{} ``Group Class Check-In'' -\textgreater{} Data \& Analysis -\textgreater{} Export \& Import -\textgreater{} Export Data -\textgreater{} CSV + Download all fields + Use Choice text
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Saved as: Qualtrics\_raw\_without\_other\_option.csv
+  \end{itemize}
+\item
+  Projects -\textgreater{} ``Group Class Check-In -- Updated with ``other'' option 7/31/17'' -\textgreater{} Data \& Analysis -\textgreater{} Export \& Import -\textgreater{} Export Data -\textgreater{} CSV Download all fields + Use Choice text
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Saved as: Qualtrics\_raw\_with\_other\_option.csv
+  \end{itemize}
+\item
+  Both files were combined into one file separate sheets
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Saved as: QR\_raw\_combined\_data\_separate\_sheets.xlsx
+  \end{itemize}
+\item
+  Files were then combined into one sheet to be used for data cleaning.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A ``Run'' column was created of running numbers from 1 to keep track of each individual row and to merge data on in R in later steps.
+  \item
+    Saved as: Qualtrics\_combined\_rawdata.xlsx
+  \end{itemize}
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Merged Class column and Class-other option column into 1 in excel
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Filtered ``Class'' column by other. Replaced other with the class indicated.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    N = 1067 total instances
+  \item
+    Saved as: Qualtrics\_cleaning.xlsx
+  \end{itemize}
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Cleaned extreme outliers in ``Today'sDate'' that were errors (e.g., 5/28/1017).
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Start, End, Recorded Date were used as a basis.
+\item
+  All month and days were consistent across the three columns. Example:
+\item
+  Saved in: Qualtrics\_cleaning.xlsx
+\end{itemize}
+
+Data Prep in R
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  \textbf{QR\_step1.R}: Loaded Qualtrics\_cleaning.xlsx in R for data cleaning:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Separated time from date into its own column
+\item
+  Identified all instances where ``recorded date'' was before ``todaysdate'' and replaced todays date with the recorded date (n=135)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    LOGIC: Since it is highly unlikely people were logging in their class attendance for future dates, its expected that this was a typing error when manually typing ``todays date'' thus recorded date was determined to be the actual date of class attendance.
+  \end{itemize}
+\item
+  Identified all instances where ``recorded date'' was after ``todaysdate''. (N=845)
+
+  \begin{itemize}
+  \item
+    Saved as: rafter.csv
+  \item
+    Two issues to consisder:
+  \item
+    \begin{enumerate}
+    \def\labelenumi{\arabic{enumi})}
+    \tightlist
+    \item
+      If MONTH and DAY are the same for start date, end date, recorded date and todays date but YEAR is different in todays date = year was changed to reflect recorded year n = 228
+    \end{enumerate}
+  \item
+    \begin{enumerate}
+    \def\labelenumi{\arabic{enumi})}
+    \setcounter{enumi}{1}
+    \tightlist
+    \item
+      Participants were allowed to report PAST class attendances resulting in instances where there are multiple (as much as 8) logs on a single day (illustrated via start,end,recorded date) with the actual date being manually reported in todays date. All instances that aren't satisfied via the first issue above were individually checked and corrected.
+    \end{enumerate}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Saved as: rafter\_clean.csv
+    \item
+      See \textless- recording\_ofme\_cleaning\_rafter.pptx for more info
+    \item
+      Because occurrences part of issue 2 would result in TodaysDate remaining the same. No changes were made here
+    \end{itemize}
+  \end{itemize}
+\item
+  Returned back to R to pick up where we left off before bullet point c.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    **** See r file: QR\_step1.R\\
+  \item
+    Saved as: QR\_cleanned\_07312020.csv
+  \end{itemize}
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  Opened QR\_cleanned\_07312020.csv file outside of R
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  In this excel file -- created a new column ``CorrectDate''
+\item
+  Then condensed Today's Date, r\_before, and r\_after over to ``CorrectDate''
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Filtered ``r\_after'' column by valid dates only(no NAs) -\textgreater{} checked one last time accuracy and then merged to ``CorrectDate'' column.
+  \item
+    Filtered ``r\_before'' column by valid dates only (no NAs) -\textgreater{} checked one last time accuracy and then merged to ``CorrectDate'' column.
+  \item
+    Filtered ``TodaysDate'' column by valid dates only -\textgreater{} checked one last time accuracy and then merged to ``CorrectDate'' column.
+  \item
+    Filtered ``CorrectDate'' column by BLANKS -\textgreater{} checked to make sure r\_after and r\_before columns were all ``NA'' and then merged ``TodaysDate'' to ``CorrectDate''
+  \item
+    No issues with the above.
+  \item
+    This process was checked at the end to ensure no overlap between r\_before and r\_after columns with CorrectDate
+  \end{itemize}
+\item
+  Saved as: QR\_CorrectDate.csv
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{##### Pulling in the data #####}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/QR_Cleaning_Processing_Files"}\NormalTok{)}
+\NormalTok{data <-}\StringTok{ }\KeywordTok{read_excel}\NormalTok{(}\StringTok{"Qualtrics_cleaning.xlsx"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(tidyr)}
+\CommentTok{##### Formatting and Preparing the data ####}
+\CommentTok{# Separates The column by data and time}
+\NormalTok{data <-}\StringTok{ }\KeywordTok{separate}\NormalTok{(data, StartDate, }\DataTypeTok{into=}\KeywordTok{c}\NormalTok{(}\StringTok{"sdate"}\NormalTok{,}\StringTok{"stime"}\NormalTok{), }\DataTypeTok{sep =} \StringTok{" "}\NormalTok{)}
+\NormalTok{data <-}\StringTok{ }\KeywordTok{separate}\NormalTok{(data, EndDate, }\DataTypeTok{into=}\KeywordTok{c}\NormalTok{(}\StringTok{"Edate"}\NormalTok{,}\StringTok{"Etime"}\NormalTok{), }\DataTypeTok{sep =} \StringTok{" "}\NormalTok{)}
+\NormalTok{data <-}\StringTok{ }\KeywordTok{separate}\NormalTok{(data, RecordedDate, }\DataTypeTok{into=}\KeywordTok{c}\NormalTok{(}\StringTok{"Rdate"}\NormalTok{,}\StringTok{"Rtime"}\NormalTok{), }\DataTypeTok{sep =} \StringTok{" "}\NormalTok{)}
+
+\CommentTok{# Removes the time columns}
+\NormalTok{data <-}\StringTok{ }\NormalTok{data[}\OperatorTok{-}\KeywordTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{9}\NormalTok{)]}
+
+\CommentTok{# Converts class type from chr to date}
+\NormalTok{data}\OperatorTok{$}\NormalTok{sdate <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"-"}\NormalTok{,}\StringTok{""}\NormalTok{, data}\OperatorTok{$}\NormalTok{sdate)}
+\NormalTok{data}\OperatorTok{$}\NormalTok{Edate <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"-"}\NormalTok{,}\StringTok{""}\NormalTok{, data}\OperatorTok{$}\NormalTok{Edate)}
+\NormalTok{data}\OperatorTok{$}\NormalTok{Rdate <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"-"}\NormalTok{,}\StringTok{""}\NormalTok{, data}\OperatorTok{$}\NormalTok{Rdate)}
+\NormalTok{data}\OperatorTok{$}\NormalTok{TodaysDate <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"-"}\NormalTok{,}\StringTok{""}\NormalTok{, data}\OperatorTok{$}\NormalTok{TodaysDate)}
+\NormalTok{data}\OperatorTok{$}\NormalTok{sdate <-}\StringTok{ }\KeywordTok{as.Date}\NormalTok{(data}\OperatorTok{$}\NormalTok{sdate, }\DataTypeTok{format=}\StringTok{"%Y%m%d"}\NormalTok{)}
+\NormalTok{data}\OperatorTok{$}\NormalTok{Edate <-}\StringTok{ }\KeywordTok{as.Date}\NormalTok{(data}\OperatorTok{$}\NormalTok{Edate, }\DataTypeTok{format=}\StringTok{"%Y%m%d"}\NormalTok{)}
+\NormalTok{data}\OperatorTok{$}\NormalTok{Rdate <-}\StringTok{ }\KeywordTok{as.Date}\NormalTok{(data}\OperatorTok{$}\NormalTok{Rdate, }\DataTypeTok{format=}\StringTok{"%Y%m%d"}\NormalTok{)}
+\NormalTok{data}\OperatorTok{$}\NormalTok{TodaysDate <-}\StringTok{ }\KeywordTok{as.Date}\NormalTok{(data}\OperatorTok{$}\NormalTok{TodaysDate, }\DataTypeTok{format=}\StringTok{"%Y%m%d"}\NormalTok{)}
+
+\CommentTok{##### Cleaning the Data for instances where Today's Date and Recorded Date does not match ####}
+
+\CommentTok{# Identifies which Recorded dates are before Todays dates and changes Todays Date to Recorded Date}
+\NormalTok{R_before <-}\StringTok{ }\KeywordTok{with}\NormalTok{(data, data[Rdate }\OperatorTok{<}\StringTok{ }\NormalTok{TodaysDate, ])}
+\NormalTok{R_before}\OperatorTok{$}\NormalTok{TodaysDate <-}\StringTok{ }\NormalTok{R_before}\OperatorTok{$}\NormalTok{Rdate}
+
+\CommentTok{# Identifies which Recorded dates are before Todays dates }
+\NormalTok{R_after <-}\StringTok{ }\KeywordTok{with}\NormalTok{(data, data[Rdate }\OperatorTok{>}\StringTok{ }\NormalTok{TodaysDate, ])}
+\CommentTok{# Saves this file to csv. to manually check for whether these were errors in typing the date or not (see data processing steps and/or screen recording)}
+\KeywordTok{write.csv}\NormalTok{(R_after, }\StringTok{"rafter.csv"}\NormalTok{)}
+\CommentTok{# Imports the cleanned rafter file}
+\NormalTok{R_after_cl <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"rafter_clean.csv"}\NormalTok{)}
+
+\CommentTok{# This matches the data on RUN and merges data from R_before and R_after_cl into main data set with others}
+\NormalTok{data}\OperatorTok{$}\NormalTok{r_before <-}\StringTok{ }\NormalTok{R_before}\OperatorTok{$}\NormalTok{TodaysDate[}\KeywordTok{match}\NormalTok{(data}\OperatorTok{$}\NormalTok{Run, R_before}\OperatorTok{$}\NormalTok{Run)]}
+\NormalTok{data}\OperatorTok{$}\NormalTok{r_after <-}\StringTok{ }\NormalTok{R_after_cl}\OperatorTok{$}\NormalTok{TodaysDate[}\KeywordTok{match}\NormalTok{(data}\OperatorTok{$}\NormalTok{Run, R_after_cl}\OperatorTok{$}\NormalTok{Run)]}
+
+\CommentTok{# Writes the data to file}
+\KeywordTok{write.csv}\NormalTok{(data, }\StringTok{"QR_cleanned_07312020.csv"}\NormalTok{)}
+
+\CommentTok{##### End of Step 1: Notes to be done before opening QR_step2.R ####}
+\CommentTok{# After this process I opened the new csv file to ensure accuracy by checking the columns: r_before and r_after}
+\CommentTok{# The changed dates were then merged into a final CorrectDate column.}
+\CommentTok{# When this is completed I continued data cleaning in QR_ID_cleanning}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{5}
+\tightlist
+\item
+  \textbf{QR\_step2.R}: This csv file (QR\_CorrectDate.csv) was then loaded into r:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Dates were separated by month, day, and year and then tallied for all 12 months
+\item
+  Afterwards the IDs were assigned to their appropriate wave
+\item
+  After running this function from the total dataset (obs = 7276) each wave had:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Wave 1 = 1841 obs
+  \item
+    Wave 2 = 1704 obs -\textgreater{} 1705 after correcting (see below)
+  \item
+    Wave 3 = 1389 obs
+  \item
+    Wave 4 = 518 obs
+  \item
+    Wave 5 = 811 obs -\textgreater{} 812 after correcting (see below)
+  \item
+    Wave 6 = 1003 obs -\textgreater{} 1004 after correcting (see below)
+  \item
+    This totals 7266obs
+  \item
+    The missing 10 observations were:
+
+    \begin{enumerate}
+    \def\labelenumi{\arabic{enumi}.}
+    \tightlist
+    \item
+      ID 593 = 3x *IPaddress not found
+    \item
+      ID 365 = 2x *IPaddress universal
+    \item
+      ID 352 = 1x *IPaddress universal
+    \item
+      ID 346 = 1x *Determined to be ID342 after looking up IPaddress
+    \item
+      ID 286 = 1x *Determined to be ID296 after looking up IPaddress
+    \item
+      ID 270 = 1x *Determined to be ID170 after looking up IPaddress
+    \item
+      ID 203 = 1x *IPaddress not found
+    \end{enumerate}
+  \end{itemize}
+\item
+  Each wave (with combined IDs) was then saved into their folder (e.g., Wave1) as a csv (e.g., wave1\_qr.csv)
+\item
+  Each Individual ID was also saved into their Wave folder (e.g ID259.csv)
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{6}
+\tightlist
+\item
+  There were instances where participants kept logging their class attendance after the 12-month frame (e.g., wave 1, ID101 logged class attended on 3/4/2018 -- but wave1 ended 1/31/2018).
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Each wave's combined file was opened (e.g., wave1\_qr.csv) and all data AFTER the 12-month dataframe was removed.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This was then saved with ``clean'' at the end (e.g., wave1\_qr\_clean.csv) so that the original file was not modified which contained the data outside of the 12-month time frame
+  \end{itemize}
+\item
+  Wave 1 = 40 instances
+
+  \begin{itemize}
+  \tightlist
+  \item
+    ID's: 101, 128, 132, 134, 141, ,143, 158
+  \end{itemize}
+\item
+  Wave 2 = 5 instances (ID204 was determined to be ID294{[}wave5{]} based on date, IPAddress, and class type)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    ID's 156, 172, 183
+  \end{itemize}
+\item
+  Wave 3 = 11 instances (ID232 was changed from 11/7/2017 to 11/7/2018)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    ID's: 215, 217, 221, 223, 243, 244
+  \end{itemize}
+\item
+  Wave 4 = 5 instances
+
+  \begin{itemize}
+  \tightlist
+  \item
+    ID's: 259, 288
+  \item
+    Wave 5 = 3 instances (ID 306 was changed from 3/23/2018 to 3/26/2019)
+  \item
+    ID: 296
+  \item
+    Wave 6 = 85 instances (April\&May removed due to refinery being closed)
+  \item
+    *Due to COVID-19 many participants logged classes they attended at home, yard work, neighborhood walking, etc.
+  \item
+    ID326 changed from 6/3/2018 to 6/5/2019
+  \item
+    ID342 changed from 9/19/2018 to 9/20/2019
+  \end{itemize}
+\item
+  *BEFORE ANY REMOVING, DATA WAS VERIFIED WITH RAW DATAFILE (QR\_raw\_combined\_data\_separate\_sheets.xlsx)
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{##### Libraries #####}
+\KeywordTok{library}\NormalTok{(tidyr)}
+\KeywordTok{library}\NormalTok{(haven)}
+\KeywordTok{library}\NormalTok{(dplyr)}
+
+\CommentTok{##### Pulling in the data ####}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/QR_Cleaning_Processing_Files"}\NormalTok{)}
+\NormalTok{data <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"QR_CorrectDate.csv"}\NormalTok{)}
+\NormalTok{data <-}\StringTok{ }\NormalTok{data[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{10}\NormalTok{)]}
+
+\CommentTok{##### Formatting and Preparing the data ####}
+
+\CommentTok{# This uses the separate function to separate the date by month, day, and year}
+\NormalTok{new =}\StringTok{ }\KeywordTok{separate}\NormalTok{(data, }\DataTypeTok{col =}\NormalTok{ CorrectDate, }\DataTypeTok{into =} \KeywordTok{c}\NormalTok{(}\StringTok{"Month"}\NormalTok{,}\StringTok{"Day"}\NormalTok{, }\StringTok{"Year"}\NormalTok{), }\DataTypeTok{sep =} \StringTok{"/"}\NormalTok{)}
+
+\CommentTok{# This tallys their attendance (via class attendence) per month}
+\NormalTok{new}\OperatorTok{$}\NormalTok{feb <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(new}\OperatorTok{$}\NormalTok{Month }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\NormalTok{new}\OperatorTok{$}\NormalTok{mar <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(new}\OperatorTok{$}\NormalTok{Month }\OperatorTok{==}\StringTok{ }\DecValTok{3}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\NormalTok{new}\OperatorTok{$}\NormalTok{apr <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(new}\OperatorTok{$}\NormalTok{Month }\OperatorTok{==}\StringTok{ }\DecValTok{4}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\NormalTok{new}\OperatorTok{$}\NormalTok{may <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(new}\OperatorTok{$}\NormalTok{Month }\OperatorTok{==}\StringTok{ }\DecValTok{5}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\NormalTok{new}\OperatorTok{$}\NormalTok{june <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(new}\OperatorTok{$}\NormalTok{Month }\OperatorTok{==}\StringTok{ }\DecValTok{6}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\NormalTok{new}\OperatorTok{$}\NormalTok{july <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(new}\OperatorTok{$}\NormalTok{Month }\OperatorTok{==}\StringTok{ }\DecValTok{7}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\NormalTok{new}\OperatorTok{$}\NormalTok{aug <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(new}\OperatorTok{$}\NormalTok{Month }\OperatorTok{==}\StringTok{ }\DecValTok{8}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\NormalTok{new}\OperatorTok{$}\NormalTok{sep <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(new}\OperatorTok{$}\NormalTok{Month }\OperatorTok{==}\StringTok{ }\DecValTok{9}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\NormalTok{new}\OperatorTok{$}\NormalTok{oct <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(new}\OperatorTok{$}\NormalTok{Month }\OperatorTok{==}\StringTok{ }\DecValTok{10}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\NormalTok{new}\OperatorTok{$}\NormalTok{nov <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(new}\OperatorTok{$}\NormalTok{Month }\OperatorTok{==}\StringTok{ }\DecValTok{11}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\NormalTok{new}\OperatorTok{$}\NormalTok{dec <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(new}\OperatorTok{$}\NormalTok{Month }\OperatorTok{==}\StringTok{ }\DecValTok{12}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\NormalTok{new}\OperatorTok{$}\NormalTok{jan <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(new}\OperatorTok{$}\NormalTok{Month }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+
+\CommentTok{# ID's filtered by Waves}
+\NormalTok{wave1 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{101}\NormalTok{,    }\DecValTok{102}\NormalTok{,    }\DecValTok{103}\NormalTok{,    }\DecValTok{104}\NormalTok{,    }\DecValTok{105}\NormalTok{,    }\DecValTok{106}\NormalTok{,    }\DecValTok{107}\NormalTok{,    }\DecValTok{108}\NormalTok{,    }\DecValTok{109}\NormalTok{,    }\DecValTok{110}\NormalTok{,    }\DecValTok{111}\NormalTok{,    }\DecValTok{112}\NormalTok{,    }\DecValTok{113}\NormalTok{,    }\DecValTok{114}\NormalTok{,    }\DecValTok{115}\NormalTok{,    }\DecValTok{116}\NormalTok{,    }\DecValTok{117}\NormalTok{,    }\DecValTok{118}\NormalTok{,    }\DecValTok{120}\NormalTok{,    }\DecValTok{121}\NormalTok{,    }\DecValTok{122}\NormalTok{,    }\DecValTok{123}\NormalTok{,}
+           \DecValTok{124}\NormalTok{, }\DecValTok{125}\NormalTok{,    }\DecValTok{126}\NormalTok{,    }\DecValTok{127}\NormalTok{,    }\DecValTok{128}\NormalTok{,    }\DecValTok{129}\NormalTok{,    }\DecValTok{131}\NormalTok{,    }\DecValTok{132}\NormalTok{,    }\DecValTok{134}\NormalTok{,    }\DecValTok{135}\NormalTok{,    }\DecValTok{136}\NormalTok{,    }\DecValTok{137}\NormalTok{,    }\DecValTok{139}\NormalTok{,    }\DecValTok{141}\NormalTok{,    }\DecValTok{142}\NormalTok{,    }\DecValTok{143}\NormalTok{,    }\DecValTok{146}\NormalTok{,    }\DecValTok{147}\NormalTok{,    }\DecValTok{150}\NormalTok{,    }\DecValTok{151}\NormalTok{,    }\DecValTok{152}\NormalTok{,    }\DecValTok{153}\NormalTok{,    }\DecValTok{155}\NormalTok{,}
+           \DecValTok{157}\NormalTok{, }\DecValTok{158}\NormalTok{,    }\DecValTok{161}\NormalTok{,    }\DecValTok{162}\NormalTok{)}
+\NormalTok{wave2 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{133}\NormalTok{, }\DecValTok{138}\NormalTok{,  }\DecValTok{144}\NormalTok{,  }\DecValTok{149}\NormalTok{,  }\DecValTok{154}\NormalTok{,  }\DecValTok{156}\NormalTok{,  }\DecValTok{159}\NormalTok{,  }\DecValTok{160}\NormalTok{,  }\DecValTok{167}\NormalTok{,  }\DecValTok{168}\NormalTok{,  }\DecValTok{169}\NormalTok{,  }\DecValTok{170}\NormalTok{,  }\DecValTok{171}\NormalTok{,  }\DecValTok{172}\NormalTok{,  }\DecValTok{173}\NormalTok{,  }\DecValTok{174}\NormalTok{,  }\DecValTok{175}\NormalTok{,  }\DecValTok{176}\NormalTok{,  }\DecValTok{177}\NormalTok{,  }\DecValTok{178}\NormalTok{,  }\DecValTok{179}\NormalTok{,  }\DecValTok{181}\NormalTok{,  }\DecValTok{182}\NormalTok{,}
+           \DecValTok{183}\NormalTok{, }\DecValTok{184}\NormalTok{,  }\DecValTok{185}\NormalTok{,  }\DecValTok{186}\NormalTok{,  }\DecValTok{187}\NormalTok{,  }\DecValTok{188}\NormalTok{,  }\DecValTok{189}\NormalTok{,  }\DecValTok{190}\NormalTok{,  }\DecValTok{191}\NormalTok{,  }\DecValTok{192}\NormalTok{,  }\DecValTok{193}\NormalTok{,  }\DecValTok{194}\NormalTok{,  }\DecValTok{195}\NormalTok{,  }\DecValTok{196}\NormalTok{,  }\DecValTok{197}\NormalTok{,  }\DecValTok{198}\NormalTok{,  }\DecValTok{199}\NormalTok{,  }\DecValTok{200}\NormalTok{,  }\DecValTok{201}\NormalTok{,  }\DecValTok{202}\NormalTok{,  }\DecValTok{204}\NormalTok{,  }\DecValTok{205}\NormalTok{,  }\DecValTok{206}\NormalTok{)}
+\NormalTok{wave3 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{207}\NormalTok{, }\DecValTok{208}\NormalTok{,  }\DecValTok{209}\NormalTok{,  }\DecValTok{210}\NormalTok{,  }\DecValTok{211}\NormalTok{,  }\DecValTok{212}\NormalTok{,  }\DecValTok{213}\NormalTok{,  }\DecValTok{215}\NormalTok{,  }\DecValTok{216}\NormalTok{,  }\DecValTok{217}\NormalTok{,  }\DecValTok{218}\NormalTok{,  }\DecValTok{219}\NormalTok{,  }\DecValTok{220}\NormalTok{,  }\DecValTok{221}\NormalTok{,  }\DecValTok{222}\NormalTok{,  }\DecValTok{223}\NormalTok{,  }\DecValTok{224}\NormalTok{,  }\DecValTok{225}\NormalTok{,  }\DecValTok{226}\NormalTok{,  }\DecValTok{227}\NormalTok{,  }\DecValTok{229}\NormalTok{,  }\DecValTok{230}\NormalTok{,  }\DecValTok{231}\NormalTok{,}
+           \DecValTok{232}\NormalTok{, }\DecValTok{233}\NormalTok{,  }\DecValTok{234}\NormalTok{,  }\DecValTok{237}\NormalTok{,  }\DecValTok{238}\NormalTok{,  }\DecValTok{239}\NormalTok{,  }\DecValTok{240}\NormalTok{,  }\DecValTok{241}\NormalTok{,  }\DecValTok{242}\NormalTok{,  }\DecValTok{243}\NormalTok{,  }\DecValTok{244}\NormalTok{,  }\DecValTok{245}\NormalTok{,  }\DecValTok{247}\NormalTok{,  }\DecValTok{248}\NormalTok{,  }\DecValTok{249}\NormalTok{,  }\DecValTok{250}\NormalTok{,  }\DecValTok{251}\NormalTok{,  }\DecValTok{252}\NormalTok{,  }\DecValTok{253}\NormalTok{,  }\DecValTok{254}\NormalTok{,  }\DecValTok{255}\NormalTok{,  }\DecValTok{256}\NormalTok{,  }\DecValTok{257}\NormalTok{, }
+           \DecValTok{258}\NormalTok{)}
+\NormalTok{wave4 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{214}\NormalTok{, }\DecValTok{259}\NormalTok{,    }\DecValTok{260}\NormalTok{,    }\DecValTok{261}\NormalTok{,    }\DecValTok{262}\NormalTok{,    }\DecValTok{263}\NormalTok{,    }\DecValTok{264}\NormalTok{,    }\DecValTok{265}\NormalTok{,    }\DecValTok{266}\NormalTok{,    }\DecValTok{267}\NormalTok{,    }\DecValTok{268}\NormalTok{,    }\DecValTok{269}\NormalTok{,    }\DecValTok{271}\NormalTok{,    }\DecValTok{273}\NormalTok{,    }\DecValTok{274}\NormalTok{,    }\DecValTok{275}\NormalTok{,    }\DecValTok{277}\NormalTok{,    }\DecValTok{278}\NormalTok{,    }\DecValTok{279}\NormalTok{,    }\DecValTok{280}\NormalTok{,    }\DecValTok{281}\NormalTok{,    }\DecValTok{282}\NormalTok{,    }\DecValTok{283}\NormalTok{,}
+           \DecValTok{284}\NormalTok{, }\DecValTok{285}\NormalTok{,    }\DecValTok{287}\NormalTok{,    }\DecValTok{288}\NormalTok{,    }\DecValTok{289}\NormalTok{,    }\DecValTok{291}\NormalTok{)}
+\NormalTok{wave5 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{292}\NormalTok{, }\DecValTok{293}\NormalTok{,    }\DecValTok{294}\NormalTok{,    }\DecValTok{295}\NormalTok{,    }\DecValTok{296}\NormalTok{,    }\DecValTok{297}\NormalTok{,    }\DecValTok{298}\NormalTok{,    }\DecValTok{299}\NormalTok{,    }\DecValTok{300}\NormalTok{,    }\DecValTok{301}\NormalTok{,    }\DecValTok{302}\NormalTok{,    }\DecValTok{303}\NormalTok{,    }\DecValTok{304}\NormalTok{,    }\DecValTok{305}\NormalTok{,    }\DecValTok{306}\NormalTok{,    }\DecValTok{307}\NormalTok{,    }\DecValTok{308}\NormalTok{,    }\DecValTok{309}\NormalTok{,    }\DecValTok{310}\NormalTok{,    }\DecValTok{311}\NormalTok{,    }\DecValTok{312}\NormalTok{,    }\DecValTok{313}\NormalTok{,    }\DecValTok{314}\NormalTok{)}
+\NormalTok{wave6 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{316}\NormalTok{, }\DecValTok{317}\NormalTok{,    }\DecValTok{318}\NormalTok{,    }\DecValTok{319}\NormalTok{,    }\DecValTok{321}\NormalTok{,    }\DecValTok{322}\NormalTok{,    }\DecValTok{323}\NormalTok{,    }\DecValTok{324}\NormalTok{,    }\DecValTok{325}\NormalTok{,    }\DecValTok{326}\NormalTok{,    }\DecValTok{327}\NormalTok{,    }\DecValTok{328}\NormalTok{,    }\DecValTok{329}\NormalTok{,    }\DecValTok{330}\NormalTok{,    }\DecValTok{331}\NormalTok{,    }\DecValTok{332}\NormalTok{,    }\DecValTok{333}\NormalTok{,    }\DecValTok{334}\NormalTok{,    }\DecValTok{335}\NormalTok{,    }\DecValTok{336}\NormalTok{,    }\DecValTok{338}\NormalTok{,    }\DecValTok{339}\NormalTok{,    }\DecValTok{341}\NormalTok{,}
+           \DecValTok{342}\NormalTok{, }\DecValTok{343}\NormalTok{,  }\DecValTok{344}\NormalTok{,  }\DecValTok{345}\NormalTok{,    }\DecValTok{347}\NormalTok{,    }\DecValTok{348}\NormalTok{,    }\DecValTok{349}\NormalTok{,    }\DecValTok{350}\NormalTok{,    }\DecValTok{351}\NormalTok{,    }\DecValTok{353}\NormalTok{,    }\DecValTok{354}\NormalTok{,    }\DecValTok{355}\NormalTok{,    }\DecValTok{356}\NormalTok{,    }\DecValTok{357}\NormalTok{,    }\DecValTok{358}\NormalTok{)}
+
+\CommentTok{# Separating ID's into their appropriate waves and saves them as raw files by waves}
+\NormalTok{wave1_qr <-}\StringTok{ }\NormalTok{new[new}\OperatorTok{$}\NormalTok{ID }\OperatorTok{%in%}\StringTok{ }\NormalTok{wave1,]}
+\NormalTok{wave2_qr <-}\StringTok{ }\NormalTok{new[new}\OperatorTok{$}\NormalTok{ID }\OperatorTok{%in%}\StringTok{ }\NormalTok{wave2,]}
+\NormalTok{wave3_qr <-}\StringTok{ }\NormalTok{new[new}\OperatorTok{$}\NormalTok{ID }\OperatorTok{%in%}\StringTok{ }\NormalTok{wave3,]}
+\NormalTok{wave4_qr <-}\StringTok{ }\NormalTok{new[new}\OperatorTok{$}\NormalTok{ID }\OperatorTok{%in%}\StringTok{ }\NormalTok{wave4,]}
+\NormalTok{wave5_qr <-}\StringTok{ }\NormalTok{new[new}\OperatorTok{$}\NormalTok{ID }\OperatorTok{%in%}\StringTok{ }\NormalTok{wave5,]}
+\NormalTok{wave6_qr <-}\StringTok{ }\NormalTok{new[new}\OperatorTok{$}\NormalTok{ID }\OperatorTok{%in%}\StringTok{ }\NormalTok{wave6,]}
+
+\KeywordTok{write.csv}\NormalTok{(wave1_qr, }\StringTok{"wave1_qr.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(wave2_qr, }\StringTok{"wave2_qr.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(wave3_qr, }\StringTok{"wave3_qr.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(wave4_qr, }\StringTok{"wave4_qr.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(wave5_qr, }\StringTok{"wave5_qr.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(wave6_qr, }\StringTok{"wave6_qr.csv"}\NormalTok{)}
+
+\CommentTok{##### Creating separate files for each ID #####}
+
+\CommentTok{#ID100 <- subset(data, ID == 100)}
+\NormalTok{ID101 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{101}\NormalTok{)}
+\NormalTok{ID102 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{102}\NormalTok{)}
+\NormalTok{ID103 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{103}\NormalTok{)}
+\NormalTok{ID104 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{104}\NormalTok{)}
+\NormalTok{ID105 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{105}\NormalTok{)}
+\NormalTok{ID106 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{106}\NormalTok{)}
+\NormalTok{ID107 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{107}\NormalTok{)}
+\NormalTok{ID108 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{108}\NormalTok{)}
+\NormalTok{ID109 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{109}\NormalTok{)}
+\NormalTok{ID110 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{110}\NormalTok{)}
+\NormalTok{ID111 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{111}\NormalTok{)}
+\NormalTok{ID112 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{112}\NormalTok{)}
+\NormalTok{ID113 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{113}\NormalTok{)}
+\NormalTok{ID114 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{114}\NormalTok{)}
+\NormalTok{ID115 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{115}\NormalTok{)}
+\NormalTok{ID116 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{116}\NormalTok{)}
+\NormalTok{ID117 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{117}\NormalTok{)}
+\NormalTok{ID118 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{118}\NormalTok{)}
+
+\NormalTok{ID120 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{120}\NormalTok{)}
+\NormalTok{ID121 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{121}\NormalTok{)}
+\NormalTok{ID122 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{122}\NormalTok{)}
+\NormalTok{ID123 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{123}\NormalTok{)}
+\NormalTok{ID124 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{124}\NormalTok{)}
+\NormalTok{ID125 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{125}\NormalTok{)}
+\NormalTok{ID126 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{126}\NormalTok{)}
+\NormalTok{ID127 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{127}\NormalTok{)}
+\NormalTok{ID128 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{128}\NormalTok{)}
+\NormalTok{ID129 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{129}\NormalTok{)}
+
+\NormalTok{ID131 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{131}\NormalTok{) }
+\NormalTok{ID132 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{132}\NormalTok{)}
+\NormalTok{ID133 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{133}\NormalTok{)}
+\NormalTok{ID134 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{134}\NormalTok{)}
+\NormalTok{ID135 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{135}\NormalTok{)}
+\NormalTok{ID136 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{136}\NormalTok{)}
+\NormalTok{ID137 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{137}\NormalTok{)}
+\CommentTok{#ID138 <- subset(data, ID == 138)}
+\NormalTok{ID139 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{139}\NormalTok{)}
+
+\NormalTok{ID141 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{141}\NormalTok{)}
+\NormalTok{ID142 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{142}\NormalTok{)}
+\NormalTok{ID143 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{143}\NormalTok{)}
+\NormalTok{ID144 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{144}\NormalTok{)}
+
+\NormalTok{ID146 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{146}\NormalTok{)}
+\NormalTok{ID147 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{147}\NormalTok{)}
+
+\NormalTok{ID149 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{149}\NormalTok{)}
+\CommentTok{#ID150 <- subset(data, ID == 150)}
+\NormalTok{ID151 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{151}\NormalTok{)}
+\NormalTok{ID152 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{152}\NormalTok{)}
+\NormalTok{ID153 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{153}\NormalTok{)}
+\NormalTok{ID154 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{154}\NormalTok{)}
+\NormalTok{ID155 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{155}\NormalTok{)}
+\NormalTok{ID156 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{156}\NormalTok{)}
+\NormalTok{ID157 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{157}\NormalTok{)}
+\NormalTok{ID158 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{158}\NormalTok{)}
+\NormalTok{ID159 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{159}\NormalTok{)}
+\CommentTok{#ID160 <- subset(data, ID == 160)}
+\NormalTok{ID161 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{161}\NormalTok{)}
+\NormalTok{ID162 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{162}\NormalTok{)}
+
+
+\NormalTok{ID167 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{167}\NormalTok{)}
+\CommentTok{#ID168 <- subset(new, ID == 168)}
+\NormalTok{ID169 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{169}\NormalTok{)}
+\NormalTok{ID170 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{170}\NormalTok{)}
+\CommentTok{#ID171 <- subset(new, ID == 171)}
+\NormalTok{ID172 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{172}\NormalTok{)}
+\NormalTok{ID173 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{173}\NormalTok{)}
+\NormalTok{ID174 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{174}\NormalTok{)}
+\NormalTok{ID175 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{175}\NormalTok{)}
+\NormalTok{ID176 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{176}\NormalTok{)}
+\NormalTok{ID177 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{177}\NormalTok{)}
+\NormalTok{ID178 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{178}\NormalTok{)}
+\NormalTok{ID179 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{179}\NormalTok{)}
+
+\NormalTok{ID181 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{181}\NormalTok{)}
+\NormalTok{ID182 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{182}\NormalTok{)}
+\NormalTok{ID183 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{183}\NormalTok{)}
+\CommentTok{#ID184 <- subset(new, ID == 184)}
+\NormalTok{ID185 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{185}\NormalTok{)}
+\NormalTok{ID186 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{186}\NormalTok{)}
+\NormalTok{ID187 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{187}\NormalTok{)}
+\NormalTok{ID188 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{188}\NormalTok{)}
+\NormalTok{ID189 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{189}\NormalTok{)}
+\NormalTok{ID190 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{190}\NormalTok{)}
+\NormalTok{ID191 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{191}\NormalTok{)}
+\NormalTok{ID192 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{192}\NormalTok{)}
+\NormalTok{ID193 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{193}\NormalTok{)}
+\NormalTok{ID194 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{194}\NormalTok{)}
+\NormalTok{ID195 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{195}\NormalTok{)}
+\NormalTok{ID196 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{196}\NormalTok{)}
+\NormalTok{ID197 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{197}\NormalTok{)}
+\NormalTok{ID198 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{198}\NormalTok{)}
+\NormalTok{ID199 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{199}\NormalTok{)}
+\NormalTok{ID200 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{200}\NormalTok{)}
+\NormalTok{ID201 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{201}\NormalTok{)}
+\NormalTok{ID202 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{202}\NormalTok{)}
+
+\NormalTok{ID204 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{204}\NormalTok{)}
+\NormalTok{ID205 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{205}\NormalTok{)}
+\NormalTok{ID206 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{206}\NormalTok{)}
+\NormalTok{ID207 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{207}\NormalTok{)}
+\CommentTok{#ID208 <- subset(new, ID == 208)}
+\NormalTok{ID209 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{209}\NormalTok{)}
+\NormalTok{ID210 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{210}\NormalTok{)}
+\CommentTok{#ID211 <- subset(new, ID == 211)}
+\NormalTok{ID212 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{212}\NormalTok{)}
+\CommentTok{#ID213 <- subset(new, ID == 213)}
+\CommentTok{#ID214 <- subset(new, ID == 214)}
+\NormalTok{ID215 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{215}\NormalTok{)}
+\NormalTok{ID216 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{216}\NormalTok{)}
+\NormalTok{ID217 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{217}\NormalTok{)}
+\NormalTok{ID218 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{218}\NormalTok{)}
+\NormalTok{ID219 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{219}\NormalTok{)}
+\CommentTok{#ID220 <- subset(new, ID == 220)}
+\NormalTok{ID221 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{221}\NormalTok{)}
+\CommentTok{#ID222 <- subset(new, ID == 222)}
+\NormalTok{ID223 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{223}\NormalTok{)}
+\NormalTok{ID224 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{224}\NormalTok{)}
+\NormalTok{ID225 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{225}\NormalTok{)}
+\NormalTok{ID226 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{226}\NormalTok{)}
+\NormalTok{ID227 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{227}\NormalTok{)}
+
+\NormalTok{ID229 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{229}\NormalTok{)}
+\NormalTok{ID230 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{230}\NormalTok{)}
+\NormalTok{ID231 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{231}\NormalTok{)}
+\NormalTok{ID232 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{232}\NormalTok{)}
+\NormalTok{ID233 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{233}\NormalTok{)}
+\NormalTok{ID234 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{234}\NormalTok{)}
+
+\NormalTok{ID237 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{237}\NormalTok{)}
+\CommentTok{#ID238 <- subset(data, ID == 238)}
+\NormalTok{ID239 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{239}\NormalTok{)}
+\NormalTok{ID240 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{240}\NormalTok{)}
+\NormalTok{ID241 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{241}\NormalTok{)}
+\NormalTok{ID242 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{242}\NormalTok{)}
+\NormalTok{ID243 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{243}\NormalTok{)}
+\NormalTok{ID244 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{244}\NormalTok{)}
+\NormalTok{ID245 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{245}\NormalTok{)}
+
+\NormalTok{ID247 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{247}\NormalTok{)}
+\NormalTok{ID248 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{248}\NormalTok{)}
+\CommentTok{#ID249 <- subset(data, ID == 249)}
+\NormalTok{ID250 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{250}\NormalTok{)}
+\CommentTok{#ID251 <- subset(data, ID == 251)}
+\NormalTok{ID252 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{252}\NormalTok{)}
+\NormalTok{ID253 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{253}\NormalTok{)}
+\NormalTok{ID254 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{254}\NormalTok{)}
+\NormalTok{ID255 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{255}\NormalTok{)}
+\CommentTok{#ID256 <- subset(new, ID == 256)}
+\NormalTok{ID257 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{257}\NormalTok{)}
+\NormalTok{ID258 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{258}\NormalTok{)}
+\NormalTok{ID259 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{259}\NormalTok{)}
+\NormalTok{ID260 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{260}\NormalTok{)}
+\CommentTok{#ID261 <- subset(new, ID == 261)}
+\NormalTok{ID262 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{262}\NormalTok{)}
+\NormalTok{ID263 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{263}\NormalTok{)}
+\CommentTok{#ID264 <- subset(new, ID == 264)}
+\NormalTok{ID265 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{265}\NormalTok{)}
+\CommentTok{#ID266 <- subset(new, ID == 266)}
+\CommentTok{#ID267 <- subset(new, ID == 267)}
+\NormalTok{ID268 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{268}\NormalTok{)}
+\NormalTok{ID269 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{269}\NormalTok{)}
+
+\NormalTok{ID271 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{271}\NormalTok{)}
+
+\NormalTok{ID273 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{273}\NormalTok{)}
+\CommentTok{#ID274 <- subset(new, ID == 274)}
+\NormalTok{ID275 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{275}\NormalTok{)}
+
+\NormalTok{ID277 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{277}\NormalTok{)}
+\NormalTok{ID278 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{278}\NormalTok{)}
+\NormalTok{ID279 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{279}\NormalTok{)}
+\NormalTok{ID280 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{280}\NormalTok{)}
+\CommentTok{#ID281 <- subset(new, ID == 281)}
+\CommentTok{#ID282 <- subset(new, ID == 282)}
+\NormalTok{ID283 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{283}\NormalTok{)}
+\NormalTok{ID284 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{284}\NormalTok{)}
+\NormalTok{ID285 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{285}\NormalTok{)}
+
+\NormalTok{ID287 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{287}\NormalTok{)}
+\NormalTok{ID288 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{288}\NormalTok{)}
+\NormalTok{ID289 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{289}\NormalTok{)}
+
+\NormalTok{ID291 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{291}\NormalTok{)}
+\CommentTok{#ID292 <- subset(new, ID == 292)}
+\NormalTok{ID293 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{293}\NormalTok{)}
+\NormalTok{ID294 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{294}\NormalTok{)}
+\NormalTok{ID295 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{295}\NormalTok{)}
+\NormalTok{ID296 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{296}\NormalTok{)}
+\NormalTok{ID297 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{297}\NormalTok{)}
+\NormalTok{ID298 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{298}\NormalTok{)}
+\NormalTok{ID299 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{299}\NormalTok{)}
+\NormalTok{ID300 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{300}\NormalTok{)}
+\NormalTok{ID301 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{301}\NormalTok{)}
+\NormalTok{ID302 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{302}\NormalTok{)}
+\NormalTok{ID303 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{303}\NormalTok{)}
+\NormalTok{ID304 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{304}\NormalTok{)}
+\NormalTok{ID305 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{305}\NormalTok{)}
+\NormalTok{ID306 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{306}\NormalTok{)}
+\NormalTok{ID307 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{307}\NormalTok{)}
+\CommentTok{#ID308 <- subset(new, ID == 308)}
+\CommentTok{#ID309 <- subset(new, ID == 309)}
+\NormalTok{ID310 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{310}\NormalTok{)}
+\NormalTok{ID311 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{311}\NormalTok{)}
+\CommentTok{#ID312 <- subset(new, ID == 312)}
+\CommentTok{#ID313 <- subset(new, ID == 313)}
+\CommentTok{#ID314 <- subset(new, ID == 314)}
+
+\NormalTok{ID316 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{316}\NormalTok{)}
+\NormalTok{ID317 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{317}\NormalTok{)}
+\CommentTok{#ID318 <- subset(new, ID == 318)}
+\NormalTok{ID319 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{319}\NormalTok{)}
+
+\NormalTok{ID321 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{321}\NormalTok{)}
+\NormalTok{ID322 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{322}\NormalTok{)}
+\CommentTok{#ID323 <- subset(new, ID == 323)}
+\NormalTok{ID324 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{324}\NormalTok{)}
+\NormalTok{ID325 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{325}\NormalTok{)}
+\NormalTok{ID326 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{326}\NormalTok{)}
+\NormalTok{ID327 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{327}\NormalTok{)}
+\NormalTok{ID328 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{328}\NormalTok{) }
+\NormalTok{ID329 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{329}\NormalTok{)}
+\NormalTok{ID330 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{330}\NormalTok{)}
+\NormalTok{ID331 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{331}\NormalTok{)}
+\NormalTok{ID332 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{332}\NormalTok{)}
+\NormalTok{ID333 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{333}\NormalTok{)}
+\CommentTok{#ID334 <- subset(new, ID == 334)}
+\CommentTok{#ID335 <- subset(new, ID == 335)}
+\CommentTok{#ID336 <- subset(new, ID == 336)}
+
+\NormalTok{ID338 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{338}\NormalTok{)}
+\CommentTok{#ID339 <- subset(new, ID == 339)}
+
+\NormalTok{ID341 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{341}\NormalTok{)}
+\NormalTok{ID342 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{342}\NormalTok{)}
+\NormalTok{ID343 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{343}\NormalTok{)}
+\NormalTok{ID344 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{344}\NormalTok{)}
+\CommentTok{#ID345 <- subset(new, ID == 345)}
+
+\CommentTok{#ID347 <- subset(new, ID == 347)}
+\NormalTok{ID348 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{348}\NormalTok{)}
+\NormalTok{ID349 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{349}\NormalTok{)}
+\NormalTok{ID350 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{350}\NormalTok{)}
+\CommentTok{#ID351 <- subset(new, ID == 351)}
+
+\NormalTok{ID353 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{353}\NormalTok{)}
+\NormalTok{ID354 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{354}\NormalTok{)}
+\NormalTok{ID355 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{355}\NormalTok{)}
+\NormalTok{ID356 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{356}\NormalTok{)}
+\NormalTok{ID357 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(new, ID }\OperatorTok{==}\StringTok{ }\DecValTok{357}\NormalTok{)}
+\CommentTok{#ID358 <- subset(new, ID == 358)}
+
+\CommentTok{##### Saving individual ID's to csv file AND folder #####}
+\KeywordTok{write.csv}\NormalTok{(ID101, }\StringTok{"ID101.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID102, }\StringTok{"ID102.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID103, }\StringTok{"ID103.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID104, }\StringTok{"ID104.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID105, }\StringTok{"ID105.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID106, }\StringTok{"ID106.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID107, }\StringTok{"ID107.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID108, }\StringTok{"ID108.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID109, }\StringTok{"ID109.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID110, }\StringTok{"ID110.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID111, }\StringTok{"ID111.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID112, }\StringTok{"ID112.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID113, }\StringTok{"ID113.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID114, }\StringTok{"ID114.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID115, }\StringTok{"ID115.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID116, }\StringTok{"ID116.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID117, }\StringTok{"ID117.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID118, }\StringTok{"ID118.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID120, }\StringTok{"ID120.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID121, }\StringTok{"ID121.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID122, }\StringTok{"ID122.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID123, }\StringTok{"ID123.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID124, }\StringTok{"ID124.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID125, }\StringTok{"ID125.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID126, }\StringTok{"ID126.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID127, }\StringTok{"ID127.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID128, }\StringTok{"ID128.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID129, }\StringTok{"ID129.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID131, }\StringTok{"ID131.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID132, }\StringTok{"ID132.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID133, }\StringTok{"ID133.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID134, }\StringTok{"ID134.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID135, }\StringTok{"ID135.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID136, }\StringTok{"ID136.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID137, }\StringTok{"ID137.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID139, }\StringTok{"ID139.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID141, }\StringTok{"ID141.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID142, }\StringTok{"ID142.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID143, }\StringTok{"ID143.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID144, }\StringTok{"ID144.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID146, }\StringTok{"ID146.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID147, }\StringTok{"ID147.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID149, }\StringTok{"ID149.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID151, }\StringTok{"ID151.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID152, }\StringTok{"ID152.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID154, }\StringTok{"ID153.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID154, }\StringTok{"ID154.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID155, }\StringTok{"ID155.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID156, }\StringTok{"ID156.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID157, }\StringTok{"ID157.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID158, }\StringTok{"ID158.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID159, }\StringTok{"ID159.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID161, }\StringTok{"ID161.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID162, }\StringTok{"ID162.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID167, }\StringTok{"ID167.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID169, }\StringTok{"ID169.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID170, }\StringTok{"ID170.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID172, }\StringTok{"ID172.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID173, }\StringTok{"ID173.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID174, }\StringTok{"ID174.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID175, }\StringTok{"ID175.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID176, }\StringTok{"ID176.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID177, }\StringTok{"ID177.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID178, }\StringTok{"ID178.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID179, }\StringTok{"ID179.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID181, }\StringTok{"ID181.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID182, }\StringTok{"ID182.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID183, }\StringTok{"ID183.csv"}\NormalTok{)}
+
+\KeywordTok{write.csv}\NormalTok{(ID185, }\StringTok{"ID185.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID186, }\StringTok{"ID186.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID187, }\StringTok{"ID187.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID188, }\StringTok{"ID188.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID189, }\StringTok{"ID189.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID190, }\StringTok{"ID190.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID191, }\StringTok{"ID191.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID192, }\StringTok{"ID192.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID193, }\StringTok{"ID193.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID194, }\StringTok{"ID194.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID195, }\StringTok{"ID195.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID196, }\StringTok{"ID196.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID197, }\StringTok{"ID197.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID198, }\StringTok{"ID198.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID199, }\StringTok{"ID199.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID200, }\StringTok{"ID200.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID201, }\StringTok{"ID201.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID202, }\StringTok{"ID202.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID204, }\StringTok{"ID204.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID205, }\StringTok{"ID205.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID206, }\StringTok{"ID206.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID207, }\StringTok{"ID207.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID209, }\StringTok{"ID209.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID210, }\StringTok{"ID210.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID212, }\StringTok{"ID212.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID215, }\StringTok{"ID215.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID216, }\StringTok{"ID216.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID217, }\StringTok{"ID217.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID218, }\StringTok{"ID218.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID219, }\StringTok{"ID219.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID221, }\StringTok{"ID221.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID223, }\StringTok{"ID223.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID224, }\StringTok{"ID224.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID225, }\StringTok{"ID225.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID226, }\StringTok{"ID226.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID227, }\StringTok{"ID227.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID229, }\StringTok{"ID229.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID230, }\StringTok{"ID230.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID231, }\StringTok{"ID231.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID232, }\StringTok{"ID232.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID233, }\StringTok{"ID233.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID234, }\StringTok{"ID234.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID237, }\StringTok{"ID237.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID239, }\StringTok{"ID239.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID240, }\StringTok{"ID240.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID241, }\StringTok{"ID241.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID242, }\StringTok{"ID242.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID243, }\StringTok{"ID243.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID244, }\StringTok{"ID244.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID245, }\StringTok{"ID245.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID247, }\StringTok{"ID247.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID248, }\StringTok{"ID248.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID250, }\StringTok{"ID250.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID252, }\StringTok{"ID252.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID253, }\StringTok{"ID253.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID254, }\StringTok{"ID254.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID255, }\StringTok{"ID255.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID257, }\StringTok{"ID257.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID258, }\StringTok{"ID258.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID259, }\StringTok{"ID259.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID260, }\StringTok{"ID260.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID262, }\StringTok{"ID262.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID263, }\StringTok{"ID263.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID265, }\StringTok{"ID265.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID268, }\StringTok{"ID268.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID269, }\StringTok{"ID269.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID271, }\StringTok{"ID271.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID273, }\StringTok{"ID273.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID275, }\StringTok{"ID275.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID277, }\StringTok{"ID277.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID278, }\StringTok{"ID278.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID279, }\StringTok{"ID279.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID280, }\StringTok{"ID280.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID283, }\StringTok{"ID283.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID284, }\StringTok{"ID284.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID285, }\StringTok{"ID285.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID287, }\StringTok{"ID287.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID288, }\StringTok{"ID288.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID289, }\StringTok{"ID289.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID291, }\StringTok{"ID291.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID293, }\StringTok{"ID293.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID294, }\StringTok{"ID294.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID295, }\StringTok{"ID295.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID296, }\StringTok{"ID296.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID297, }\StringTok{"ID297.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID298, }\StringTok{"ID298.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID299, }\StringTok{"ID299.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID300, }\StringTok{"ID300.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID301, }\StringTok{"ID301.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID302, }\StringTok{"ID302.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID303, }\StringTok{"ID303.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID304, }\StringTok{"ID304.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID305, }\StringTok{"ID305.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID306, }\StringTok{"ID306.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID307, }\StringTok{"ID307.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID310, }\StringTok{"ID310.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID311, }\StringTok{"ID311.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID316, }\StringTok{"ID316.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID317, }\StringTok{"ID317.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID319, }\StringTok{"ID319.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID321, }\StringTok{"ID321.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID322, }\StringTok{"ID322.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID324, }\StringTok{"ID324.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID325, }\StringTok{"ID325.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID326, }\StringTok{"ID326.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID327, }\StringTok{"ID327.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID328, }\StringTok{"ID328.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID329, }\StringTok{"ID329.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID330, }\StringTok{"ID330.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID331, }\StringTok{"ID331.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID332, }\StringTok{"ID332.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID333, }\StringTok{"ID333.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID338, }\StringTok{"ID338.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID341, }\StringTok{"ID341.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID342, }\StringTok{"ID342.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID343, }\StringTok{"ID343.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID344, }\StringTok{"ID344.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID348, }\StringTok{"ID348.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID349, }\StringTok{"ID349.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID350, }\StringTok{"ID350.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID353, }\StringTok{"ID353.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID354, }\StringTok{"ID354.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID355, }\StringTok{"ID355.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID356, }\StringTok{"ID356.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(ID357, }\StringTok{"ID357.csv"}\NormalTok{)}
+
+
+\CommentTok{##### End of Step 2: Notes to be done before opening QR_step3.R #####}
+\CommentTok{# Next step: Opened each ID's csv file to check for accuracy and ensure data is within the 12-month window. A couple IDs (i.e., 101) continue}
+\CommentTok{# going to the gym after the studies 12-months and future dates needed to be removed}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{7}
+\tightlist
+\item
+  \textbf{QR\_step3.R:} Each waves clean csv file (e.g., wave1\_qr\_clean.csv) was loaded into r
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Data was aggregated and summed so that the resulting file included a single row of each ID with each months class attendance summed for that particular ID
+\item
+  A Total class attendance column was created at the end
+\item
+  ``Wave'' column was added
+\item
+  Names of month was changed from jan, feb \ldots{} into month 1 month 2 \ldots{}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This was different for even and odd months -- obviously
+  \item
+    Order of months/columns were reordered
+  \end{itemize}
+\item
+  Results were then saved for each individual wave as: w1\_final.csv
+\item
+  In this file some ``visualization'' was done for plotting -- though this is insignificant for the data processing steps.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Aggregating and formating data #}
+\CommentTok{##### Pulling in the data #####}
+\CommentTok{# Get wave 1 data}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave1"}\NormalTok{)}
+\NormalTok{w1_data <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave1_qr_clean.csv"}\NormalTok{)}
+\CommentTok{# Get wave 2 data}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave2"}\NormalTok{)}
+\NormalTok{w2_data <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave2_qr_clean.csv"}\NormalTok{)}
+\CommentTok{# Get wave 3 data}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave3"}\NormalTok{)}
+\NormalTok{w3_data <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave3_qr_clean.csv"}\NormalTok{)}
+\CommentTok{# Get wave 4 data}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave4"}\NormalTok{)}
+\NormalTok{w4_data <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave4_qr_clean.csv"}\NormalTok{)}
+\CommentTok{# Get wave 5 data}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave5"}\NormalTok{)}
+\NormalTok{w5_data <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave5_qr_clean.csv"}\NormalTok{)}
+\CommentTok{# Get wave 6 data}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave6"}\NormalTok{)}
+\NormalTok{w6_data <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave6_qr_clean.csv"}\NormalTok{)}
+
+\CommentTok{##### Preparing and Processing the data to aggregate #####}
+
+\CommentTok{# The Below codes aggregates each months class attendance by ID. Final variable includes 1 row for each ID with month totals }
+\NormalTok{w1_final <-}\StringTok{ }\NormalTok{w1_data[}\OperatorTok{-}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{)]                          }\CommentTok{# Makes dataframe of just the ID's and months}
+\NormalTok{w1_final <-}\StringTok{ }\KeywordTok{aggregate}\NormalTok{(.}\OperatorTok{~}\NormalTok{ID, w1_final, sum)               }\CommentTok{# aggregates total for each month and YTD}
+\NormalTok{w1_final}\OperatorTok{$}\NormalTok{Total_YTD <-}\StringTok{ }\KeywordTok{rowSums}\NormalTok{(w1_final[}\OperatorTok{-}\DecValTok{1}\NormalTok{])            }\CommentTok{# This [-1] is to make sure the ID # isn't summed as well}
+
+\NormalTok{w2_final <-}\StringTok{ }\NormalTok{w2_data[}\OperatorTok{-}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{)]                         }
+\NormalTok{w2_final <-}\StringTok{ }\KeywordTok{aggregate}\NormalTok{(.}\OperatorTok{~}\NormalTok{ID, w2_final, sum)              }
+\NormalTok{w2_final}\OperatorTok{$}\NormalTok{Total_YTD <-}\StringTok{ }\KeywordTok{rowSums}\NormalTok{(w2_final[}\OperatorTok{-}\DecValTok{1}\NormalTok{])            }
+
+\NormalTok{w3_final <-}\StringTok{ }\NormalTok{w3_data[}\OperatorTok{-}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{)]                         }
+\NormalTok{w3_final <-}\StringTok{ }\KeywordTok{aggregate}\NormalTok{(.}\OperatorTok{~}\NormalTok{ID, w3_final, sum)              }
+\NormalTok{w3_final}\OperatorTok{$}\NormalTok{Total_YTD <-}\StringTok{ }\KeywordTok{rowSums}\NormalTok{(w3_final[}\OperatorTok{-}\DecValTok{1}\NormalTok{]) }
+
+\NormalTok{w4_final <-}\StringTok{ }\NormalTok{w4_data[}\OperatorTok{-}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{)]                         }
+\NormalTok{w4_final <-}\StringTok{ }\KeywordTok{aggregate}\NormalTok{(.}\OperatorTok{~}\NormalTok{ID, w4_final, sum)              }
+\NormalTok{w4_final}\OperatorTok{$}\NormalTok{Total_YTD <-}\StringTok{ }\KeywordTok{rowSums}\NormalTok{(w4_final[}\OperatorTok{-}\DecValTok{1}\NormalTok{]) }
+
+\NormalTok{w5_final <-}\StringTok{ }\NormalTok{w5_data[}\OperatorTok{-}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{)]                         }
+\NormalTok{w5_final <-}\StringTok{ }\KeywordTok{aggregate}\NormalTok{(.}\OperatorTok{~}\NormalTok{ID, w5_final, sum)              }
+\NormalTok{w5_final}\OperatorTok{$}\NormalTok{Total_YTD <-}\StringTok{ }\KeywordTok{rowSums}\NormalTok{(w5_final[}\OperatorTok{-}\DecValTok{1}\NormalTok{]) }
+
+\NormalTok{w6_final <-}\StringTok{ }\NormalTok{w6_data[}\OperatorTok{-}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{)]                         }
+\NormalTok{w6_final <-}\StringTok{ }\KeywordTok{aggregate}\NormalTok{(.}\OperatorTok{~}\NormalTok{ID, w6_final, sum)              }
+\NormalTok{w6_final}\OperatorTok{$}\NormalTok{Total_YTD <-}\StringTok{ }\KeywordTok{rowSums}\NormalTok{(w6_final[}\OperatorTok{-}\DecValTok{1}\NormalTok{]) }
+
+\CommentTok{# Adds column indicating wave}
+\NormalTok{w1_final}\OperatorTok{$}\NormalTok{wave <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(w1_final))}
+\NormalTok{w2_final}\OperatorTok{$}\NormalTok{wave <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{2}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(w2_final))}
+\NormalTok{w3_final}\OperatorTok{$}\NormalTok{wave <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{3}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(w3_final))}
+\NormalTok{w4_final}\OperatorTok{$}\NormalTok{wave <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{4}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(w4_final))}
+\NormalTok{w5_final}\OperatorTok{$}\NormalTok{wave <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{5}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(w5_final))}
+\NormalTok{w6_final}\OperatorTok{$}\NormalTok{wave <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{6}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(w6_final))}
+
+\CommentTok{# Labels Month 1, month 2 ... for each wave}
+\KeywordTok{colnames}\NormalTok{(w1_final) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"ID"}\NormalTok{, }\StringTok{"Month1"}\NormalTok{, }\StringTok{"Month2"}\NormalTok{, }\StringTok{"Month3"}\NormalTok{, }\StringTok{"Month4"}\NormalTok{, }\StringTok{"Month5"}\NormalTok{, }\StringTok{"Month6"}\NormalTok{, }\StringTok{"Month7"}\NormalTok{, }\StringTok{"Month8"}\NormalTok{, }\StringTok{"Month9"}\NormalTok{, }\StringTok{"Month10"}\NormalTok{, }\StringTok{"Month11"}\NormalTok{, }\StringTok{"Month12"}\NormalTok{, }\StringTok{"YearAVG"}\NormalTok{, }\StringTok{"wave"}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(w3_final) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"ID"}\NormalTok{, }\StringTok{"Month1"}\NormalTok{, }\StringTok{"Month2"}\NormalTok{, }\StringTok{"Month3"}\NormalTok{, }\StringTok{"Month4"}\NormalTok{, }\StringTok{"Month5"}\NormalTok{, }\StringTok{"Month6"}\NormalTok{, }\StringTok{"Month7"}\NormalTok{, }\StringTok{"Month8"}\NormalTok{, }\StringTok{"Month9"}\NormalTok{, }\StringTok{"Month10"}\NormalTok{, }\StringTok{"Month11"}\NormalTok{, }\StringTok{"Month12"}\NormalTok{, }\StringTok{"YearAVG"}\NormalTok{, }\StringTok{"wave"}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(w5_final) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"ID"}\NormalTok{, }\StringTok{"Month1"}\NormalTok{, }\StringTok{"Month2"}\NormalTok{, }\StringTok{"Month3"}\NormalTok{, }\StringTok{"Month4"}\NormalTok{, }\StringTok{"Month5"}\NormalTok{, }\StringTok{"Month6"}\NormalTok{, }\StringTok{"Month7"}\NormalTok{, }\StringTok{"Month8"}\NormalTok{, }\StringTok{"Month9"}\NormalTok{, }\StringTok{"Month10"}\NormalTok{, }\StringTok{"Month11"}\NormalTok{, }\StringTok{"Month12"}\NormalTok{, }\StringTok{"YearAVG"}\NormalTok{, }\StringTok{"wave"}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(w2_final) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"ID"}\NormalTok{, }\StringTok{"Month9"}\NormalTok{, }\StringTok{"Month10"}\NormalTok{, }\StringTok{"Month11"}\NormalTok{, }\StringTok{"Month12"}\NormalTok{, }\StringTok{"Month1"}\NormalTok{, }\StringTok{"Month2"}\NormalTok{, }\StringTok{"Month3"}\NormalTok{, }\StringTok{"Month4"}\NormalTok{, }\StringTok{"Month5"}\NormalTok{, }\StringTok{"Month6"}\NormalTok{, }\StringTok{"Month7"}\NormalTok{, }\StringTok{"Month8"}\NormalTok{, }\StringTok{"YearAVG"}\NormalTok{, }\StringTok{"wave"}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(w4_final) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"ID"}\NormalTok{, }\StringTok{"Month9"}\NormalTok{, }\StringTok{"Month10"}\NormalTok{, }\StringTok{"Month11"}\NormalTok{, }\StringTok{"Month12"}\NormalTok{, }\StringTok{"Month1"}\NormalTok{, }\StringTok{"Month2"}\NormalTok{, }\StringTok{"Month3"}\NormalTok{, }\StringTok{"Month4"}\NormalTok{, }\StringTok{"Month5"}\NormalTok{, }\StringTok{"Month6"}\NormalTok{, }\StringTok{"Month7"}\NormalTok{, }\StringTok{"Month8"}\NormalTok{, }\StringTok{"YearAVG"}\NormalTok{, }\StringTok{"wave"}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(w6_final) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"ID"}\NormalTok{, }\StringTok{"Month9"}\NormalTok{, }\StringTok{"Month10"}\NormalTok{, }\StringTok{"Month11"}\NormalTok{, }\StringTok{"Month12"}\NormalTok{, }\StringTok{"Month1"}\NormalTok{, }\StringTok{"Month2"}\NormalTok{, }\StringTok{"Month3"}\NormalTok{, }\StringTok{"Month4"}\NormalTok{, }\StringTok{"Month5"}\NormalTok{, }\StringTok{"Month6"}\NormalTok{, }\StringTok{"Month7"}\NormalTok{, }\StringTok{"Month8"}\NormalTok{, }\StringTok{"YearAVG"}\NormalTok{, }\StringTok{"wave"}\NormalTok{)}
+
+\CommentTok{# Puts Waves 2,4,6 columns in correct order ("month1, month2...) and puts "wave" into the 2nd column position}
+\NormalTok{w1_final <-}\StringTok{ }\NormalTok{w1_final[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{15}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{10}\NormalTok{,}\DecValTok{11}\NormalTok{,}\DecValTok{12}\NormalTok{,}\DecValTok{13}\NormalTok{,}\DecValTok{14}\NormalTok{)]}
+\NormalTok{w2_final <-}\StringTok{ }\NormalTok{w2_final[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{15}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{10}\NormalTok{,}\DecValTok{11}\NormalTok{,}\DecValTok{12}\NormalTok{,}\DecValTok{13}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{14}\NormalTok{)]}
+\NormalTok{w3_final <-}\StringTok{ }\NormalTok{w3_final[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{15}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{10}\NormalTok{,}\DecValTok{11}\NormalTok{,}\DecValTok{12}\NormalTok{,}\DecValTok{13}\NormalTok{,}\DecValTok{14}\NormalTok{)]}
+\NormalTok{w4_final <-}\StringTok{ }\NormalTok{w4_final[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{15}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{10}\NormalTok{,}\DecValTok{11}\NormalTok{,}\DecValTok{12}\NormalTok{,}\DecValTok{13}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{14}\NormalTok{)]}
+\NormalTok{w5_final <-}\StringTok{ }\NormalTok{w5_final[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{15}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{10}\NormalTok{,}\DecValTok{11}\NormalTok{,}\DecValTok{12}\NormalTok{,}\DecValTok{13}\NormalTok{,}\DecValTok{14}\NormalTok{)]}
+\NormalTok{w6_final <-}\StringTok{ }\NormalTok{w6_final[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{15}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{10}\NormalTok{,}\DecValTok{11}\NormalTok{,}\DecValTok{12}\NormalTok{,}\DecValTok{13}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{14}\NormalTok{)]}
+
+
+
+
+\CommentTok{# Creates a master file and saves it}
+\NormalTok{master <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(w1_final, w2_final, w3_final, w4_final, w5_final, w6_final)}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/LAB_NUC/QR_data"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(master, }\StringTok{"QR_master.csv"}\NormalTok{)}
+
+\CommentTok{# Writes final data as a csv.}
+\KeywordTok{write.csv}\NormalTok{(w1_final, }\StringTok{"w1_final.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w2_final, }\StringTok{"w2_final.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w3_final, }\StringTok{"w3_final.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w4_final, }\StringTok{"w4_final.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w5_final, }\StringTok{"w5_final.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w6_final, }\StringTok{"w6_final.csv"}\NormalTok{)}
+
+
+\CommentTok{########## Visualization ############}
+
+\NormalTok{data <-}\StringTok{ }\NormalTok{master}
+\CommentTok{# Taking the mean of each month by wave}
+\NormalTok{m1 <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(}\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month1[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month1[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month1[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{3}\NormalTok{]),}
+            \KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month1[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{4}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month1[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{5}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month1[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{6}\NormalTok{]))}
+\NormalTok{m2 <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(}\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month2[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month2[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month2[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{3}\NormalTok{]),}
+            \KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month2[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{4}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month2[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{5}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month2[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{6}\NormalTok{]))}
+\NormalTok{m3 <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(}\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month3[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month3[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month3[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{3}\NormalTok{]),}
+            \KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month3[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{4}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month3[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{5}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month3[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{6}\NormalTok{]))}
+\NormalTok{m4 <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(}\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month4[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month4[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month4[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{3}\NormalTok{]),}
+            \KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month4[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{4}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month4[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{5}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month4[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{6}\NormalTok{]))}
+\NormalTok{m5 <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(}\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month5[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month5[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month5[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{3}\NormalTok{]),}
+            \KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month5[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{4}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month5[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{5}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month5[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{6}\NormalTok{]))}
+\NormalTok{m6 <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(}\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month6[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month6[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month6[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{3}\NormalTok{]),}
+            \KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month6[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{4}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month6[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{5}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month6[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{6}\NormalTok{]))}
+\NormalTok{m7 <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(}\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month7[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month7[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month7[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{3}\NormalTok{]),}
+            \KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month7[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{4}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month7[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{5}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month7[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{6}\NormalTok{]))}
+\NormalTok{m8 <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(}\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month8[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month8[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month8[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{3}\NormalTok{]),}
+            \KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month8[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{4}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month8[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{5}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month8[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{6}\NormalTok{]))}
+\NormalTok{m9 <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(}\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month9[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month9[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month9[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{3}\NormalTok{]),}
+            \KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month9[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{4}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month9[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{5}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month9[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{6}\NormalTok{]))}
+\NormalTok{m10 <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(}\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month10[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month10[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month10[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{3}\NormalTok{]),}
+             \KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month10[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{4}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month10[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{5}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month10[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{6}\NormalTok{]))}
+\NormalTok{m11 <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(}\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month11[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month11[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month11[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{3}\NormalTok{]),}
+             \KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month11[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{4}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month11[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{5}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month11[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{6}\NormalTok{]))}
+\NormalTok{m12 <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(}\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month12[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month12[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month12[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{3}\NormalTok{]),}
+             \KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month12[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{4}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month12[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{5}\NormalTok{]), }\KeywordTok{mean}\NormalTok{(data}\OperatorTok{$}\NormalTok{Month12[data}\OperatorTok{$}\NormalTok{wave }\OperatorTok{==}\StringTok{ }\DecValTok{6}\NormalTok{]))}
+
+\CommentTok{# Prepare the variables to be plotted}
+\NormalTok{wave <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12)}
+\KeywordTok{colnames}\NormalTok{(wave) <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(}\StringTok{"Month"}\NormalTok{, }\DecValTok{1}\OperatorTok{:}\DecValTok{12}\NormalTok{)}
+\KeywordTok{rownames}\NormalTok{(wave) <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(}\StringTok{"Wave"}\NormalTok{, }\DecValTok{1}\OperatorTok{:}\DecValTok{6}\NormalTok{)}
+\NormalTok{master <-}\StringTok{ }\NormalTok{master[, }\OperatorTok{-}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{15}\NormalTok{)]}
+\NormalTok{monthAVGc <-}\StringTok{ }\KeywordTok{colMeans}\NormalTok{(master, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{)}
+
+\CommentTok{# Plotting the main master plot}
+\KeywordTok{plot}\NormalTok{(monthAVGc,}
+     \DataTypeTok{main =} \StringTok{"Average CLASSES per Month"}\NormalTok{,}
+     \DataTypeTok{xlab =} \StringTok{"Months"}\NormalTok{,}
+     \DataTypeTok{ylab =} \StringTok{"Average vists"}\NormalTok{,}
+     \DataTypeTok{sub =} \StringTok{"Across all waves"}\NormalTok{, }
+     \DataTypeTok{pch =} \DecValTok{15}\NormalTok{,}
+     \DataTypeTok{col =} \StringTok{"blue"}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{,}\DataTypeTok{legend=}\KeywordTok{c}\NormalTok{(}\StringTok{"Average across waves"}\NormalTok{),}
+       \DataTypeTok{text.col=}\KeywordTok{c}\NormalTok{(}\StringTok{"black"}\NormalTok{),}\DataTypeTok{pch=}\KeywordTok{c}\NormalTok{(}\DecValTok{15}\NormalTok{),}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{"blue"}\NormalTok{))}
+
+\CommentTok{# Plotting the data}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow=}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{))}
+\KeywordTok{plot}\NormalTok{(wave[}\DecValTok{1}\NormalTok{,],}
+     \DataTypeTok{main =} \StringTok{"Wave 1: Average CLASSES per Month"}\NormalTok{,}
+     \DataTypeTok{xlab =} \StringTok{"Months"}\NormalTok{,}
+     \DataTypeTok{ylab =} \StringTok{"Average CLASSES"}\NormalTok{,}
+     \DataTypeTok{pch =} \DecValTok{15}\NormalTok{,}
+     \DataTypeTok{col =} \StringTok{"black"}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{,}\DataTypeTok{legend=}\KeywordTok{c}\NormalTok{(}\StringTok{"January = M12"}\NormalTok{),}
+       \DataTypeTok{text.col=}\KeywordTok{c}\NormalTok{(}\StringTok{"blue"}\NormalTok{),}\DataTypeTok{pch=}\KeywordTok{c}\NormalTok{(}\DecValTok{17}\NormalTok{),}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{"black"}\NormalTok{))}
+\KeywordTok{axis}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{12}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\KeywordTok{plot}\NormalTok{(wave[}\DecValTok{3}\NormalTok{,],}
+     \DataTypeTok{main =} \StringTok{"Wave 3: Average CLASSES per Month"}\NormalTok{,}
+     \DataTypeTok{xlab =} \StringTok{"Months"}\NormalTok{,}
+     \DataTypeTok{ylab =} \StringTok{"Average CLASSES"}\NormalTok{,}
+     \DataTypeTok{pch =} \DecValTok{15}\NormalTok{,}
+     \DataTypeTok{col =} \StringTok{"black"}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{,}\DataTypeTok{legend=}\KeywordTok{c}\NormalTok{(}\StringTok{"January = M12"}\NormalTok{),}
+       \DataTypeTok{text.col=}\KeywordTok{c}\NormalTok{(}\StringTok{"blue"}\NormalTok{),}\DataTypeTok{pch=}\KeywordTok{c}\NormalTok{(}\DecValTok{17}\NormalTok{),}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{"black"}\NormalTok{))}
+\KeywordTok{axis}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{12}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\KeywordTok{plot}\NormalTok{(wave[}\DecValTok{5}\NormalTok{,],}
+     \DataTypeTok{main =} \StringTok{"Wave 5: Average CLASSES per Month"}\NormalTok{,}
+     \DataTypeTok{xlab =} \StringTok{"Months"}\NormalTok{,}
+     \DataTypeTok{ylab =} \StringTok{"Average CLASSES"}\NormalTok{,}
+     \DataTypeTok{pch =} \DecValTok{15}\NormalTok{,}
+     \DataTypeTok{col =} \StringTok{"black"}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{,}\DataTypeTok{legend=}\KeywordTok{c}\NormalTok{(}\StringTok{"January = M12"}\NormalTok{),}
+       \DataTypeTok{text.col=}\KeywordTok{c}\NormalTok{(}\StringTok{"blue"}\NormalTok{),}\DataTypeTok{pch=}\KeywordTok{c}\NormalTok{(}\DecValTok{17}\NormalTok{),}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{"black"}\NormalTok{))}
+\KeywordTok{axis}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{12}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\KeywordTok{plot}\NormalTok{(wave[}\DecValTok{2}\NormalTok{,],}
+     \DataTypeTok{main =} \StringTok{"Wave 2: Average CLASSES per Month"}\NormalTok{,}
+     \DataTypeTok{xlab =} \StringTok{"Months"}\NormalTok{,}
+     \DataTypeTok{ylab =} \StringTok{"Average CLASSES"}\NormalTok{,}
+     \DataTypeTok{pch =} \DecValTok{15}\NormalTok{,}
+     \DataTypeTok{col =} \StringTok{"red"}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{,}\DataTypeTok{legend=}\KeywordTok{c}\NormalTok{(}\StringTok{"January = M8"}\NormalTok{),}
+       \DataTypeTok{text.col=}\KeywordTok{c}\NormalTok{(}\StringTok{"blue"}\NormalTok{),}\DataTypeTok{pch=}\KeywordTok{c}\NormalTok{(}\DecValTok{17}\NormalTok{),}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{"red"}\NormalTok{))}
+\KeywordTok{axis}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{12}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\KeywordTok{plot}\NormalTok{(wave[}\DecValTok{4}\NormalTok{,],}
+     \DataTypeTok{main =} \StringTok{"Wave 4: Average CLASSES per Month"}\NormalTok{,}
+     \DataTypeTok{xlab =} \StringTok{"Months"}\NormalTok{,}
+     \DataTypeTok{ylab =} \StringTok{"Average CLASSES"}\NormalTok{,}
+     \DataTypeTok{pch =} \DecValTok{15}\NormalTok{,}
+     \DataTypeTok{col =} \StringTok{"red"}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{,}\DataTypeTok{legend=}\KeywordTok{c}\NormalTok{(}\StringTok{"January = M8"}\NormalTok{),}
+       \DataTypeTok{text.col=}\KeywordTok{c}\NormalTok{(}\StringTok{"blue"}\NormalTok{),}\DataTypeTok{pch=}\KeywordTok{c}\NormalTok{(}\DecValTok{17}\NormalTok{),}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{"red"}\NormalTok{))}
+\KeywordTok{axis}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{12}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\KeywordTok{plot}\NormalTok{(wave[}\DecValTok{6}\NormalTok{,],}
+     \DataTypeTok{main =} \StringTok{"Wave 6: Average CLASSES per Month"}\NormalTok{,}
+     \DataTypeTok{xlab =} \StringTok{"Months"}\NormalTok{,}
+     \DataTypeTok{ylab =} \StringTok{"Average CLASSES"}\NormalTok{,}
+     \DataTypeTok{pch =} \DecValTok{15}\NormalTok{,}
+     \DataTypeTok{col =} \StringTok{"red"}\NormalTok{)}
+\KeywordTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{,}\DataTypeTok{legend=}\KeywordTok{c}\NormalTok{(}\StringTok{"Covid: M11 & M12"}\NormalTok{),}
+       \DataTypeTok{text.col=}\KeywordTok{c}\NormalTok{(}\StringTok{"blue"}\NormalTok{),}\DataTypeTok{pch=}\KeywordTok{c}\NormalTok{(}\DecValTok{17}\NormalTok{),}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{"red"}\NormalTok{))}
+\KeywordTok{axis}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{12}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{8}
+\tightlist
+\item
+  \textbf{QR\_classes.R:} Each waves clean csv file (e.g., wave1\_qr\_clean.csv) was loaded into r
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  ``wave'' column was added and names of month was changed -\textgreater{} see c.~and d.~above
+
+  \begin{itemize}
+  \tightlist
+  \item
+    SIDE NOTE: The reason for repeating these two steps again is that it made it easier to aggregate the data first, then performed c.~and d.~in QR\_step3.R
+  \item
+    In this step, we don't want to work with the aggregated data so we're pulling in the non-modified csv file (e.g., wave1\_qr\_clean.csv) and thus have to repeat those 2 data cleaning steps.
+  \end{itemize}
+\item
+  Waves were then bind together for a master file containing all 6 waves.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Saved as: QR\_master\_class.csv
+  \item
+    Each individual wave was also saved as w1\_class.csv
+  \end{itemize}
+\item
+  QR\_master\_class.csv: File was open externally and classes were then cleaned for the ``other'' responses using rules per SPM:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    For those with ``other'' response -- if they did NOT have a keyswipe that day give them a tallied variable that will be used in the future.
+  \item
+    Neighborhood walking does not count UNLESS it was during COVID time
+  \item
+    the unique responses for other may have some commonalities. So you can probably break them down
+  \item
+    COVID time online classes should only list the class or online class.
+  \item
+    This was all cleaned manually in excel. In total n =357 removed
+  \item
+    **SEE ``List of classes removed \& recoded.xlsx'' file to see what was removed and what was recoded
+  \item
+    Saved as: QR\_master\_class\_cleaned
+  \end{itemize}
+\item
+  QR\_Classes.R: the class cleaned filed above was loaded back into R
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Two files created: Class count by wave and class count overall
+  \item
+    Saved as: Class\_frequency\_bywave.csv
+  \item
+    Saved as: Class\_frequency\_overall.csv
+  \end{itemize}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{##### Libraries #####}
+\KeywordTok{library}\NormalTok{(dplyr)}
+
+\CommentTok{##### Side Task: Prepare separate file containing only classes #####}
+\CommentTok{# Creates a file containing ID, month, day, year, class for each wave }
+\CommentTok{## Pulls in each waves data}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave1"}\NormalTok{)}
+\NormalTok{w1_class <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave1_qr_clean.csv"}\NormalTok{)}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave2"}\NormalTok{)}
+\NormalTok{w2_class <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave2_qr_clean.csv"}\NormalTok{)}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave3"}\NormalTok{)}
+\NormalTok{w3_class <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave3_qr_clean.csv"}\NormalTok{)}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave4"}\NormalTok{)}
+\NormalTok{w4_class <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave4_qr_clean.csv"}\NormalTok{)}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave5"}\NormalTok{)}
+\NormalTok{w5_class <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave5_qr_clean.csv"}\NormalTok{)}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave6"}\NormalTok{)}
+\NormalTok{w6_class <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave6_qr_clean.csv"}\NormalTok{)}
+
+\CommentTok{# Adds column indicating wave}
+\NormalTok{w1_class}\OperatorTok{$}\NormalTok{wave <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(w1_class))}
+\NormalTok{w2_class}\OperatorTok{$}\NormalTok{wave <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{2}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(w2_class))}
+\NormalTok{w3_class}\OperatorTok{$}\NormalTok{wave <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{3}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(w3_class))}
+\NormalTok{w4_class}\OperatorTok{$}\NormalTok{wave <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{4}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(w4_class))}
+\NormalTok{w5_class}\OperatorTok{$}\NormalTok{wave <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{5}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(w5_class))}
+\NormalTok{w6_class}\OperatorTok{$}\NormalTok{wave <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{6}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(w6_class))}
+
+\CommentTok{# Puts Waves 2,4,6 columns in correct order ("month1, month2...) and puts "wave" into the 2nd column position}
+\NormalTok{w1_class <-}\StringTok{ }\NormalTok{w1_class[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{19}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{10}\NormalTok{,}\DecValTok{11}\NormalTok{,}\DecValTok{12}\NormalTok{,}\DecValTok{13}\NormalTok{,}\DecValTok{14}\NormalTok{,}\DecValTok{18}\NormalTok{,}\DecValTok{16}\NormalTok{,}\DecValTok{17}\NormalTok{,}\DecValTok{18}\NormalTok{)]}
+\NormalTok{w2_class <-}\StringTok{ }\NormalTok{w2_class[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{19}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{11}\NormalTok{,}\DecValTok{12}\NormalTok{,}\DecValTok{13}\NormalTok{,}\DecValTok{14}\NormalTok{,}\DecValTok{15}\NormalTok{,}\DecValTok{16}\NormalTok{,}\DecValTok{17}\NormalTok{,}\DecValTok{18}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{10}\NormalTok{)]}
+\NormalTok{w3_class <-}\StringTok{ }\NormalTok{w3_class[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{19}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{10}\NormalTok{,}\DecValTok{11}\NormalTok{,}\DecValTok{12}\NormalTok{,}\DecValTok{13}\NormalTok{,}\DecValTok{14}\NormalTok{,}\DecValTok{18}\NormalTok{,}\DecValTok{16}\NormalTok{,}\DecValTok{17}\NormalTok{,}\DecValTok{18}\NormalTok{)]}
+\NormalTok{w4_class <-}\StringTok{ }\NormalTok{w4_class[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{19}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{11}\NormalTok{,}\DecValTok{12}\NormalTok{,}\DecValTok{13}\NormalTok{,}\DecValTok{14}\NormalTok{,}\DecValTok{15}\NormalTok{,}\DecValTok{16}\NormalTok{,}\DecValTok{17}\NormalTok{,}\DecValTok{18}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{10}\NormalTok{)]}
+\NormalTok{w5_class <-}\StringTok{ }\NormalTok{w5_class[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{19}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{10}\NormalTok{,}\DecValTok{11}\NormalTok{,}\DecValTok{12}\NormalTok{,}\DecValTok{13}\NormalTok{,}\DecValTok{14}\NormalTok{,}\DecValTok{18}\NormalTok{,}\DecValTok{16}\NormalTok{,}\DecValTok{17}\NormalTok{,}\DecValTok{18}\NormalTok{)]}
+\NormalTok{w6_class <-}\StringTok{ }\NormalTok{w6_class[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{19}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{11}\NormalTok{,}\DecValTok{12}\NormalTok{,}\DecValTok{13}\NormalTok{,}\DecValTok{14}\NormalTok{,}\DecValTok{15}\NormalTok{,}\DecValTok{16}\NormalTok{,}\DecValTok{17}\NormalTok{,}\DecValTok{18}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{,}\DecValTok{10}\NormalTok{)]}
+
+\CommentTok{# Labels Month 1, month 2 ... for each wave}
+\KeywordTok{colnames}\NormalTok{(w1_class) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"run"}\NormalTok{, }\StringTok{"ID"}\NormalTok{, }\StringTok{"wave"}\NormalTok{, }\StringTok{"Class"}\NormalTok{,}\StringTok{"Month"}\NormalTok{, }\StringTok{"day"}\NormalTok{, }\StringTok{"year"}\NormalTok{, }\StringTok{"Month1"}\NormalTok{, }\StringTok{"Month2"}\NormalTok{, }\StringTok{"Month3"}\NormalTok{, }\StringTok{"Month4"}\NormalTok{, }\StringTok{"Month5"}\NormalTok{, }\StringTok{"Month6"}\NormalTok{, }\StringTok{"Month7"}\NormalTok{, }\StringTok{"Month8"}\NormalTok{, }\StringTok{"Month9"}\NormalTok{, }\StringTok{"Month10"}\NormalTok{, }\StringTok{"Month11"}\NormalTok{, }\StringTok{"Month12"}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(w3_class) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"run"}\NormalTok{, }\StringTok{"ID"}\NormalTok{, }\StringTok{"wave"}\NormalTok{, }\StringTok{"Class"}\NormalTok{,}\StringTok{"Month"}\NormalTok{, }\StringTok{"day"}\NormalTok{, }\StringTok{"year"}\NormalTok{, }\StringTok{"Month1"}\NormalTok{, }\StringTok{"Month2"}\NormalTok{, }\StringTok{"Month3"}\NormalTok{, }\StringTok{"Month4"}\NormalTok{, }\StringTok{"Month5"}\NormalTok{, }\StringTok{"Month6"}\NormalTok{, }\StringTok{"Month7"}\NormalTok{, }\StringTok{"Month8"}\NormalTok{, }\StringTok{"Month9"}\NormalTok{, }\StringTok{"Month10"}\NormalTok{, }\StringTok{"Month11"}\NormalTok{, }\StringTok{"Month12"}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(w5_class) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"run"}\NormalTok{, }\StringTok{"ID"}\NormalTok{, }\StringTok{"wave"}\NormalTok{, }\StringTok{"Class"}\NormalTok{,}\StringTok{"Month"}\NormalTok{, }\StringTok{"day"}\NormalTok{, }\StringTok{"year"}\NormalTok{, }\StringTok{"Month1"}\NormalTok{, }\StringTok{"Month2"}\NormalTok{, }\StringTok{"Month3"}\NormalTok{, }\StringTok{"Month4"}\NormalTok{, }\StringTok{"Month5"}\NormalTok{, }\StringTok{"Month6"}\NormalTok{, }\StringTok{"Month7"}\NormalTok{, }\StringTok{"Month8"}\NormalTok{, }\StringTok{"Month9"}\NormalTok{, }\StringTok{"Month10"}\NormalTok{, }\StringTok{"Month11"}\NormalTok{, }\StringTok{"Month12"}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(w2_class) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"run"}\NormalTok{, }\StringTok{"ID"}\NormalTok{, }\StringTok{"wave"}\NormalTok{, }\StringTok{"Class"}\NormalTok{,}\StringTok{"Month"}\NormalTok{, }\StringTok{"day"}\NormalTok{, }\StringTok{"year"}\NormalTok{, }\StringTok{"Month1"}\NormalTok{, }\StringTok{"Month2"}\NormalTok{, }\StringTok{"Month3"}\NormalTok{, }\StringTok{"Month4"}\NormalTok{, }\StringTok{"Month5"}\NormalTok{, }\StringTok{"Month6"}\NormalTok{, }\StringTok{"Month7"}\NormalTok{, }\StringTok{"Month8"}\NormalTok{, }\StringTok{"Month9"}\NormalTok{, }\StringTok{"Month10"}\NormalTok{, }\StringTok{"Month11"}\NormalTok{, }\StringTok{"Month12"}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(w4_class) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"run"}\NormalTok{, }\StringTok{"ID"}\NormalTok{, }\StringTok{"wave"}\NormalTok{, }\StringTok{"Class"}\NormalTok{,}\StringTok{"Month"}\NormalTok{, }\StringTok{"day"}\NormalTok{, }\StringTok{"year"}\NormalTok{, }\StringTok{"Month1"}\NormalTok{, }\StringTok{"Month2"}\NormalTok{, }\StringTok{"Month3"}\NormalTok{, }\StringTok{"Month4"}\NormalTok{, }\StringTok{"Month5"}\NormalTok{, }\StringTok{"Month6"}\NormalTok{, }\StringTok{"Month7"}\NormalTok{, }\StringTok{"Month8"}\NormalTok{, }\StringTok{"Month9"}\NormalTok{, }\StringTok{"Month10"}\NormalTok{, }\StringTok{"Month11"}\NormalTok{, }\StringTok{"Month12"}\NormalTok{)}
+\KeywordTok{colnames}\NormalTok{(w6_class) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"run"}\NormalTok{, }\StringTok{"ID"}\NormalTok{, }\StringTok{"wave"}\NormalTok{, }\StringTok{"Class"}\NormalTok{,}\StringTok{"Month"}\NormalTok{, }\StringTok{"day"}\NormalTok{, }\StringTok{"year"}\NormalTok{, }\StringTok{"Month1"}\NormalTok{, }\StringTok{"Month2"}\NormalTok{, }\StringTok{"Month3"}\NormalTok{, }\StringTok{"Month4"}\NormalTok{, }\StringTok{"Month5"}\NormalTok{, }\StringTok{"Month6"}\NormalTok{, }\StringTok{"Month7"}\NormalTok{, }\StringTok{"Month8"}\NormalTok{, }\StringTok{"Month9"}\NormalTok{, }\StringTok{"Month10"}\NormalTok{, }\StringTok{"Month11"}\NormalTok{, }\StringTok{"Month12"}\NormalTok{)}
+
+
+\CommentTok{# Creates master dataframe of all waves and tallys them}
+\NormalTok{masterclass <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(w1_class, w2_class, w3_class, w4_class, w5_class, w6_class)}
+\NormalTok{QR_count_bywave <-}\StringTok{ }\NormalTok{masterclass }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(wave, Class)}
+
+
+\CommentTok{## Saves file to directory #####}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/LAB_NUC/QR_data"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w1_class, }\StringTok{"w1_class.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w2_class, }\StringTok{"w2_class.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w3_class, }\StringTok{"w3_class.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w4_class, }\StringTok{"w4_class.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w5_class, }\StringTok{"w5_class.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w6_class, }\StringTok{"w6_class.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(masterclass, }\StringTok{"QR_master_class.csv"}\NormalTok{)}
+
+\CommentTok{##### Cleaning the "other" class responses as per SPM rules (see document) ####}
+\CommentTok{## File QR_master_class.csv was open externally and classes were cleaned and saved as: QR_master_class_clean.csv}
+\CommentTok{## See QR_Class_Data_Processing.docx and List of classes removed & recoded.xlsx}
+
+\CommentTok{##### Importing cleanned class file back in ####}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"S:/LAB_Documents/Visits_QR_data/QR_data/QR_Cleaned_Processed_Files"}\NormalTok{)}
+\NormalTok{class_clean <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"QR_master_class_cleaned.csv"}\NormalTok{)}
+
+\NormalTok{QR_count_bywave <-}\StringTok{ }\NormalTok{class_clean }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(wave, Class)}
+\NormalTok{QR_count_overall <-}\StringTok{ }\NormalTok{class_clean }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(Class)}
+\KeywordTok{write.csv}\NormalTok{(QR_count_bywave, }\StringTok{"Class_frequency_bywave.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(QR_count_overall, }\StringTok{"Class_frequency_overall.csv"}\NormalTok{)}
+
+\NormalTok{john <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\KeywordTok{unique}\NormalTok{(class_clean}\OperatorTok{$}\NormalTok{Class))}
+\KeywordTok{colnames}\NormalTok{(john) <-}\StringTok{ "Classes"}
+\KeywordTok{write.csv}\NormalTok{(john, }\StringTok{"class_Descr.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Sean's Note (7/28/20 FLAM): Sean ``Don't worry about classes 4-hour splits'' -- its invalid with this data due to manual typing in. ``The 4-hour rule is meant for the visits data''
+
+\hypertarget{data-processing---keyswipes-data}{%
+\chapter{Data Processing - Keyswipes Data}\label{data-processing---keyswipes-data}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  In -\textgreater{} CORTEX II/Data/PrimaryData-Attendance+Fitbit/Visit Data"
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Opened up each waves raw file
+\item
+  Then opened up every individual ID file and added a column for their ID \#
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Checked to make sure all data was refinery check in.
+
+    \begin{enumerate}
+    \def\labelenumi{\arabic{enumi}.}
+    \tightlist
+    \item
+      Anything else removed (e.g., childcare, corporate, WEST)
+    \end{enumerate}
+  \item
+    Saved as: ID101.xlsx
+  \item
+    Previous raw file was kept as is and placed into Data\WaveX\Visit\_Data\WaveX\_visit data (mainly for Tiffs W1)
+  \end{itemize}
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  \textbf{Visits\_pre.R}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Here we loaded in ALL the excel files in a specific folder and then bind them together in one data frame
+\item
+  ** Wave3, for some reason this data was received differently from the refinery and is reflected in certain individual files. Use raw file BE FIT Dec -- Jan.xls for reference.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Files for ID's 208, 211, 213, 222, 251 were deleted due to being blank
+  \item
+    ID's 232, 224/225, 245, 256 had data in feb/2019 removed
+  \item
+    Wave4: Files for ID's 214, 264, 282 were deleted due to being blank
+  \end{itemize}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{##### Libraries #####}
+\KeywordTok{library}\NormalTok{(readxl)}
+\KeywordTok{library}\NormalTok{(plyr)    }\CommentTok{# for binding multiple files}
+\KeywordTok{library}\NormalTok{(dplyr)}
+\KeywordTok{library}\NormalTok{(stringr) }\CommentTok{# for function str_replace_all}
+
+
+\CommentTok{##### Loading in multiple files and binding together ####}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/Visits/wave1"}\NormalTok{)}
+\NormalTok{wave1 <-}\StringTok{ }\KeywordTok{list.files}\NormalTok{(}\DataTypeTok{pattern =} \StringTok{"*.xlsx"}\NormalTok{, }\DataTypeTok{full.names =}\NormalTok{ T)}
+\NormalTok{wave1 <-}\StringTok{ }\KeywordTok{sapply}\NormalTok{(wave1, read_excel, }\DataTypeTok{simplify=}\OtherTok{FALSE}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{bind_rows}\NormalTok{(}\DataTypeTok{.id =} \StringTok{"ID"}\NormalTok{)  }\CommentTok{# binding files together in one dataframe}
+
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/Visits/wave2"}\NormalTok{)}
+\NormalTok{wave2 <-}\StringTok{ }\KeywordTok{list.files}\NormalTok{(}\DataTypeTok{pattern =} \StringTok{"*.xlsx"}\NormalTok{, }\DataTypeTok{full.names =}\NormalTok{ T)}
+\NormalTok{wave2 <-}\StringTok{ }\KeywordTok{sapply}\NormalTok{(wave2, read_excel, }\DataTypeTok{simplify=}\OtherTok{FALSE}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{bind_rows}\NormalTok{(}\DataTypeTok{.id =} \StringTok{"Client"}\NormalTok{)}
+
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/Visits/wave3"}\NormalTok{)}
+\NormalTok{wave3 <-}\StringTok{ }\KeywordTok{list.files}\NormalTok{(}\DataTypeTok{pattern =} \StringTok{"*.xlsx"}\NormalTok{, }\DataTypeTok{full.names =}\NormalTok{ T)}
+\NormalTok{wave3 <-}\StringTok{ }\KeywordTok{sapply}\NormalTok{(wave3, read_excel, }\DataTypeTok{simplify=}\OtherTok{FALSE}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{bind_rows}\NormalTok{(}\DataTypeTok{.id =} \StringTok{"Client"}\NormalTok{)}
+
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/Visits/wave4"}\NormalTok{)}
+\NormalTok{wave4 <-}\StringTok{ }\KeywordTok{list.files}\NormalTok{(}\DataTypeTok{pattern =} \StringTok{"*.xlsx"}\NormalTok{, }\DataTypeTok{full.names =}\NormalTok{ T)}
+\NormalTok{wave4 <-}\StringTok{ }\KeywordTok{sapply}\NormalTok{(wave4, read_excel, }\DataTypeTok{simplify=}\OtherTok{FALSE}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{bind_rows}\NormalTok{(}\DataTypeTok{.id =} \StringTok{"Client"}\NormalTok{)}
+
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/Visits/wave5"}\NormalTok{)}
+\NormalTok{wave5 <-}\StringTok{ }\KeywordTok{list.files}\NormalTok{(}\DataTypeTok{pattern =} \StringTok{"*.xlsx"}\NormalTok{, }\DataTypeTok{full.names =}\NormalTok{ T)}
+\NormalTok{wave5 <-}\StringTok{ }\KeywordTok{sapply}\NormalTok{(wave5, read_excel, }\DataTypeTok{simplify=}\OtherTok{FALSE}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{bind_rows}\NormalTok{(}\DataTypeTok{.id =} \StringTok{"Client"}\NormalTok{)}
+
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/Visits/wave6"}\NormalTok{)}
+\NormalTok{wave6 <-}\StringTok{ }\KeywordTok{list.files}\NormalTok{(}\DataTypeTok{pattern =} \StringTok{"*.xlsx"}\NormalTok{, }\DataTypeTok{full.names =}\NormalTok{ T)}
+\NormalTok{wave6 <-}\StringTok{ }\KeywordTok{sapply}\NormalTok{(wave6, read_excel, }\DataTypeTok{simplify=}\OtherTok{FALSE}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{bind_rows}\NormalTok{(}\DataTypeTok{.id =} \StringTok{"Client"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  \textbf{Visits\_pre.R:} \#\#\#\#\# Data cleaning \#\#\#\#\#
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Changed class type for wave1\$Date to match other waves
+\item
+  Cleaned the ID variable to remove the file name (e.g., ./215.xlsx -\textgreater{} 215)
+\item
+  Selected the needed columns (date,time,Id,payment)
+\item
+  Selected only visits from Be Fit Study. This ensured that things like childcare, corporate, or WEST swipes were not included in the database
+\item
+  Data was saved by wave as: wave1\_cleaned.csv
+\item
+  File was open
+\item
+  ** Notes:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    ID 285 7/5/2018 less than 4 hours
+  \item
+    ID 217 3/3/2018 less than 4 hours
+  \item
+    ID 217 3/17/2018 less than 4 hours
+  \item
+    ID 218 3/20/2018 less than 4 hours
+  \item
+    ID 218 3/27/2018 less than 4 hours
+  \item
+    ID 218 3/29/2018 less than 4 hours
+  \item
+    ID 218 4/9/2018 less than 4 hours
+  \item
+    ID 218 4/16/2018 less than 4 hours
+  \item
+    ID 218 11/26/2018 less than 4 hours
+  \item
+    ID 229 3/31/2018 less than 4 hours
+  \end{itemize}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{##### Libraries #####}
+\KeywordTok{library}\NormalTok{(readxl)}
+\KeywordTok{library}\NormalTok{(plyr)    }\CommentTok{# for binding multiple files}
+\KeywordTok{library}\NormalTok{(dplyr)}
+\KeywordTok{library}\NormalTok{(stringr) }\CommentTok{# for function str_replace_all}
+
+
+\CommentTok{##### Data Cleaning ####}
+
+\CommentTok{# Converts class type for Date to character for wave 1 so that its the same as wave 2-6}
+\NormalTok{wave1}\OperatorTok{$}\NormalTok{Date <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(wave1}\OperatorTok{$}\NormalTok{Date)}
+
+\CommentTok{# Changes column name from Client to ID}
+\KeywordTok{colnames}\NormalTok{(wave2)[}\DecValTok{5}\NormalTok{] <-}\StringTok{ "ID"}
+\KeywordTok{colnames}\NormalTok{(wave3)[}\DecValTok{5}\NormalTok{] <-}\StringTok{ "ID"}
+\KeywordTok{colnames}\NormalTok{(wave4)[}\DecValTok{5}\NormalTok{] <-}\StringTok{ "ID"}
+\KeywordTok{colnames}\NormalTok{(wave5)[}\DecValTok{5}\NormalTok{] <-}\StringTok{ "ID"}
+\KeywordTok{colnames}\NormalTok{(wave6)[}\DecValTok{5}\NormalTok{] <-}\StringTok{ "ID"}
+
+\CommentTok{# Clean ID column to only show ID# and not file extension }
+\NormalTok{wave1}\OperatorTok{$}\NormalTok{ID <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{".*D"}\NormalTok{,}\StringTok{""}\NormalTok{, wave1}\OperatorTok{$}\NormalTok{ID)                }\CommentTok{# Removes everything before the number | gsub =before}
+\NormalTok{wave1}\OperatorTok{$}\NormalTok{ID <-}\StringTok{ }\NormalTok{wave1}\OperatorTok{$}\NormalTok{ID }\OperatorTok{%>%}\StringTok{ }\KeywordTok{str_replace_all}\NormalTok{(}\StringTok{'}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.'}\NormalTok{, }\StringTok{''}\NormalTok{) }\CommentTok{# Removes the period in the column}
+\NormalTok{wave1}\OperatorTok{$}\NormalTok{ID <-}\StringTok{ }\KeywordTok{sub}\NormalTok{(}\StringTok{"xlsx"}\NormalTok{,}\StringTok{""}\NormalTok{, wave1}\OperatorTok{$}\NormalTok{ID)                }\CommentTok{# Removes everything after the number   | sub = after}
+
+\NormalTok{wave2}\OperatorTok{$}\NormalTok{ID <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"/"}\NormalTok{, }\StringTok{""}\NormalTok{, wave2}\OperatorTok{$}\NormalTok{ID)                 }\CommentTok{# Removes the / before the data}
+\NormalTok{wave2}\OperatorTok{$}\NormalTok{ID <-}\StringTok{ }\NormalTok{wave2}\OperatorTok{$}\NormalTok{ID }\OperatorTok{%>%}\StringTok{ }\KeywordTok{str_replace_all}\NormalTok{(}\StringTok{'}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.'}\NormalTok{, }\StringTok{''}\NormalTok{) }
+\NormalTok{wave2}\OperatorTok{$}\NormalTok{ID <-}\StringTok{ }\KeywordTok{sub}\NormalTok{(}\StringTok{"xlsx"}\NormalTok{,}\StringTok{""}\NormalTok{, wave2}\OperatorTok{$}\NormalTok{ID)}
+
+\NormalTok{wave3}\OperatorTok{$}\NormalTok{ID <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"/"}\NormalTok{,}\StringTok{""}\NormalTok{, wave3}\OperatorTok{$}\NormalTok{ID)                }
+\NormalTok{wave3}\OperatorTok{$}\NormalTok{ID <-}\StringTok{ }\NormalTok{wave3}\OperatorTok{$}\NormalTok{ID }\OperatorTok{%>%}\StringTok{ }\KeywordTok{str_replace_all}\NormalTok{(}\StringTok{'}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.'}\NormalTok{, }\StringTok{''}\NormalTok{) }
+\NormalTok{wave3}\OperatorTok{$}\NormalTok{ID <-}\StringTok{ }\KeywordTok{sub}\NormalTok{(}\StringTok{"xlsx"}\NormalTok{,}\StringTok{""}\NormalTok{, wave3}\OperatorTok{$}\NormalTok{ID) }
+
+\NormalTok{wave4}\OperatorTok{$}\NormalTok{ID <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"/"}\NormalTok{, }\StringTok{""}\NormalTok{, wave4}\OperatorTok{$}\NormalTok{ID)                }
+\NormalTok{wave4}\OperatorTok{$}\NormalTok{ID <-}\StringTok{ }\NormalTok{wave4}\OperatorTok{$}\NormalTok{ID }\OperatorTok{%>%}\StringTok{ }\KeywordTok{str_replace_all}\NormalTok{(}\StringTok{'}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.'}\NormalTok{, }\StringTok{''}\NormalTok{) }
+\NormalTok{wave4}\OperatorTok{$}\NormalTok{ID <-}\StringTok{ }\KeywordTok{sub}\NormalTok{(}\StringTok{"xlsx"}\NormalTok{,}\StringTok{""}\NormalTok{, wave4}\OperatorTok{$}\NormalTok{ID) }
+
+\NormalTok{wave5}\OperatorTok{$}\NormalTok{ID <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"/"}\NormalTok{, }\StringTok{""}\NormalTok{, wave5}\OperatorTok{$}\NormalTok{ID)                }
+\NormalTok{wave5}\OperatorTok{$}\NormalTok{ID <-}\StringTok{ }\NormalTok{wave5}\OperatorTok{$}\NormalTok{ID }\OperatorTok{%>%}\StringTok{ }\KeywordTok{str_replace_all}\NormalTok{(}\StringTok{'}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.'}\NormalTok{, }\StringTok{''}\NormalTok{) }
+\NormalTok{wave5}\OperatorTok{$}\NormalTok{ID <-}\StringTok{ }\KeywordTok{sub}\NormalTok{(}\StringTok{"xlsx"}\NormalTok{,}\StringTok{""}\NormalTok{, wave5}\OperatorTok{$}\NormalTok{ID) }
+
+\NormalTok{wave6}\OperatorTok{$}\NormalTok{ID <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"/"}\NormalTok{, }\StringTok{""}\NormalTok{, wave6}\OperatorTok{$}\NormalTok{ID)                }
+\NormalTok{wave6}\OperatorTok{$}\NormalTok{ID <-}\StringTok{ }\NormalTok{wave6}\OperatorTok{$}\NormalTok{ID }\OperatorTok{%>%}\StringTok{ }\KeywordTok{str_replace_all}\NormalTok{(}\StringTok{'}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.'}\NormalTok{, }\StringTok{''}\NormalTok{) }
+\NormalTok{wave6}\OperatorTok{$}\NormalTok{ID <-}\StringTok{ }\KeywordTok{sub}\NormalTok{(}\StringTok{"xlsx"}\NormalTok{,}\StringTok{""}\NormalTok{, wave6}\OperatorTok{$}\NormalTok{ID) }
+
+\CommentTok{# Removes the extra noise in the Time column}
+\CommentTok{## (.*) looks for any character 0 or more times until the first space, (?) is what makes it stop at the first space}
+\NormalTok{wave1}\OperatorTok{$}\NormalTok{Time <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{".*? "}\NormalTok{, }\StringTok{" "}\NormalTok{, wave1}\OperatorTok{$}\NormalTok{Time) }
+
+\CommentTok{# Changes column "Check-In Time" to "Time" to remain consistent with the other waves}
+\KeywordTok{colnames}\NormalTok{(wave1)[}\DecValTok{8}\NormalTok{] <-}\StringTok{ "Pricing Option"}
+\KeywordTok{colnames}\NormalTok{(wave2)[}\DecValTok{6}\NormalTok{] <-}\StringTok{ "Time"}
+\KeywordTok{colnames}\NormalTok{(wave3)[}\DecValTok{6}\NormalTok{] <-}\StringTok{ "Time"}
+\KeywordTok{colnames}\NormalTok{(wave4)[}\DecValTok{6}\NormalTok{] <-}\StringTok{ "Time"}
+\KeywordTok{colnames}\NormalTok{(wave5)[}\DecValTok{6}\NormalTok{] <-}\StringTok{ "Time"}
+\KeywordTok{colnames}\NormalTok{(wave6)[}\DecValTok{6}\NormalTok{] <-}\StringTok{ "Time"}
+
+\CommentTok{# Select the needed columns (date,time,ID,Payment) then ensures dataset contains only those in Befit study}
+\NormalTok{w1 <-}\StringTok{ }\NormalTok{wave1[,}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{8}\NormalTok{)]}
+\NormalTok{w1 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(w1, }\StringTok{`}\DataTypeTok{Pricing Option}\StringTok{`} \OperatorTok{==}\StringTok{ "Be Fit Study"}\NormalTok{)}
+
+\NormalTok{w2 <-}\StringTok{ }\NormalTok{wave2[,}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{7}\NormalTok{)]}
+\NormalTok{w2 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(w2, }\StringTok{`}\DataTypeTok{Pricing Option}\StringTok{`} \OperatorTok{==}\StringTok{ "Be Fit Study"}\NormalTok{)}
+
+\NormalTok{w3 <-}\StringTok{ }\NormalTok{wave3[,}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{7}\NormalTok{)]}
+\NormalTok{w3 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(w3, }\StringTok{`}\DataTypeTok{Pricing Option}\StringTok{`} \OperatorTok{==}\StringTok{ "Be Fit Study"}\NormalTok{)}
+
+\NormalTok{w4 <-}\StringTok{ }\NormalTok{wave4[,}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{7}\NormalTok{)]}
+\NormalTok{w4 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(w4, }\StringTok{`}\DataTypeTok{Pricing Option}\StringTok{`} \OperatorTok{==}\StringTok{ "Be Fit Study"}\NormalTok{)}
+
+\NormalTok{w5 <-}\StringTok{ }\NormalTok{wave5[,}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{7}\NormalTok{)]}
+\NormalTok{w5 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(w5, }\StringTok{`}\DataTypeTok{Pricing Option}\StringTok{`} \OperatorTok{==}\StringTok{ "Be Fit Study"}\NormalTok{)}
+
+\NormalTok{w6 <-}\StringTok{ }\NormalTok{wave6[,}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{7}\NormalTok{)]}
+\NormalTok{w6 <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(w6, }\StringTok{`}\DataTypeTok{Pricing Option}\StringTok{`} \OperatorTok{==}\StringTok{ "Be Fit Study"}\NormalTok{)}
+
+\CommentTok{# Writes the cleaned file to Visits folder}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/Visits"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w1, }\StringTok{"wave1_cleaned.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w2, }\StringTok{"wave2_cleaned.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w3, }\StringTok{"wave3_cleaned.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w4, }\StringTok{"wave4_cleaned.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w5, }\StringTok{"wave5_cleaned.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w6, }\StringTok{"wave6_cleaned.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  \textbf{Visits\_Step1:}
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Checked for ID's that had duplicates and saved those duplicates by wave (e.g., wave1\_duplicates.csv)
+\item
+  This file was open externally and dates were highlighted in the respectful wave1\_cleaned.csv file
+\item
+  Dates were removed if \textless4 hours apart, otherwise they remained the same. Final file was saved as = wave1\_final.csv
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Wave 1
+
+    \begin{enumerate}
+    \def\labelenumi{\arabic{enumi}.}
+    \tightlist
+    \item
+      ID 115, 5/27/2017 - removed
+    \item
+      ID 115, 6/10/2017 - removed
+    \item
+      ID 115, 6/17/2017 - removed
+    \item
+      ID 115, 7/1/2017 - removed
+    \item
+      ID 115, 7/15/2017 - removed
+    \item
+      ID 115, 7/22/2017 - removed
+    \item
+      ID 115, 7/29/2017 - removed
+    \item
+      ID 115, 8/5/2017 - removed
+    \item
+      ID 115, 8/12/2017 - removed
+    \item
+      ID 116, 3/27/2017 -- kept: both \textgreater4hrs apart
+    \item
+      ID 116, 3/29/2017 -- kept: both \textgreater4hrs apart
+    \item
+      ID 116, 4/3/2017 -- kept: both \textgreater4hrs apart
+    \item
+      ID 116, 4/12/2017 -- kept: both \textgreater4hrs apart
+    \item
+      ID 116, 4/24/2017 -- kept: both \textgreater4hrs apart
+    \item
+      ID 116, 4/26/2017 -- kept: both \textgreater4hrs apart
+    \item
+      ID 132, 2/4/2017 - removed
+    \item
+      ID 135, 7/7/2017 -- kept: both \textgreater4hrs apart
+    \item
+      ID 135, 12/20/2017 -- kept: both \textgreater4hrs apart
+    \item
+      ID 141, 2/6/2017 -- kept: both \textgreater4hrs apart
+    \item
+      ID 143, 3/3/2017 - removed
+    \item
+      ID 143, 3/10/2017 - removed
+    \item
+      ID 143, 4/14/2017 - removed
+    \item
+      ID 143, 4/21/2017 - removed
+    \item
+      ID 143, 5/5/2017 - removed
+    \item
+      ID 143, 5/12/2017 - removed
+    \item
+      ID 143, 5/19/2017 - removed
+    \item
+      ID 143, 6/2/2017 - removed
+    \item
+      ID 143, 6/16/2017 - removed
+    \item
+      ID 143, 6/30/2017 - removed
+    \item
+      ID 143, 7/7/2017 - removed
+    \item
+      ID 143, 8/4/2017 - removed
+    \item
+      ID 143, 8/11/2017 - removed
+    \item
+      ID 143, 8/18/2017 - removed
+    \item
+      ID 143, 9/1/2017 - removed
+    \item
+      ID 143, 10/30/2017 - removed
+    \item
+      ID 143, 11/6/2017 - removed
+    \item
+      ID 143, 11/13/2017 - removed
+    \item
+      ID 143, 11/20/2017 - removed
+    \item
+      ID 143, 11/27/2017 - removed
+    \item
+      ID 143, 12/4/2017 - removed
+    \item
+      ID 143, 12/11/2017 - removed
+    \item
+      ID 143, 12/18/2017 - removed
+    \item
+      ID 143, 1/8/2018 - removed
+    \item
+      ID 158, 4/24/2017 -- kept: both \textgreater4hrs apart
+    \end{enumerate}
+  \item
+    Wave 2
+
+    \begin{enumerate}
+    \def\labelenumi{\arabic{enumi}.}
+    \tightlist
+    \item
+      ID 156, 3/19/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 156, 7/24/2017 - removed
+    \item
+      ID 156, 8/15/2017 - removed
+    \item
+      ID 167, 8/8/2017 - removed
+    \item
+      ID 169, 3/14/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 176, 6/17/2017 - removed
+    \item
+      ID 177, 9/11/2017 -- kept: both \textgreater4hrs apart
+    \item
+      ID 177, 9/2/2017 - removed
+    \item
+      ID 178, 8/3/2017 - removed
+    \item
+      ID 178, 8/31/2017 - removed
+    \item
+      ID 179, 6/26/2017 - removed
+    \item
+      ID 182, 6/29/2017 - removed
+    \end{enumerate}
+  \item
+    Wave 3
+
+    \begin{enumerate}
+    \def\labelenumi{\arabic{enumi}.}
+    \tightlist
+    \item
+      ID 215, 5/14/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 215, 5/24/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 215, 6/18/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 215, 6/20/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 215, 6/21/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 215, 7/5/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 217, 3/17/2018 - removed
+    \item
+      ID 217, 3/29/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 217, 3/3/2018 - removed
+    \item
+      ID 217, 4/2/2018 - removed
+    \item
+      ID 217, 6/15/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 218, 11/14/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 218, 11/26/2018 - removed
+    \item
+      ID 218, 3/15/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 218, 3/20/2018 - removed
+    \item
+      ID 218, 3/27/2018 - removed
+    \item
+      ID 218, 3/29/2018 -- removed
+    \item
+      ID 218, 4/16/2018 - removed
+    \item
+      ID 218, 4/17/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 218, 4/9/2018 - removed
+    \item
+      ID 218, 5/21/2018 -- removed
+    \item
+      ID 218, 6/12/2018 - removed
+    \item
+      ID 218, 6/21/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 218, 6/7/2018 - removed
+    \item
+      ID 218, 8/6/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 224, 3/30/2018 - removed
+    \item
+      ID 229, 3/31/2018 - removed
+    \item
+      ID 230, 2/12/2018 - removed
+    \item
+      ID 230, 2/14/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 230, 2/8/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 232, 11/23/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 232, 3/28/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 232, 4/11/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 233, 3/9/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 248, 1/2/2019 -- kept: both \textgreater4hrs apart
+    \item
+      ID 254, 3/12/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 254, 3/26/2018 -- kept: both \textgreater4hrs apart
+    \item
+      ID 254, 4/3/2018 -- removed
+    \item
+      ID 256, 2/6/2018 - removed
+    \end{enumerate}
+  \item
+    Wave 4/
+
+    \begin{enumerate}
+    \def\labelenumi{\arabic{enumi}.}
+    \tightlist
+    \item
+      ID 285, 7/5/2018 - removed
+    \end{enumerate}
+  \item
+    Wave 5
+
+    \begin{enumerate}
+    \def\labelenumi{\arabic{enumi}.}
+    \tightlist
+    \item
+      ID 306, 2/5/2019 -- removed
+    \item
+      ID 306, 3/19/2019 - removed
+    \end{enumerate}
+  \item
+    Wave 6
+
+    \begin{enumerate}
+    \def\labelenumi{\arabic{enumi}.}
+    \tightlist
+    \item
+      ID 358, 6/20/2019 -- removed
+    \end{enumerate}
+  \end{itemize}
+\item
+  Each ``wave1\_final.csv'' was checked once again for formatting (date 48256) and 12-month range.
+\item
+  Wave1\_final.csv is new master type file moving forward
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(dplyr)}
+\KeywordTok{library}\NormalTok{(tidyr)}
+
+\CommentTok{# Set working directory and read in data}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/Visits"}\NormalTok{)}
+\NormalTok{wave1 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave1_cleaned.csv"}\NormalTok{)}
+\NormalTok{wave2 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave2_cleaned.csv"}\NormalTok{)}
+\NormalTok{wave3 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave3_cleaned.csv"}\NormalTok{)}
+\NormalTok{wave4 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave4_cleaned.csv"}\NormalTok{)}
+\NormalTok{wave5 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave5_cleaned.csv"}\NormalTok{)}
+\NormalTok{wave6 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave6_cleaned.csv"}\NormalTok{)}
+
+\CommentTok{# Determining which ID's have duplicate check-In Dates}
+\NormalTok{check <-}\StringTok{ }\NormalTok{wave1 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(ID,Date) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(Date)}
+\NormalTok{w1d <-}\StringTok{ }\KeywordTok{with}\NormalTok{(check, check[n }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{, ])}
+
+\NormalTok{check <-}\StringTok{ }\NormalTok{wave2 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(ID,Date) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(Date)}
+\NormalTok{w2d <-}\StringTok{ }\KeywordTok{with}\NormalTok{(check, check[n }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{, ])}
+
+\NormalTok{check <-}\StringTok{ }\NormalTok{wave3 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(ID,Date) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(Date)}
+\NormalTok{w3d <-}\StringTok{ }\KeywordTok{with}\NormalTok{(check, check[n }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{, ])}
+
+\NormalTok{check <-}\StringTok{ }\NormalTok{wave4 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(ID,Date) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(Date)}
+\NormalTok{w4d <-}\StringTok{ }\KeywordTok{with}\NormalTok{(check, check[n }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{, ])}
+
+\NormalTok{check <-}\StringTok{ }\NormalTok{wave5 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(ID,Date) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(Date)}
+\NormalTok{w5d <-}\StringTok{ }\KeywordTok{with}\NormalTok{(check, check[n }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{, ])}
+
+\NormalTok{check <-}\StringTok{ }\NormalTok{wave6 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(ID,Date) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{count}\NormalTok{(Date)}
+\NormalTok{w6d <-}\StringTok{ }\KeywordTok{with}\NormalTok{(check, check[n }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{, ])}
+
+\CommentTok{# Writing file of all duplicate ID's to be checked}
+\KeywordTok{write.csv}\NormalTok{(w1d, }\StringTok{"wave1_duplicates.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w2d, }\StringTok{"wave2_duplicates.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w3d, }\StringTok{"wave3_duplicates.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w4d, }\StringTok{"wave4_duplicates.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w5d, }\StringTok{"wave5_duplicates.csv"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(w6d, }\StringTok{"wave6_duplicates.csv"}\NormalTok{)}
+
+\CommentTok{##### See Data Processing Visits.docx 4.c ####}
+\CommentTok{# duplicate swipes on same day was checked for 4 hour rule}
+
+\CommentTok{# read in files after removing duplicates ####}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/Visits"}\NormalTok{)}
+\NormalTok{wave1 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave1_final.csv"}\NormalTok{)}
+\NormalTok{wave2 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave2_final.csv"}\NormalTok{)}
+\NormalTok{wave3 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave3_final.csv"}\NormalTok{)}
+\NormalTok{wave4 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave4_final.csv"}\NormalTok{)}
+\NormalTok{wave5 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave5_final.csv"}\NormalTok{)}
+\NormalTok{wave6 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave6_final.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+**** NEXT STEP IS TO MERGE QR AND VISITS TOGETHER BASED ON ID ****
+
+\hypertarget{data-processing---merging-qr-keyswipe}{%
+\chapter{Data Processing - Merging QR \& Keyswipe}\label{data-processing---merging-qr-keyswipe}}
+
+Merging data together
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  Read in final visit data from processing sheet (e.g., wave1\_final.csv)
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Added column indicating wave to each individual wave file prior to merging
+\item
+  Select columns: ID, Wave, Date, Pricing Option
+\item
+  Merged all wave files into new data frame: Visit\_Master
+\item
+  Renamed `Pricing Option' -\textgreater{} ``Keyswipe''
+\item
+  Recoded ``Be Fit Study'' (which indicated a keyswipe) to ``1''
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  For QR data, first we needed to import proper date format
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Read in QR\_CorrectDate.csv file
+\item
+  Select columns ``Run'' and ``CorrectDate''
+\item
+  Read in final QR data from processing sheet = QR\_master\_class\_cleaned.csv
+\item
+  Merged the ``CorrectDate'' column to QR\_master\_class\_cleaned file on the ``Run'' column
+\item
+  Reordered the dataset to use only whats needed
+\item
+  Renamed ``CorrectDate'' to ``Date''
+\item
+  Recoded ``Class'' to ``1''
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Merging
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Merged QR data and Keyswipe data on ID and Date
+\item
+  For all perfectly matching ID and Date this will be shown without any issues
+\item
+  For any observation where ID and Date did not match for QR and Keyswipe date =\textgreater{} R will indicate this as NA in the column
+\item
+  Saved as: Final\_Merged\_raw.csv
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{##### Visits Data #####}
+\CommentTok{# Read in Visits data}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/LAB_NUC/Visits_QR_data/Visits"}\NormalTok{)}
+\NormalTok{wave1_v <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave1_final.csv"}\NormalTok{)}
+\NormalTok{wave2_v <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave2_final.csv"}\NormalTok{)}
+\NormalTok{wave3_v <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave3_final.csv"}\NormalTok{)}
+\NormalTok{wave4_v <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave4_final.csv"}\NormalTok{)}
+\NormalTok{wave5_v <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave5_final.csv"}\NormalTok{)}
+\NormalTok{wave6_v <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"wave6_final.csv"}\NormalTok{)}
+\CommentTok{# Adds column indicating wave}
+\NormalTok{wave1_v}\OperatorTok{$}\NormalTok{wave <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(wave1_v))}
+\NormalTok{wave2_v}\OperatorTok{$}\NormalTok{wave <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{2}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(wave2_v))}
+\NormalTok{wave3_v}\OperatorTok{$}\NormalTok{wave <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{3}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(wave3_v))}
+\NormalTok{wave4_v}\OperatorTok{$}\NormalTok{wave <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{4}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(wave4_v))}
+\NormalTok{wave5_v}\OperatorTok{$}\NormalTok{wave <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{5}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(wave5_v))}
+\NormalTok{wave6_v}\OperatorTok{$}\NormalTok{wave <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{6}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(wave6_v))}
+\CommentTok{# Selects columns of interest}
+\NormalTok{wave1_v <-}\StringTok{ }\NormalTok{wave1_v[}\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{5}\NormalTok{)]}
+\NormalTok{wave2_v <-}\StringTok{ }\NormalTok{wave2_v[}\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{5}\NormalTok{)]}
+\NormalTok{wave3_v <-}\StringTok{ }\NormalTok{wave3_v[}\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{5}\NormalTok{)]}
+\NormalTok{wave4_v <-}\StringTok{ }\NormalTok{wave4_v[}\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{5}\NormalTok{)]}
+\NormalTok{wave5_v <-}\StringTok{ }\NormalTok{wave5_v[}\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{5}\NormalTok{)]}
+\NormalTok{wave6_v <-}\StringTok{ }\NormalTok{wave6_v[}\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{5}\NormalTok{)]}
+\CommentTok{# Merges all the waves into a single dataset}
+\NormalTok{visit_master <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(wave1_v, wave2_v, wave3_v, wave4_v, wave5_v, wave6_v)}
+\KeywordTok{colnames}\NormalTok{(visit_master)[}\DecValTok{4}\NormalTok{] <-}\StringTok{ "Keyswipe"}  \CommentTok{# Changes pricing.option column to keyswipes}
+\NormalTok{visit_master}\OperatorTok{$}\NormalTok{Keyswipe <-}\StringTok{ "1"}             \CommentTok{# Give a value 1 to all valid swipes in dataset}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{cleaning}{%
+\chapter{Cleaning}\label{cleaning}}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  Cleanned wave.x and wave.y columns
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Wave.x -\textgreater{} ``Wave''
+\item
+  Wave.y was deleted
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  All NA's -\textgreater{} Find and replace -\textgreater{} 0
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Final cleaned saved as: Final\_merged.csv
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{##### QR Data #####}
+\CommentTok{# Read in QR data - for dates}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/LAB_NUC/Visits_QR_data/QR_data/QR_Cleaned_Processed_Files"}\NormalTok{)}
+\NormalTok{data <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"QR_CorrectDate.csv"}\NormalTok{)}
+\NormalTok{data <-}\StringTok{ }\NormalTok{data[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{10}\NormalTok{)]}
+
+\CommentTok{# Read in QR master cleaned }
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/LAB_NUC/Visits_QR_data/QR_data"}\NormalTok{)}
+\NormalTok{class_clean <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"QR_master_class_cleaned.csv"}\NormalTok{)}
+
+\CommentTok{# Merge date format into QR file}
+\NormalTok{qr_merg <-}\StringTok{ }\KeywordTok{merge}\NormalTok{(class_clean, data, }\DataTypeTok{by.x =} \StringTok{"run"}\NormalTok{, }\DataTypeTok{by.y =} \StringTok{"Run"}\NormalTok{)}
+\NormalTok{qr_master <-}\StringTok{ }\NormalTok{qr_merg[}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{20}\NormalTok{,}\DecValTok{4}\NormalTok{)]}
+\KeywordTok{colnames}\NormalTok{(qr_master)[}\DecValTok{3}\NormalTok{] <-}\StringTok{ "Date"}
+\NormalTok{qr_master}\OperatorTok{$}\NormalTok{Class <-}\StringTok{ "1"}  \CommentTok{# Give a value 1 to all valid class attendence in dataset}
+\CommentTok{##### Merging Visits and QR Data #####}
+\NormalTok{final_merged <-}\StringTok{ }\KeywordTok{merge}\NormalTok{(qr_master, visit_master, }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"ID"}\NormalTok{, }\StringTok{"Date"}\NormalTok{), }\DataTypeTok{all =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{final_merged <-}\StringTok{ }\NormalTok{final_merged[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{)]}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"C:/Users/jadamek2/Desktop/LAB_NUC/Visits_QR_data"}\NormalTok{)}
+\KeywordTok{write.csv}\NormalTok{(final_merged, }\StringTok{"Final_merged_raw.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{aggregating}{%
+\chapter{Aggregating}\label{aggregating}}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  Read in Final\_merged.csv
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Selected only Class and Keyswipe column
+\item
+  Aggregated
+\item
+  Created a total combined column of class + keyswipes
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Prepared to insert waves again
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Copied wave 1 -- 6 Id's
+\item
+  Ran function to create wave column with correct ID
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Saved as: Complete\_Merged.csv
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{##### Aggregating #####}
+
+\CommentTok{# Get Data}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"S:/LAB_Documents/Visits_QR_data"}\NormalTok{)}
+\NormalTok{merg <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"Final_merged.csv"}\NormalTok{)}
+
+\CommentTok{# The Below codes aggregates Class and keyswipes}
+\NormalTok{merg_select <-}\StringTok{ }\NormalTok{merg[}\OperatorTok{-}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{)]                          }\CommentTok{# Makes dataframe of just the ID's class and keyswipe}
+\NormalTok{merg_select <-}\StringTok{ }\KeywordTok{aggregate}\NormalTok{(.}\OperatorTok{~}\NormalTok{ID, merg_select, sum)               }
+\NormalTok{merg_select}\OperatorTok{$}\NormalTok{Total_Combined <-}\StringTok{ }\KeywordTok{rowSums}\NormalTok{(merg_select[}\OperatorTok{-}\DecValTok{1}\NormalTok{])            }\CommentTok{# This [-1] is to make sure the ID # isn't summed as well}
+
+\CommentTok{#Waves's}
+\NormalTok{wave1 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{101}\NormalTok{,    }\DecValTok{102}\NormalTok{,    }\DecValTok{103}\NormalTok{,    }\DecValTok{104}\NormalTok{,    }\DecValTok{105}\NormalTok{,    }\DecValTok{106}\NormalTok{,    }\DecValTok{107}\NormalTok{,    }\DecValTok{108}\NormalTok{,    }\DecValTok{109}\NormalTok{,    }\DecValTok{110}\NormalTok{,    }\DecValTok{111}\NormalTok{,    }\DecValTok{112}\NormalTok{,    }\DecValTok{113}\NormalTok{,    }\DecValTok{114}\NormalTok{,    }\DecValTok{115}\NormalTok{,    }\DecValTok{116}\NormalTok{,    }\DecValTok{117}\NormalTok{,    }\DecValTok{118}\NormalTok{,    }\DecValTok{120}\NormalTok{,    }\DecValTok{121}\NormalTok{,    }\DecValTok{122}\NormalTok{,    }\DecValTok{123}\NormalTok{,}
+           \DecValTok{124}\NormalTok{, }\DecValTok{125}\NormalTok{,    }\DecValTok{126}\NormalTok{,    }\DecValTok{127}\NormalTok{,    }\DecValTok{128}\NormalTok{,    }\DecValTok{129}\NormalTok{,    }\DecValTok{131}\NormalTok{,    }\DecValTok{132}\NormalTok{,    }\DecValTok{134}\NormalTok{,    }\DecValTok{135}\NormalTok{,    }\DecValTok{136}\NormalTok{,    }\DecValTok{137}\NormalTok{,    }\DecValTok{139}\NormalTok{,    }\DecValTok{141}\NormalTok{,    }\DecValTok{142}\NormalTok{,    }\DecValTok{143}\NormalTok{,    }\DecValTok{146}\NormalTok{,    }\DecValTok{147}\NormalTok{,    }\DecValTok{150}\NormalTok{,    }\DecValTok{151}\NormalTok{,    }\DecValTok{152}\NormalTok{,    }\DecValTok{153}\NormalTok{,    }\DecValTok{155}\NormalTok{,}
+           \DecValTok{157}\NormalTok{, }\DecValTok{158}\NormalTok{,    }\DecValTok{161}\NormalTok{,    }\DecValTok{162}\NormalTok{)}
+\NormalTok{wave2 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{133}\NormalTok{, }\DecValTok{138}\NormalTok{,  }\DecValTok{144}\NormalTok{,  }\DecValTok{149}\NormalTok{,  }\DecValTok{154}\NormalTok{,  }\DecValTok{156}\NormalTok{,  }\DecValTok{159}\NormalTok{,  }\DecValTok{160}\NormalTok{,  }\DecValTok{167}\NormalTok{,  }\DecValTok{168}\NormalTok{,  }\DecValTok{169}\NormalTok{,  }\DecValTok{170}\NormalTok{,  }\DecValTok{171}\NormalTok{,  }\DecValTok{172}\NormalTok{,  }\DecValTok{173}\NormalTok{,  }\DecValTok{174}\NormalTok{,  }\DecValTok{175}\NormalTok{,  }\DecValTok{176}\NormalTok{,  }\DecValTok{177}\NormalTok{,  }\DecValTok{178}\NormalTok{,  }\DecValTok{179}\NormalTok{,  }\DecValTok{181}\NormalTok{,  }\DecValTok{182}\NormalTok{,}
+           \DecValTok{183}\NormalTok{, }\DecValTok{184}\NormalTok{,  }\DecValTok{185}\NormalTok{,  }\DecValTok{186}\NormalTok{,  }\DecValTok{187}\NormalTok{,  }\DecValTok{188}\NormalTok{,  }\DecValTok{189}\NormalTok{,  }\DecValTok{190}\NormalTok{,  }\DecValTok{191}\NormalTok{,  }\DecValTok{192}\NormalTok{,  }\DecValTok{193}\NormalTok{,  }\DecValTok{194}\NormalTok{,  }\DecValTok{195}\NormalTok{,  }\DecValTok{196}\NormalTok{,  }\DecValTok{197}\NormalTok{,  }\DecValTok{198}\NormalTok{,  }\DecValTok{199}\NormalTok{,  }\DecValTok{200}\NormalTok{,  }\DecValTok{201}\NormalTok{,  }\DecValTok{202}\NormalTok{,  }\DecValTok{204}\NormalTok{,  }\DecValTok{205}\NormalTok{,  }\DecValTok{206}\NormalTok{)}
+\NormalTok{wave3 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{207}\NormalTok{, }\DecValTok{208}\NormalTok{,  }\DecValTok{209}\NormalTok{,  }\DecValTok{210}\NormalTok{,  }\DecValTok{211}\NormalTok{,  }\DecValTok{212}\NormalTok{,  }\DecValTok{213}\NormalTok{,  }\DecValTok{215}\NormalTok{,  }\DecValTok{216}\NormalTok{,  }\DecValTok{217}\NormalTok{,  }\DecValTok{218}\NormalTok{,  }\DecValTok{219}\NormalTok{,  }\DecValTok{220}\NormalTok{,  }\DecValTok{221}\NormalTok{,  }\DecValTok{222}\NormalTok{,  }\DecValTok{223}\NormalTok{,  }\DecValTok{224}\NormalTok{,  }\DecValTok{225}\NormalTok{,  }\DecValTok{226}\NormalTok{,  }\DecValTok{227}\NormalTok{,  }\DecValTok{229}\NormalTok{,  }\DecValTok{230}\NormalTok{,  }\DecValTok{231}\NormalTok{,}
+           \DecValTok{232}\NormalTok{, }\DecValTok{233}\NormalTok{,  }\DecValTok{234}\NormalTok{,  }\DecValTok{237}\NormalTok{,  }\DecValTok{238}\NormalTok{,  }\DecValTok{239}\NormalTok{,  }\DecValTok{240}\NormalTok{,  }\DecValTok{241}\NormalTok{,  }\DecValTok{242}\NormalTok{,  }\DecValTok{243}\NormalTok{,  }\DecValTok{244}\NormalTok{,  }\DecValTok{245}\NormalTok{,  }\DecValTok{247}\NormalTok{,  }\DecValTok{248}\NormalTok{,  }\DecValTok{249}\NormalTok{,  }\DecValTok{250}\NormalTok{,  }\DecValTok{251}\NormalTok{,  }\DecValTok{252}\NormalTok{,  }\DecValTok{253}\NormalTok{,  }\DecValTok{254}\NormalTok{,  }\DecValTok{255}\NormalTok{,  }\DecValTok{256}\NormalTok{,  }\DecValTok{257}\NormalTok{, }
+           \DecValTok{258}\NormalTok{)}
+\NormalTok{wave4 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{214}\NormalTok{, }\DecValTok{259}\NormalTok{,    }\DecValTok{260}\NormalTok{,    }\DecValTok{261}\NormalTok{,    }\DecValTok{262}\NormalTok{,    }\DecValTok{263}\NormalTok{,    }\DecValTok{264}\NormalTok{,    }\DecValTok{265}\NormalTok{,    }\DecValTok{266}\NormalTok{,    }\DecValTok{267}\NormalTok{,    }\DecValTok{268}\NormalTok{,    }\DecValTok{269}\NormalTok{,    }\DecValTok{271}\NormalTok{,    }\DecValTok{273}\NormalTok{,    }\DecValTok{274}\NormalTok{,    }\DecValTok{275}\NormalTok{,    }\DecValTok{277}\NormalTok{,    }\DecValTok{278}\NormalTok{,    }\DecValTok{279}\NormalTok{,    }\DecValTok{280}\NormalTok{,    }\DecValTok{281}\NormalTok{,    }\DecValTok{282}\NormalTok{,    }\DecValTok{283}\NormalTok{,}
+           \DecValTok{284}\NormalTok{, }\DecValTok{285}\NormalTok{,    }\DecValTok{287}\NormalTok{,    }\DecValTok{288}\NormalTok{,    }\DecValTok{289}\NormalTok{,    }\DecValTok{291}\NormalTok{)}
+\NormalTok{wave5 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{292}\NormalTok{, }\DecValTok{293}\NormalTok{,    }\DecValTok{294}\NormalTok{,    }\DecValTok{295}\NormalTok{,    }\DecValTok{296}\NormalTok{,    }\DecValTok{297}\NormalTok{,    }\DecValTok{298}\NormalTok{,    }\DecValTok{299}\NormalTok{,    }\DecValTok{300}\NormalTok{,    }\DecValTok{301}\NormalTok{,    }\DecValTok{302}\NormalTok{,    }\DecValTok{303}\NormalTok{,    }\DecValTok{304}\NormalTok{,    }\DecValTok{305}\NormalTok{,    }\DecValTok{306}\NormalTok{,    }\DecValTok{307}\NormalTok{,    }\DecValTok{308}\NormalTok{,    }\DecValTok{309}\NormalTok{,    }\DecValTok{310}\NormalTok{,    }\DecValTok{311}\NormalTok{,    }\DecValTok{312}\NormalTok{,    }\DecValTok{313}\NormalTok{,    }\DecValTok{314}\NormalTok{)}
+\NormalTok{wave6 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{316}\NormalTok{, }\DecValTok{317}\NormalTok{,    }\DecValTok{318}\NormalTok{,    }\DecValTok{319}\NormalTok{,    }\DecValTok{321}\NormalTok{,    }\DecValTok{322}\NormalTok{,    }\DecValTok{323}\NormalTok{,    }\DecValTok{324}\NormalTok{,    }\DecValTok{325}\NormalTok{,    }\DecValTok{326}\NormalTok{,    }\DecValTok{327}\NormalTok{,    }\DecValTok{328}\NormalTok{,    }\DecValTok{329}\NormalTok{,    }\DecValTok{330}\NormalTok{,    }\DecValTok{331}\NormalTok{,    }\DecValTok{332}\NormalTok{,    }\DecValTok{333}\NormalTok{,    }\DecValTok{334}\NormalTok{,    }\DecValTok{335}\NormalTok{,    }\DecValTok{336}\NormalTok{,    }\DecValTok{338}\NormalTok{,    }\DecValTok{339}\NormalTok{,    }\DecValTok{341}\NormalTok{,}
+           \DecValTok{342}\NormalTok{, }\DecValTok{343}\NormalTok{,  }\DecValTok{344}\NormalTok{,  }\DecValTok{345}\NormalTok{,    }\DecValTok{347}\NormalTok{,    }\DecValTok{348}\NormalTok{,    }\DecValTok{349}\NormalTok{,    }\DecValTok{350}\NormalTok{,    }\DecValTok{351}\NormalTok{,    }\DecValTok{353}\NormalTok{,    }\DecValTok{354}\NormalTok{,    }\DecValTok{355}\NormalTok{,    }\DecValTok{356}\NormalTok{,    }\DecValTok{357}\NormalTok{,    }\DecValTok{358}\NormalTok{)}
+
+
+\CommentTok{#Identifing waves again}
+\NormalTok{merg_select}\OperatorTok{$}\NormalTok{wave[merg_select}\OperatorTok{$}\NormalTok{ID }\OperatorTok{%in%}\StringTok{ }\NormalTok{wave1] <-}\StringTok{ }\DecValTok{1}
+\NormalTok{merg_select}\OperatorTok{$}\NormalTok{wave[merg_select}\OperatorTok{$}\NormalTok{ID }\OperatorTok{%in%}\StringTok{ }\NormalTok{wave2] <-}\StringTok{ }\DecValTok{2}
+\NormalTok{merg_select}\OperatorTok{$}\NormalTok{wave[merg_select}\OperatorTok{$}\NormalTok{ID }\OperatorTok{%in%}\StringTok{ }\NormalTok{wave3] <-}\StringTok{ }\DecValTok{3}
+\NormalTok{merg_select}\OperatorTok{$}\NormalTok{wave[merg_select}\OperatorTok{$}\NormalTok{ID }\OperatorTok{%in%}\StringTok{ }\NormalTok{wave4] <-}\StringTok{ }\DecValTok{4}
+\NormalTok{merg_select}\OperatorTok{$}\NormalTok{wave[merg_select}\OperatorTok{$}\NormalTok{ID }\OperatorTok{%in%}\StringTok{ }\NormalTok{wave5] <-}\StringTok{ }\DecValTok{5}
+\NormalTok{merg_select}\OperatorTok{$}\NormalTok{wave[merg_select}\OperatorTok{$}\NormalTok{ID }\OperatorTok{%in%}\StringTok{ }\NormalTok{wave6] <-}\StringTok{ }\DecValTok{6}
+
+\NormalTok{merg_select <-}\StringTok{ }\NormalTok{merg_select[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{)]}
+
+\KeywordTok{write.csv}\NormalTok{(merg_select, }\StringTok{"Complete_Merged.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{unique}{%
+\chapter{Unique}\label{unique}}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  Sean's Unique visit request
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Read in Final\_merged.csv
+\item
+  Ran ifelse statement indicating that if Class == 1 (valid) AND keyswipe == 0 create a new column (unique\_class) indicating ``1'' otherwise for all other occurrences ``0''.
+\item
+  This was then aggregated
+\item
+  Saved as: Complete\_Merged\_unique.csv
+\item
+  Read into SPSS and saved as Total\_Classes\&Keyswipes.sav
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"S:/LAB_Documents/Visits_QR_data"}\NormalTok{)}
+\NormalTok{uniq <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"Final_merged.csv"}\NormalTok{)}
+
+\CommentTok{# If class is 1 but no overlap new column is a 1 otherwise its a 2}
+\NormalTok{uniq}\OperatorTok{$}\NormalTok{unique_class <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(uniq}\OperatorTok{$}\NormalTok{Class }\OperatorTok{==}\StringTok{ }\DecValTok{1} \OperatorTok{&}\StringTok{ }\NormalTok{uniq}\OperatorTok{$}\NormalTok{Keyswipe }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{,  }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+
+
+\NormalTok{uniq_ <-}\StringTok{ }\NormalTok{uniq[}\OperatorTok{-}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{)]                          }
+\NormalTok{uniq_ <-}\StringTok{ }\KeywordTok{aggregate}\NormalTok{(.}\OperatorTok{~}\NormalTok{ID, uniq_, sum)              }
+
+\KeywordTok{write.csv}\NormalTok{(uniq_, }\StringTok{"Complete_Merged_unique.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+  \bibliography{book.bib,packages.bib}
+
+\end{document}

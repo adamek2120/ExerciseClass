@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 5 Aggregating | Data Processing - Visits &amp; QR</title>
+  <meta name="description" content="This is the steps that were taken for cleanning and processing QR and visits data from A-Z" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 5 Aggregating | Data Processing - Visits &amp; QR" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is the steps that were taken for cleanning and processing QR and visits data from A-Z" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 5 Aggregating | Data Processing - Visits &amp; QR" />
+  
+  <meta name="twitter:description" content="This is the steps that were taken for cleanning and processing QR and visits data from A-Z" />
+  
+
+<meta name="author" content="John F. Adamek" />
+
+
+<meta name="date" content="2020-11-03" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="cleaning.html"/>
+<link rel="next" href="unique.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="data-processing-qr-data.html"><a href="data-processing-qr-data.html"><i class="fa fa-check"></i><b>1</b> Data Processing - QR Data</a></li>
+<li class="chapter" data-level="2" data-path="data-processing-keyswipes-data.html"><a href="data-processing-keyswipes-data.html"><i class="fa fa-check"></i><b>2</b> Data Processing - Keyswipes Data</a></li>
+<li class="chapter" data-level="3" data-path="data-processing-merging-qr-keyswipe.html"><a href="data-processing-merging-qr-keyswipe.html"><i class="fa fa-check"></i><b>3</b> Data Processing - Merging QR &amp; Keyswipe</a></li>
+<li class="chapter" data-level="4" data-path="cleaning.html"><a href="cleaning.html"><i class="fa fa-check"></i><b>4</b> Cleaning</a></li>
+<li class="chapter" data-level="5" data-path="aggregating.html"><a href="aggregating.html"><i class="fa fa-check"></i><b>5</b> Aggregating</a></li>
+<li class="chapter" data-level="6" data-path="unique.html"><a href="unique.html"><i class="fa fa-check"></i><b>6</b> Unique</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Data Processing - Visits &amp; QR</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="aggregating" class="section level1">
+<h1><span class="header-section-number">Chapter 5</span> Aggregating</h1>
+<ol style="list-style-type: lower-alpha">
+<li>Read in Final_merged.csv</li>
+</ol>
+<ul>
+<li>Selected only Class and Keyswipe column</li>
+<li>Aggregated</li>
+<li>Created a total combined column of class + keyswipes</li>
+</ul>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Prepared to insert waves again</li>
+</ol>
+<ul>
+<li>Copied wave 1 – 6 Id’s</li>
+<li>Ran function to create wave column with correct ID</li>
+</ul>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Saved as: Complete_Merged.csv</li>
+</ol>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="aggregating.html#cb10-1"></a><span class="co">##### Aggregating #####</span></span>
+<span id="cb10-2"><a href="aggregating.html#cb10-2"></a></span>
+<span id="cb10-3"><a href="aggregating.html#cb10-3"></a><span class="co"># Get Data</span></span>
+<span id="cb10-4"><a href="aggregating.html#cb10-4"></a><span class="kw">setwd</span>(<span class="st">&quot;S:/LAB_Documents/Visits_QR_data&quot;</span>)</span>
+<span id="cb10-5"><a href="aggregating.html#cb10-5"></a>merg &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;Final_merged.csv&quot;</span>)</span>
+<span id="cb10-6"><a href="aggregating.html#cb10-6"></a></span>
+<span id="cb10-7"><a href="aggregating.html#cb10-7"></a><span class="co"># The Below codes aggregates Class and keyswipes</span></span>
+<span id="cb10-8"><a href="aggregating.html#cb10-8"></a>merg_select &lt;-<span class="st"> </span>merg[<span class="op">-</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>)]                          <span class="co"># Makes dataframe of just the ID&#39;s class and keyswipe</span></span>
+<span id="cb10-9"><a href="aggregating.html#cb10-9"></a>merg_select &lt;-<span class="st"> </span><span class="kw">aggregate</span>(.<span class="op">~</span>ID, merg_select, sum)               </span>
+<span id="cb10-10"><a href="aggregating.html#cb10-10"></a>merg_select<span class="op">$</span>Total_Combined &lt;-<span class="st"> </span><span class="kw">rowSums</span>(merg_select[<span class="op">-</span><span class="dv">1</span>])            <span class="co"># This [-1] is to make sure the ID # isn&#39;t summed as well</span></span>
+<span id="cb10-11"><a href="aggregating.html#cb10-11"></a></span>
+<span id="cb10-12"><a href="aggregating.html#cb10-12"></a><span class="co">#Waves&#39;s</span></span>
+<span id="cb10-13"><a href="aggregating.html#cb10-13"></a>wave1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">100</span>, <span class="dv">101</span>,    <span class="dv">102</span>,    <span class="dv">103</span>,    <span class="dv">104</span>,    <span class="dv">105</span>,    <span class="dv">106</span>,    <span class="dv">107</span>,    <span class="dv">108</span>,    <span class="dv">109</span>,    <span class="dv">110</span>,    <span class="dv">111</span>,    <span class="dv">112</span>,    <span class="dv">113</span>,    <span class="dv">114</span>,    <span class="dv">115</span>,    <span class="dv">116</span>,    <span class="dv">117</span>,    <span class="dv">118</span>,    <span class="dv">120</span>,    <span class="dv">121</span>,    <span class="dv">122</span>,    <span class="dv">123</span>,</span>
+<span id="cb10-14"><a href="aggregating.html#cb10-14"></a>           <span class="dv">124</span>, <span class="dv">125</span>,    <span class="dv">126</span>,    <span class="dv">127</span>,    <span class="dv">128</span>,    <span class="dv">129</span>,    <span class="dv">131</span>,    <span class="dv">132</span>,    <span class="dv">134</span>,    <span class="dv">135</span>,    <span class="dv">136</span>,    <span class="dv">137</span>,    <span class="dv">139</span>,    <span class="dv">141</span>,    <span class="dv">142</span>,    <span class="dv">143</span>,    <span class="dv">146</span>,    <span class="dv">147</span>,    <span class="dv">150</span>,    <span class="dv">151</span>,    <span class="dv">152</span>,    <span class="dv">153</span>,    <span class="dv">155</span>,</span>
+<span id="cb10-15"><a href="aggregating.html#cb10-15"></a>           <span class="dv">157</span>, <span class="dv">158</span>,    <span class="dv">161</span>,    <span class="dv">162</span>)</span>
+<span id="cb10-16"><a href="aggregating.html#cb10-16"></a>wave2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">133</span>, <span class="dv">138</span>,  <span class="dv">144</span>,  <span class="dv">149</span>,  <span class="dv">154</span>,  <span class="dv">156</span>,  <span class="dv">159</span>,  <span class="dv">160</span>,  <span class="dv">167</span>,  <span class="dv">168</span>,  <span class="dv">169</span>,  <span class="dv">170</span>,  <span class="dv">171</span>,  <span class="dv">172</span>,  <span class="dv">173</span>,  <span class="dv">174</span>,  <span class="dv">175</span>,  <span class="dv">176</span>,  <span class="dv">177</span>,  <span class="dv">178</span>,  <span class="dv">179</span>,  <span class="dv">181</span>,  <span class="dv">182</span>,</span>
+<span id="cb10-17"><a href="aggregating.html#cb10-17"></a>           <span class="dv">183</span>, <span class="dv">184</span>,  <span class="dv">185</span>,  <span class="dv">186</span>,  <span class="dv">187</span>,  <span class="dv">188</span>,  <span class="dv">189</span>,  <span class="dv">190</span>,  <span class="dv">191</span>,  <span class="dv">192</span>,  <span class="dv">193</span>,  <span class="dv">194</span>,  <span class="dv">195</span>,  <span class="dv">196</span>,  <span class="dv">197</span>,  <span class="dv">198</span>,  <span class="dv">199</span>,  <span class="dv">200</span>,  <span class="dv">201</span>,  <span class="dv">202</span>,  <span class="dv">204</span>,  <span class="dv">205</span>,  <span class="dv">206</span>)</span>
+<span id="cb10-18"><a href="aggregating.html#cb10-18"></a>wave3 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">207</span>, <span class="dv">208</span>,  <span class="dv">209</span>,  <span class="dv">210</span>,  <span class="dv">211</span>,  <span class="dv">212</span>,  <span class="dv">213</span>,  <span class="dv">215</span>,  <span class="dv">216</span>,  <span class="dv">217</span>,  <span class="dv">218</span>,  <span class="dv">219</span>,  <span class="dv">220</span>,  <span class="dv">221</span>,  <span class="dv">222</span>,  <span class="dv">223</span>,  <span class="dv">224</span>,  <span class="dv">225</span>,  <span class="dv">226</span>,  <span class="dv">227</span>,  <span class="dv">229</span>,  <span class="dv">230</span>,  <span class="dv">231</span>,</span>
+<span id="cb10-19"><a href="aggregating.html#cb10-19"></a>           <span class="dv">232</span>, <span class="dv">233</span>,  <span class="dv">234</span>,  <span class="dv">237</span>,  <span class="dv">238</span>,  <span class="dv">239</span>,  <span class="dv">240</span>,  <span class="dv">241</span>,  <span class="dv">242</span>,  <span class="dv">243</span>,  <span class="dv">244</span>,  <span class="dv">245</span>,  <span class="dv">247</span>,  <span class="dv">248</span>,  <span class="dv">249</span>,  <span class="dv">250</span>,  <span class="dv">251</span>,  <span class="dv">252</span>,  <span class="dv">253</span>,  <span class="dv">254</span>,  <span class="dv">255</span>,  <span class="dv">256</span>,  <span class="dv">257</span>, </span>
+<span id="cb10-20"><a href="aggregating.html#cb10-20"></a>           <span class="dv">258</span>)</span>
+<span id="cb10-21"><a href="aggregating.html#cb10-21"></a>wave4 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">214</span>, <span class="dv">259</span>,    <span class="dv">260</span>,    <span class="dv">261</span>,    <span class="dv">262</span>,    <span class="dv">263</span>,    <span class="dv">264</span>,    <span class="dv">265</span>,    <span class="dv">266</span>,    <span class="dv">267</span>,    <span class="dv">268</span>,    <span class="dv">269</span>,    <span class="dv">271</span>,    <span class="dv">273</span>,    <span class="dv">274</span>,    <span class="dv">275</span>,    <span class="dv">277</span>,    <span class="dv">278</span>,    <span class="dv">279</span>,    <span class="dv">280</span>,    <span class="dv">281</span>,    <span class="dv">282</span>,    <span class="dv">283</span>,</span>
+<span id="cb10-22"><a href="aggregating.html#cb10-22"></a>           <span class="dv">284</span>, <span class="dv">285</span>,    <span class="dv">287</span>,    <span class="dv">288</span>,    <span class="dv">289</span>,    <span class="dv">291</span>)</span>
+<span id="cb10-23"><a href="aggregating.html#cb10-23"></a>wave5 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">292</span>, <span class="dv">293</span>,    <span class="dv">294</span>,    <span class="dv">295</span>,    <span class="dv">296</span>,    <span class="dv">297</span>,    <span class="dv">298</span>,    <span class="dv">299</span>,    <span class="dv">300</span>,    <span class="dv">301</span>,    <span class="dv">302</span>,    <span class="dv">303</span>,    <span class="dv">304</span>,    <span class="dv">305</span>,    <span class="dv">306</span>,    <span class="dv">307</span>,    <span class="dv">308</span>,    <span class="dv">309</span>,    <span class="dv">310</span>,    <span class="dv">311</span>,    <span class="dv">312</span>,    <span class="dv">313</span>,    <span class="dv">314</span>)</span>
+<span id="cb10-24"><a href="aggregating.html#cb10-24"></a>wave6 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">316</span>, <span class="dv">317</span>,    <span class="dv">318</span>,    <span class="dv">319</span>,    <span class="dv">321</span>,    <span class="dv">322</span>,    <span class="dv">323</span>,    <span class="dv">324</span>,    <span class="dv">325</span>,    <span class="dv">326</span>,    <span class="dv">327</span>,    <span class="dv">328</span>,    <span class="dv">329</span>,    <span class="dv">330</span>,    <span class="dv">331</span>,    <span class="dv">332</span>,    <span class="dv">333</span>,    <span class="dv">334</span>,    <span class="dv">335</span>,    <span class="dv">336</span>,    <span class="dv">338</span>,    <span class="dv">339</span>,    <span class="dv">341</span>,</span>
+<span id="cb10-25"><a href="aggregating.html#cb10-25"></a>           <span class="dv">342</span>, <span class="dv">343</span>,  <span class="dv">344</span>,  <span class="dv">345</span>,    <span class="dv">347</span>,    <span class="dv">348</span>,    <span class="dv">349</span>,    <span class="dv">350</span>,    <span class="dv">351</span>,    <span class="dv">353</span>,    <span class="dv">354</span>,    <span class="dv">355</span>,    <span class="dv">356</span>,    <span class="dv">357</span>,    <span class="dv">358</span>)</span>
+<span id="cb10-26"><a href="aggregating.html#cb10-26"></a></span>
+<span id="cb10-27"><a href="aggregating.html#cb10-27"></a></span>
+<span id="cb10-28"><a href="aggregating.html#cb10-28"></a><span class="co">#Identifing waves again</span></span>
+<span id="cb10-29"><a href="aggregating.html#cb10-29"></a>merg_select<span class="op">$</span>wave[merg_select<span class="op">$</span>ID <span class="op">%in%</span><span class="st"> </span>wave1] &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb10-30"><a href="aggregating.html#cb10-30"></a>merg_select<span class="op">$</span>wave[merg_select<span class="op">$</span>ID <span class="op">%in%</span><span class="st"> </span>wave2] &lt;-<span class="st"> </span><span class="dv">2</span></span>
+<span id="cb10-31"><a href="aggregating.html#cb10-31"></a>merg_select<span class="op">$</span>wave[merg_select<span class="op">$</span>ID <span class="op">%in%</span><span class="st"> </span>wave3] &lt;-<span class="st"> </span><span class="dv">3</span></span>
+<span id="cb10-32"><a href="aggregating.html#cb10-32"></a>merg_select<span class="op">$</span>wave[merg_select<span class="op">$</span>ID <span class="op">%in%</span><span class="st"> </span>wave4] &lt;-<span class="st"> </span><span class="dv">4</span></span>
+<span id="cb10-33"><a href="aggregating.html#cb10-33"></a>merg_select<span class="op">$</span>wave[merg_select<span class="op">$</span>ID <span class="op">%in%</span><span class="st"> </span>wave5] &lt;-<span class="st"> </span><span class="dv">5</span></span>
+<span id="cb10-34"><a href="aggregating.html#cb10-34"></a>merg_select<span class="op">$</span>wave[merg_select<span class="op">$</span>ID <span class="op">%in%</span><span class="st"> </span>wave6] &lt;-<span class="st"> </span><span class="dv">6</span></span>
+<span id="cb10-35"><a href="aggregating.html#cb10-35"></a></span>
+<span id="cb10-36"><a href="aggregating.html#cb10-36"></a>merg_select &lt;-<span class="st"> </span>merg_select[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>)]</span>
+<span id="cb10-37"><a href="aggregating.html#cb10-37"></a></span>
+<span id="cb10-38"><a href="aggregating.html#cb10-38"></a><span class="kw">write.csv</span>(merg_select, <span class="st">&quot;Complete_Merged.csv&quot;</span>)</span></code></pre></div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="cleaning.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="unique.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["VisitsData.pdf", "VisitsData.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

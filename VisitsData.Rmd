@@ -1,0 +1,1522 @@
+--- 
+title: "Data Processing - Visits & QR"
+author: "John F. Adamek"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+description: "This is the steps that were taken for cleanning and processing QR and visits data from A-Z"
+---
+
+
+```{r include=FALSE}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'packages.bib')
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+hook_output = knit_hooks$get('output')
+knit_hooks$set(output = function(x, options) {
+  # this hook is used only when the linewidth option is not NULL
+  if (!is.null(n <- options$linewidth)) {
+    x = knitr:::split_lines(x)
+    # any lines wider than n should be wrapped
+    if (any(nchar(x) > n)) x = strwrap(x, width = n)
+    x = paste(x, collapse = '\n')
+  }
+  hook_output(x, options)
+})
+```
+
+<!--chapter:end:index.Rmd-->
+
+# Data Processing - QR Data
+
+Downloading Raw files from Qualtrics
+
+1.	Downloaded the raw data files from Qualtrics:
+* Projects -> “Group Class Check-In” -> Data & Analysis -> Export & Import -> Export Data -> CSV + Download all fields +  Use Choice text
+  + Saved as: Qualtrics_raw_without_other_option.csv
+* Projects -> “Group Class Check-In – Updated with “other” option 7/31/17” -> Data & Analysis -> Export & Import -> Export Data -> CSV Download all fields +  Use Choice text
+  + Saved as: Qualtrics_raw_with_other_option.csv
+* Both files were combined into one file separate sheets
+  + Saved as: QR_raw_combined_data_separate_sheets.xlsx 
+* Files were then combined into one sheet to be used for data cleaning. 
+  + A “Run” column was created of running numbers from 1 to keep track of each individual row and to merge data on in R in later steps. 
+  + Saved as: Qualtrics_combined_rawdata.xlsx
+2.	Merged Class column and Class-other option column into 1 in excel
+* Filtered “Class” column by other. Replaced other with the class indicated.
+  + N = 1067 total instances
+  + Saved as: Qualtrics_cleaning.xlsx
+3.	Cleaned extreme outliers in “Today’sDate” that were errors (e.g., 5/28/1017). 
+* Start, End, Recorded Date were used as a basis.
+* All month and days were consistent across the three columns. Example:
+* Saved in: Qualtrics_cleaning.xlsx
+
+Data Prep in R
+
+4.	**QR_step1.R**:  Loaded Qualtrics_cleaning.xlsx in R for data cleaning: 
+* Separated time from date into its own column
+* Identified all instances where “recorded date” was before “todaysdate” and replaced todays date with the recorded date (n=135)
+  + LOGIC: Since it is highly unlikely people were logging in their class attendance for future dates, its expected that this was a typing error when manually typing “todays date” thus recorded date was determined to be the actual date of class attendance.
+* Identified all instances where “recorded date” was after “todaysdate”. (N=845)
+  + Saved as: rafter.csv 
+  + Two issues to consisder:
+  + 1) If MONTH and DAY are the same for start date, end date, recorded date and todays date but YEAR is different in todays date = year was changed to reflect recorded year n = 228
+  + 2) Participants were allowed to report PAST class attendances resulting in instances where there are multiple (as much as 8) logs on a single day (illustrated via start,end,recorded date) with the actual date being manually reported in todays date. All instances that aren’t satisfied via the first issue above were individually checked and corrected.
+    + Saved as: rafter_clean.csv
+    + See <- recording_ofme_cleaning_rafter.pptx  for more info 
+    + Because occurrences part of issue 2 would result in TodaysDate remaining the same. No changes were made here
+* Returned back to R to pick up where we left off before bullet point c.
+  + **** See r file:  QR_step1.R      
+  + Saved as: QR_cleanned_07312020.csv
+  
+5.	Opened QR_cleanned_07312020.csv file outside of R
+* In this excel file – created a new column “CorrectDate”
+* Then condensed Today’s Date, r_before, and r_after over to “CorrectDate”
+  + Filtered “r_after” column by valid dates only(no NAs) -> checked one last time accuracy and then merged to “CorrectDate” column.
+  + Filtered “r_before” column by valid dates only (no NAs) -> checked one last time accuracy and then merged to “CorrectDate” column.
+  + Filtered “TodaysDate” column by valid dates only -> checked one last time accuracy and then merged to “CorrectDate” column.
+  + Filtered “CorrectDate” column by BLANKS -> checked to make sure r_after and r_before columns were all “NA” and then merged “TodaysDate” to “CorrectDate”
+  + No issues with the above.
+  + This process was checked at the end to ensure no overlap between r_before and r_after columns with CorrectDate
+* Saved as: QR_CorrectDate.csv
+
+```{r eval = FALSE,  linewidth=50}
+##### Pulling in the data #####
+setwd("C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/QR_Cleaning_Processing_Files")
+data <- read_excel("Qualtrics_cleaning.xlsx")
+library(tidyr)
+##### Formatting and Preparing the data ####
+# Separates The column by data and time
+data <- separate(data, StartDate, into=c("sdate","stime"), sep = " ")
+data <- separate(data, EndDate, into=c("Edate","Etime"), sep = " ")
+data <- separate(data, RecordedDate, into=c("Rdate","Rtime"), sep = " ")
+
+# Removes the time columns
+data <- data[-c(5,7,9)]
+
+# Converts class type from chr to date
+data$sdate <- gsub("-","", data$sdate)
+data$Edate <- gsub("-","", data$Edate)
+data$Rdate <- gsub("-","", data$Rdate)
+data$TodaysDate <- gsub("-","", data$TodaysDate)
+data$sdate <- as.Date(data$sdate, format="%Y%m%d")
+data$Edate <- as.Date(data$Edate, format="%Y%m%d")
+data$Rdate <- as.Date(data$Rdate, format="%Y%m%d")
+data$TodaysDate <- as.Date(data$TodaysDate, format="%Y%m%d")
+
+##### Cleaning the Data for instances where Today's Date and Recorded Date does not match ####
+
+# Identifies which Recorded dates are before Todays dates and changes Todays Date to Recorded Date
+R_before <- with(data, data[Rdate < TodaysDate, ])
+R_before$TodaysDate <- R_before$Rdate
+
+# Identifies which Recorded dates are before Todays dates 
+R_after <- with(data, data[Rdate > TodaysDate, ])
+# Saves this file to csv. to manually check for whether these were errors in typing the date or not (see data processing steps and/or screen recording)
+write.csv(R_after, "rafter.csv")
+# Imports the cleanned rafter file
+R_after_cl <- read.csv("rafter_clean.csv")
+
+# This matches the data on RUN and merges data from R_before and R_after_cl into main data set with others
+data$r_before <- R_before$TodaysDate[match(data$Run, R_before$Run)]
+data$r_after <- R_after_cl$TodaysDate[match(data$Run, R_after_cl$Run)]
+
+# Writes the data to file
+write.csv(data, "QR_cleanned_07312020.csv")
+
+##### End of Step 1: Notes to be done before opening QR_step2.R ####
+# After this process I opened the new csv file to ensure accuracy by checking the columns: r_before and r_after
+# The changed dates were then merged into a final CorrectDate column.
+# When this is completed I continued data cleaning in QR_ID_cleanning
+```
+
+
+6.	**QR_step2.R**: This csv file (QR_CorrectDate.csv) was then loaded into r: 
+* Dates were separated by month, day, and year and then tallied for all 12 months
+* Afterwards the IDs were assigned to their appropriate wave
+* After running this function from the total dataset (obs = 7276) each wave had:
+  + Wave 1 = 1841 obs
+  + Wave 2 = 1704 obs -> 1705 after correcting (see below)
+  + Wave 3 = 1389 obs
+  + Wave 4 = 518 obs
+  + Wave 5 = 811 obs -> 812 after correcting (see below)
+  + Wave 6 = 1003 obs -> 1004 after correcting (see below)
+  + This totals 7266obs
+  + The missing 10 observations were:
+    1.	ID 593 = 3x   *IPaddress not found
+    2.	ID 365 = 2x   *IPaddress universal
+    3.	ID 352 = 1x   *IPaddress universal
+    4.	ID 346 = 1x *Determined to be ID342 after looking up IPaddress
+    5.	ID 286 = 1x *Determined to be ID296 after looking up IPaddress
+    6.	ID 270 = 1x  *Determined to be ID170 after looking up IPaddress
+    7.	ID 203 = 1x  *IPaddress not found
+*	Each wave (with combined IDs) was then saved into their folder (e.g., Wave1) as a csv (e.g., wave1_qr.csv)
+  + Each Individual ID was also saved into their Wave folder (e.g ID259.csv)
+7.	There were instances where participants kept logging their class attendance after the 12-month frame (e.g., wave 1, ID101 logged class attended on 3/4/2018 – but wave1 ended 1/31/2018).
+* Each wave’s combined file was opened (e.g., wave1_qr.csv) and all data AFTER the 12-month dataframe was removed.
+  + This was then saved with “clean” at the end (e.g., wave1_qr_clean.csv) so that the original file was not modified which contained the data outside of the 12-month time frame
+* Wave 1 = 40 instances
+  + ID’s: 101, 128, 132, 134, 141, ,143, 158
+* Wave 2 = 5 instances (ID204 was determined to be ID294[wave5] based on date, IPAddress, and class type)
+  + ID’s 156, 172, 183
+* Wave 3 = 11 instances (ID232 was changed from 11/7/2017 to 11/7/2018)
+  + ID’s: 215, 217, 221, 223, 243, 244
+* Wave 4 = 5 instances 
+  + ID’s: 259, 288
+  + Wave 5 = 3 instances (ID 306 was changed from 3/23/2018 to 3/26/2019)
+  + ID: 296
+  + Wave 6 = 85 instances (April&May removed due to refinery being closed)
+  + *Due to COVID-19 many participants logged classes they attended at home, yard work, neighborhood walking, etc.
+  + ID326 changed from 6/3/2018 to 6/5/2019
+  + ID342 changed from 9/19/2018 to 9/20/2019
+* *BEFORE ANY REMOVING, DATA WAS VERIFIED WITH RAW DATAFILE (QR_raw_combined_data_separate_sheets.xlsx)
+
+```{r eval=FALSE,  linewidth=50}
+##### Libraries #####
+library(tidyr)
+library(haven)
+library(dplyr)
+
+##### Pulling in the data ####
+setwd("C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/QR_Cleaning_Processing_Files")
+data <- read.csv("QR_CorrectDate.csv")
+data <- data[c(1,2,3,10)]
+
+##### Formatting and Preparing the data ####
+
+# This uses the separate function to separate the date by month, day, and year
+new = separate(data, col = CorrectDate, into = c("Month","Day", "Year"), sep = "/")
+
+# This tallys their attendance (via class attendence) per month
+new$feb <- ifelse(new$Month == 2, 1, 0)
+new$mar <- ifelse(new$Month == 3, 1, 0)
+new$apr <- ifelse(new$Month == 4, 1, 0)
+new$may <- ifelse(new$Month == 5, 1, 0)
+new$june <- ifelse(new$Month == 6, 1, 0)
+new$july <- ifelse(new$Month == 7, 1, 0)
+new$aug <- ifelse(new$Month == 8, 1, 0)
+new$sep <- ifelse(new$Month == 9, 1, 0)
+new$oct <- ifelse(new$Month == 10, 1, 0)
+new$nov <- ifelse(new$Month == 11, 1, 0)
+new$dec <- ifelse(new$Month == 12, 1, 0)
+new$jan <- ifelse(new$Month == 1, 1, 0)
+
+# ID's filtered by Waves
+wave1 <- c(100,	101,	102,	103,	104,	105,	106,	107,	108,	109,	110,	111,	112,	113,	114,	115,	116,	117,	118,	120,	121,	122,	123,
+           124,	125,	126,	127,	128,	129,	131,	132,	134,	135,	136,	137,	139,	141,	142,	143,	146,	147,	150,	151,	152,	153,	155,
+           157,	158,	161,	162)
+wave2 <- c(133, 138,  144,  149,  154,  156,  159,  160,  167,  168,  169,  170,  171,  172,  173,  174,  175,  176,  177,  178,  179,  181,  182,
+           183, 184,  185,  186,  187,  188,  189,  190,  191,  192,  193,  194,  195,  196,  197,  198,  199,  200,  201,  202,  204,  205,  206)
+wave3 <- c(207, 208,  209,  210,  211,  212,  213,  215,  216,  217,  218,  219,  220,  221,  222,  223,  224,  225,  226,  227,  229,  230,  231,
+           232, 233,  234,  237,  238,  239,  240,  241,  242,  243,  244,  245,  247,  248,  249,  250,  251,  252,  253,  254,  255,  256,  257, 
+           258)
+wave4 <- c(214,	259,	260,	261,	262,	263,	264,	265,	266,	267,	268,	269,	271,	273,	274,	275,	277,	278,	279,	280,	281,	282,	283,
+           284,	285,	287,	288,	289,	291)
+wave5 <- c(292,	293,	294,	295,	296,	297,	298,	299,	300,	301,	302,	303,	304,	305,	306,	307,	308,	309,	310,	311,	312,	313,	314)
+wave6 <- c(316,	317,	318,	319,	321,	322,	323,	324,	325,	326,	327,	328,	329,	330,	331,	332,	333,	334,	335,	336,	338,	339,	341,
+           342,	343,  344,	345,	347,	348,	349,	350,	351,	353,	354,	355,	356,	357,	358)
+
+# Separating ID's into their appropriate waves and saves them as raw files by waves
+wave1_qr <- new[new$ID %in% wave1,]
+wave2_qr <- new[new$ID %in% wave2,]
+wave3_qr <- new[new$ID %in% wave3,]
+wave4_qr <- new[new$ID %in% wave4,]
+wave5_qr <- new[new$ID %in% wave5,]
+wave6_qr <- new[new$ID %in% wave6,]
+
+write.csv(wave1_qr, "wave1_qr.csv")
+write.csv(wave2_qr, "wave2_qr.csv")
+write.csv(wave3_qr, "wave3_qr.csv")
+write.csv(wave4_qr, "wave4_qr.csv")
+write.csv(wave5_qr, "wave5_qr.csv")
+write.csv(wave6_qr, "wave6_qr.csv")
+
+##### Creating separate files for each ID #####
+
+#ID100 <- subset(data, ID == 100)
+ID101 <- subset(new, ID == 101)
+ID102 <- subset(new, ID == 102)
+ID103 <- subset(new, ID == 103)
+ID104 <- subset(new, ID == 104)
+ID105 <- subset(new, ID == 105)
+ID106 <- subset(new, ID == 106)
+ID107 <- subset(new, ID == 107)
+ID108 <- subset(new, ID == 108)
+ID109 <- subset(new, ID == 109)
+ID110 <- subset(new, ID == 110)
+ID111 <- subset(new, ID == 111)
+ID112 <- subset(new, ID == 112)
+ID113 <- subset(new, ID == 113)
+ID114 <- subset(new, ID == 114)
+ID115 <- subset(new, ID == 115)
+ID116 <- subset(new, ID == 116)
+ID117 <- subset(new, ID == 117)
+ID118 <- subset(new, ID == 118)
+
+ID120 <- subset(new, ID == 120)
+ID121 <- subset(new, ID == 121)
+ID122 <- subset(new, ID == 122)
+ID123 <- subset(new, ID == 123)
+ID124 <- subset(new, ID == 124)
+ID125 <- subset(new, ID == 125)
+ID126 <- subset(new, ID == 126)
+ID127 <- subset(new, ID == 127)
+ID128 <- subset(new, ID == 128)
+ID129 <- subset(new, ID == 129)
+
+ID131 <- subset(new, ID == 131) 
+ID132 <- subset(new, ID == 132)
+ID133 <- subset(new, ID == 133)
+ID134 <- subset(new, ID == 134)
+ID135 <- subset(new, ID == 135)
+ID136 <- subset(new, ID == 136)
+ID137 <- subset(new, ID == 137)
+#ID138 <- subset(data, ID == 138)
+ID139 <- subset(new, ID == 139)
+
+ID141 <- subset(new, ID == 141)
+ID142 <- subset(new, ID == 142)
+ID143 <- subset(new, ID == 143)
+ID144 <- subset(new, ID == 144)
+
+ID146 <- subset(new, ID == 146)
+ID147 <- subset(new, ID == 147)
+
+ID149 <- subset(new, ID == 149)
+#ID150 <- subset(data, ID == 150)
+ID151 <- subset(new, ID == 151)
+ID152 <- subset(new, ID == 152)
+ID153 <- subset(new, ID == 153)
+ID154 <- subset(new, ID == 154)
+ID155 <- subset(new, ID == 155)
+ID156 <- subset(new, ID == 156)
+ID157 <- subset(new, ID == 157)
+ID158 <- subset(new, ID == 158)
+ID159 <- subset(new, ID == 159)
+#ID160 <- subset(data, ID == 160)
+ID161 <- subset(new, ID == 161)
+ID162 <- subset(new, ID == 162)
+
+
+ID167 <- subset(new, ID == 167)
+#ID168 <- subset(new, ID == 168)
+ID169 <- subset(new, ID == 169)
+ID170 <- subset(new, ID == 170)
+#ID171 <- subset(new, ID == 171)
+ID172 <- subset(new, ID == 172)
+ID173 <- subset(new, ID == 173)
+ID174 <- subset(new, ID == 174)
+ID175 <- subset(new, ID == 175)
+ID176 <- subset(new, ID == 176)
+ID177 <- subset(new, ID == 177)
+ID178 <- subset(new, ID == 178)
+ID179 <- subset(new, ID == 179)
+
+ID181 <- subset(new, ID == 181)
+ID182 <- subset(new, ID == 182)
+ID183 <- subset(new, ID == 183)
+#ID184 <- subset(new, ID == 184)
+ID185 <- subset(new, ID == 185)
+ID186 <- subset(new, ID == 186)
+ID187 <- subset(new, ID == 187)
+ID188 <- subset(new, ID == 188)
+ID189 <- subset(new, ID == 189)
+ID190 <- subset(new, ID == 190)
+ID191 <- subset(new, ID == 191)
+ID192 <- subset(new, ID == 192)
+ID193 <- subset(new, ID == 193)
+ID194 <- subset(new, ID == 194)
+ID195 <- subset(new, ID == 195)
+ID196 <- subset(new, ID == 196)
+ID197 <- subset(new, ID == 197)
+ID198 <- subset(new, ID == 198)
+ID199 <- subset(new, ID == 199)
+ID200 <- subset(new, ID == 200)
+ID201 <- subset(new, ID == 201)
+ID202 <- subset(new, ID == 202)
+
+ID204 <- subset(new, ID == 204)
+ID205 <- subset(new, ID == 205)
+ID206 <- subset(new, ID == 206)
+ID207 <- subset(new, ID == 207)
+#ID208 <- subset(new, ID == 208)
+ID209 <- subset(new, ID == 209)
+ID210 <- subset(new, ID == 210)
+#ID211 <- subset(new, ID == 211)
+ID212 <- subset(new, ID == 212)
+#ID213 <- subset(new, ID == 213)
+#ID214 <- subset(new, ID == 214)
+ID215 <- subset(new, ID == 215)
+ID216 <- subset(new, ID == 216)
+ID217 <- subset(new, ID == 217)
+ID218 <- subset(new, ID == 218)
+ID219 <- subset(new, ID == 219)
+#ID220 <- subset(new, ID == 220)
+ID221 <- subset(new, ID == 221)
+#ID222 <- subset(new, ID == 222)
+ID223 <- subset(new, ID == 223)
+ID224 <- subset(new, ID == 224)
+ID225 <- subset(new, ID == 225)
+ID226 <- subset(new, ID == 226)
+ID227 <- subset(new, ID == 227)
+
+ID229 <- subset(new, ID == 229)
+ID230 <- subset(new, ID == 230)
+ID231 <- subset(new, ID == 231)
+ID232 <- subset(new, ID == 232)
+ID233 <- subset(new, ID == 233)
+ID234 <- subset(new, ID == 234)
+
+ID237 <- subset(new, ID == 237)
+#ID238 <- subset(data, ID == 238)
+ID239 <- subset(new, ID == 239)
+ID240 <- subset(new, ID == 240)
+ID241 <- subset(new, ID == 241)
+ID242 <- subset(new, ID == 242)
+ID243 <- subset(new, ID == 243)
+ID244 <- subset(new, ID == 244)
+ID245 <- subset(new, ID == 245)
+
+ID247 <- subset(new, ID == 247)
+ID248 <- subset(new, ID == 248)
+#ID249 <- subset(data, ID == 249)
+ID250 <- subset(new, ID == 250)
+#ID251 <- subset(data, ID == 251)
+ID252 <- subset(new, ID == 252)
+ID253 <- subset(new, ID == 253)
+ID254 <- subset(new, ID == 254)
+ID255 <- subset(new, ID == 255)
+#ID256 <- subset(new, ID == 256)
+ID257 <- subset(new, ID == 257)
+ID258 <- subset(new, ID == 258)
+ID259 <- subset(new, ID == 259)
+ID260 <- subset(new, ID == 260)
+#ID261 <- subset(new, ID == 261)
+ID262 <- subset(new, ID == 262)
+ID263 <- subset(new, ID == 263)
+#ID264 <- subset(new, ID == 264)
+ID265 <- subset(new, ID == 265)
+#ID266 <- subset(new, ID == 266)
+#ID267 <- subset(new, ID == 267)
+ID268 <- subset(new, ID == 268)
+ID269 <- subset(new, ID == 269)
+
+ID271 <- subset(new, ID == 271)
+
+ID273 <- subset(new, ID == 273)
+#ID274 <- subset(new, ID == 274)
+ID275 <- subset(new, ID == 275)
+
+ID277 <- subset(new, ID == 277)
+ID278 <- subset(new, ID == 278)
+ID279 <- subset(new, ID == 279)
+ID280 <- subset(new, ID == 280)
+#ID281 <- subset(new, ID == 281)
+#ID282 <- subset(new, ID == 282)
+ID283 <- subset(new, ID == 283)
+ID284 <- subset(new, ID == 284)
+ID285 <- subset(new, ID == 285)
+
+ID287 <- subset(new, ID == 287)
+ID288 <- subset(new, ID == 288)
+ID289 <- subset(new, ID == 289)
+
+ID291 <- subset(new, ID == 291)
+#ID292 <- subset(new, ID == 292)
+ID293 <- subset(new, ID == 293)
+ID294 <- subset(new, ID == 294)
+ID295 <- subset(new, ID == 295)
+ID296 <- subset(new, ID == 296)
+ID297 <- subset(new, ID == 297)
+ID298 <- subset(new, ID == 298)
+ID299 <- subset(new, ID == 299)
+ID300 <- subset(new, ID == 300)
+ID301 <- subset(new, ID == 301)
+ID302 <- subset(new, ID == 302)
+ID303 <- subset(new, ID == 303)
+ID304 <- subset(new, ID == 304)
+ID305 <- subset(new, ID == 305)
+ID306 <- subset(new, ID == 306)
+ID307 <- subset(new, ID == 307)
+#ID308 <- subset(new, ID == 308)
+#ID309 <- subset(new, ID == 309)
+ID310 <- subset(new, ID == 310)
+ID311 <- subset(new, ID == 311)
+#ID312 <- subset(new, ID == 312)
+#ID313 <- subset(new, ID == 313)
+#ID314 <- subset(new, ID == 314)
+
+ID316 <- subset(new, ID == 316)
+ID317 <- subset(new, ID == 317)
+#ID318 <- subset(new, ID == 318)
+ID319 <- subset(new, ID == 319)
+
+ID321 <- subset(new, ID == 321)
+ID322 <- subset(new, ID == 322)
+#ID323 <- subset(new, ID == 323)
+ID324 <- subset(new, ID == 324)
+ID325 <- subset(new, ID == 325)
+ID326 <- subset(new, ID == 326)
+ID327 <- subset(new, ID == 327)
+ID328 <- subset(new, ID == 328) 
+ID329 <- subset(new, ID == 329)
+ID330 <- subset(new, ID == 330)
+ID331 <- subset(new, ID == 331)
+ID332 <- subset(new, ID == 332)
+ID333 <- subset(new, ID == 333)
+#ID334 <- subset(new, ID == 334)
+#ID335 <- subset(new, ID == 335)
+#ID336 <- subset(new, ID == 336)
+
+ID338 <- subset(new, ID == 338)
+#ID339 <- subset(new, ID == 339)
+
+ID341 <- subset(new, ID == 341)
+ID342 <- subset(new, ID == 342)
+ID343 <- subset(new, ID == 343)
+ID344 <- subset(new, ID == 344)
+#ID345 <- subset(new, ID == 345)
+
+#ID347 <- subset(new, ID == 347)
+ID348 <- subset(new, ID == 348)
+ID349 <- subset(new, ID == 349)
+ID350 <- subset(new, ID == 350)
+#ID351 <- subset(new, ID == 351)
+
+ID353 <- subset(new, ID == 353)
+ID354 <- subset(new, ID == 354)
+ID355 <- subset(new, ID == 355)
+ID356 <- subset(new, ID == 356)
+ID357 <- subset(new, ID == 357)
+#ID358 <- subset(new, ID == 358)
+
+##### Saving individual ID's to csv file AND folder #####
+write.csv(ID101, "ID101.csv")
+write.csv(ID102, "ID102.csv")
+write.csv(ID103, "ID103.csv")
+write.csv(ID104, "ID104.csv")
+write.csv(ID105, "ID105.csv")
+write.csv(ID106, "ID106.csv")
+write.csv(ID107, "ID107.csv")
+write.csv(ID108, "ID108.csv")
+write.csv(ID109, "ID109.csv")
+write.csv(ID110, "ID110.csv")
+write.csv(ID111, "ID111.csv")
+write.csv(ID112, "ID112.csv")
+write.csv(ID113, "ID113.csv")
+write.csv(ID114, "ID114.csv")
+write.csv(ID115, "ID115.csv")
+write.csv(ID116, "ID116.csv")
+write.csv(ID117, "ID117.csv")
+write.csv(ID118, "ID118.csv")
+write.csv(ID120, "ID120.csv")
+write.csv(ID121, "ID121.csv")
+write.csv(ID122, "ID122.csv")
+write.csv(ID123, "ID123.csv")
+write.csv(ID124, "ID124.csv")
+write.csv(ID125, "ID125.csv")
+write.csv(ID126, "ID126.csv")
+write.csv(ID127, "ID127.csv")
+write.csv(ID128, "ID128.csv")
+write.csv(ID129, "ID129.csv")
+write.csv(ID131, "ID131.csv")
+write.csv(ID132, "ID132.csv")
+write.csv(ID133, "ID133.csv")
+write.csv(ID134, "ID134.csv")
+write.csv(ID135, "ID135.csv")
+write.csv(ID136, "ID136.csv")
+write.csv(ID137, "ID137.csv")
+write.csv(ID139, "ID139.csv")
+write.csv(ID141, "ID141.csv")
+write.csv(ID142, "ID142.csv")
+write.csv(ID143, "ID143.csv")
+write.csv(ID144, "ID144.csv")
+write.csv(ID146, "ID146.csv")
+write.csv(ID147, "ID147.csv")
+write.csv(ID149, "ID149.csv")
+write.csv(ID151, "ID151.csv")
+write.csv(ID152, "ID152.csv")
+write.csv(ID154, "ID153.csv")
+write.csv(ID154, "ID154.csv")
+write.csv(ID155, "ID155.csv")
+write.csv(ID156, "ID156.csv")
+write.csv(ID157, "ID157.csv")
+write.csv(ID158, "ID158.csv")
+write.csv(ID159, "ID159.csv")
+write.csv(ID161, "ID161.csv")
+write.csv(ID162, "ID162.csv")
+write.csv(ID167, "ID167.csv")
+write.csv(ID169, "ID169.csv")
+write.csv(ID170, "ID170.csv")
+write.csv(ID172, "ID172.csv")
+write.csv(ID173, "ID173.csv")
+write.csv(ID174, "ID174.csv")
+write.csv(ID175, "ID175.csv")
+write.csv(ID176, "ID176.csv")
+write.csv(ID177, "ID177.csv")
+write.csv(ID178, "ID178.csv")
+write.csv(ID179, "ID179.csv")
+write.csv(ID181, "ID181.csv")
+write.csv(ID182, "ID182.csv")
+write.csv(ID183, "ID183.csv")
+
+write.csv(ID185, "ID185.csv")
+write.csv(ID186, "ID186.csv")
+write.csv(ID187, "ID187.csv")
+write.csv(ID188, "ID188.csv")
+write.csv(ID189, "ID189.csv")
+write.csv(ID190, "ID190.csv")
+write.csv(ID191, "ID191.csv")
+write.csv(ID192, "ID192.csv")
+write.csv(ID193, "ID193.csv")
+write.csv(ID194, "ID194.csv")
+write.csv(ID195, "ID195.csv")
+write.csv(ID196, "ID196.csv")
+write.csv(ID197, "ID197.csv")
+write.csv(ID198, "ID198.csv")
+write.csv(ID199, "ID199.csv")
+write.csv(ID200, "ID200.csv")
+write.csv(ID201, "ID201.csv")
+write.csv(ID202, "ID202.csv")
+write.csv(ID204, "ID204.csv")
+write.csv(ID205, "ID205.csv")
+write.csv(ID206, "ID206.csv")
+write.csv(ID207, "ID207.csv")
+write.csv(ID209, "ID209.csv")
+write.csv(ID210, "ID210.csv")
+write.csv(ID212, "ID212.csv")
+write.csv(ID215, "ID215.csv")
+write.csv(ID216, "ID216.csv")
+write.csv(ID217, "ID217.csv")
+write.csv(ID218, "ID218.csv")
+write.csv(ID219, "ID219.csv")
+write.csv(ID221, "ID221.csv")
+write.csv(ID223, "ID223.csv")
+write.csv(ID224, "ID224.csv")
+write.csv(ID225, "ID225.csv")
+write.csv(ID226, "ID226.csv")
+write.csv(ID227, "ID227.csv")
+write.csv(ID229, "ID229.csv")
+write.csv(ID230, "ID230.csv")
+write.csv(ID231, "ID231.csv")
+write.csv(ID232, "ID232.csv")
+write.csv(ID233, "ID233.csv")
+write.csv(ID234, "ID234.csv")
+write.csv(ID237, "ID237.csv")
+write.csv(ID239, "ID239.csv")
+write.csv(ID240, "ID240.csv")
+write.csv(ID241, "ID241.csv")
+write.csv(ID242, "ID242.csv")
+write.csv(ID243, "ID243.csv")
+write.csv(ID244, "ID244.csv")
+write.csv(ID245, "ID245.csv")
+write.csv(ID247, "ID247.csv")
+write.csv(ID248, "ID248.csv")
+write.csv(ID250, "ID250.csv")
+write.csv(ID252, "ID252.csv")
+write.csv(ID253, "ID253.csv")
+write.csv(ID254, "ID254.csv")
+write.csv(ID255, "ID255.csv")
+write.csv(ID257, "ID257.csv")
+write.csv(ID258, "ID258.csv")
+write.csv(ID259, "ID259.csv")
+write.csv(ID260, "ID260.csv")
+write.csv(ID262, "ID262.csv")
+write.csv(ID263, "ID263.csv")
+write.csv(ID265, "ID265.csv")
+write.csv(ID268, "ID268.csv")
+write.csv(ID269, "ID269.csv")
+write.csv(ID271, "ID271.csv")
+write.csv(ID273, "ID273.csv")
+write.csv(ID275, "ID275.csv")
+write.csv(ID277, "ID277.csv")
+write.csv(ID278, "ID278.csv")
+write.csv(ID279, "ID279.csv")
+write.csv(ID280, "ID280.csv")
+write.csv(ID283, "ID283.csv")
+write.csv(ID284, "ID284.csv")
+write.csv(ID285, "ID285.csv")
+write.csv(ID287, "ID287.csv")
+write.csv(ID288, "ID288.csv")
+write.csv(ID289, "ID289.csv")
+write.csv(ID291, "ID291.csv")
+write.csv(ID293, "ID293.csv")
+write.csv(ID294, "ID294.csv")
+write.csv(ID295, "ID295.csv")
+write.csv(ID296, "ID296.csv")
+write.csv(ID297, "ID297.csv")
+write.csv(ID298, "ID298.csv")
+write.csv(ID299, "ID299.csv")
+write.csv(ID300, "ID300.csv")
+write.csv(ID301, "ID301.csv")
+write.csv(ID302, "ID302.csv")
+write.csv(ID303, "ID303.csv")
+write.csv(ID304, "ID304.csv")
+write.csv(ID305, "ID305.csv")
+write.csv(ID306, "ID306.csv")
+write.csv(ID307, "ID307.csv")
+write.csv(ID310, "ID310.csv")
+write.csv(ID311, "ID311.csv")
+write.csv(ID316, "ID316.csv")
+write.csv(ID317, "ID317.csv")
+write.csv(ID319, "ID319.csv")
+write.csv(ID321, "ID321.csv")
+write.csv(ID322, "ID322.csv")
+write.csv(ID324, "ID324.csv")
+write.csv(ID325, "ID325.csv")
+write.csv(ID326, "ID326.csv")
+write.csv(ID327, "ID327.csv")
+write.csv(ID328, "ID328.csv")
+write.csv(ID329, "ID329.csv")
+write.csv(ID330, "ID330.csv")
+write.csv(ID331, "ID331.csv")
+write.csv(ID332, "ID332.csv")
+write.csv(ID333, "ID333.csv")
+write.csv(ID338, "ID338.csv")
+write.csv(ID341, "ID341.csv")
+write.csv(ID342, "ID342.csv")
+write.csv(ID343, "ID343.csv")
+write.csv(ID344, "ID344.csv")
+write.csv(ID348, "ID348.csv")
+write.csv(ID349, "ID349.csv")
+write.csv(ID350, "ID350.csv")
+write.csv(ID353, "ID353.csv")
+write.csv(ID354, "ID354.csv")
+write.csv(ID355, "ID355.csv")
+write.csv(ID356, "ID356.csv")
+write.csv(ID357, "ID357.csv")
+
+
+##### End of Step 2: Notes to be done before opening QR_step3.R #####
+# Next step: Opened each ID's csv file to check for accuracy and ensure data is within the 12-month window. A couple IDs (i.e., 101) continue
+# going to the gym after the studies 12-months and future dates needed to be removed
+```
+
+
+8.	**QR_step3.R:**  Each waves clean csv file (e.g., wave1_qr_clean.csv) was loaded into r 
+* Data was aggregated and summed so that the resulting file included a single row of each ID with each months class attendance summed for that particular ID
+* A Total class attendance column was created at the end 
+* “Wave” column was added
+* Names of month was changed from jan, feb … into month 1 month 2 … 
+  + This was different for even and odd months – obviously
+  + Order of months/columns were reordered 
+* Results were then saved for each individual wave as: w1_final.csv
+* In this file some “visualization” was done for plotting – though this is insignificant for the data processing steps.
+
+```{r eval = FALSE, linewidth=50}
+# Aggregating and formating data #
+##### Pulling in the data #####
+# Get wave 1 data
+setwd("C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave1")
+w1_data <- read.csv("wave1_qr_clean.csv")
+# Get wave 2 data
+setwd("C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave2")
+w2_data <- read.csv("wave2_qr_clean.csv")
+# Get wave 3 data
+setwd("C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave3")
+w3_data <- read.csv("wave3_qr_clean.csv")
+# Get wave 4 data
+setwd("C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave4")
+w4_data <- read.csv("wave4_qr_clean.csv")
+# Get wave 5 data
+setwd("C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave5")
+w5_data <- read.csv("wave5_qr_clean.csv")
+# Get wave 6 data
+setwd("C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave6")
+w6_data <- read.csv("wave6_qr_clean.csv")
+
+##### Preparing and Processing the data to aggregate #####
+
+# The Below codes aggregates each months class attendance by ID. Final variable includes 1 row for each ID with month totals 
+w1_final <- w1_data[-c(1,3,4,5,6)]                          # Makes dataframe of just the ID's and months
+w1_final <- aggregate(.~ID, w1_final, sum)               # aggregates total for each month and YTD
+w1_final$Total_YTD <- rowSums(w1_final[-1])            # This [-1] is to make sure the ID # isn't summed as well
+
+w2_final <- w2_data[-c(1,3,4,5,6)]                         
+w2_final <- aggregate(.~ID, w2_final, sum)              
+w2_final$Total_YTD <- rowSums(w2_final[-1])            
+
+w3_final <- w3_data[-c(1,3,4,5,6)]                         
+w3_final <- aggregate(.~ID, w3_final, sum)              
+w3_final$Total_YTD <- rowSums(w3_final[-1]) 
+
+w4_final <- w4_data[-c(1,3,4,5,6)]                         
+w4_final <- aggregate(.~ID, w4_final, sum)              
+w4_final$Total_YTD <- rowSums(w4_final[-1]) 
+
+w5_final <- w5_data[-c(1,3,4,5,6)]                         
+w5_final <- aggregate(.~ID, w5_final, sum)              
+w5_final$Total_YTD <- rowSums(w5_final[-1]) 
+
+w6_final <- w6_data[-c(1,3,4,5,6)]                         
+w6_final <- aggregate(.~ID, w6_final, sum)              
+w6_final$Total_YTD <- rowSums(w6_final[-1]) 
+
+# Adds column indicating wave
+w1_final$wave <- rep(1, nrow(w1_final))
+w2_final$wave <- rep(2, nrow(w2_final))
+w3_final$wave <- rep(3, nrow(w3_final))
+w4_final$wave <- rep(4, nrow(w4_final))
+w5_final$wave <- rep(5, nrow(w5_final))
+w6_final$wave <- rep(6, nrow(w6_final))
+
+# Labels Month 1, month 2 ... for each wave
+colnames(w1_final) <- c("ID", "Month1", "Month2", "Month3", "Month4", "Month5", "Month6", "Month7", "Month8", "Month9", "Month10", "Month11", "Month12", "YearAVG", "wave")
+colnames(w3_final) <- c("ID", "Month1", "Month2", "Month3", "Month4", "Month5", "Month6", "Month7", "Month8", "Month9", "Month10", "Month11", "Month12", "YearAVG", "wave")
+colnames(w5_final) <- c("ID", "Month1", "Month2", "Month3", "Month4", "Month5", "Month6", "Month7", "Month8", "Month9", "Month10", "Month11", "Month12", "YearAVG", "wave")
+colnames(w2_final) <- c("ID", "Month9", "Month10", "Month11", "Month12", "Month1", "Month2", "Month3", "Month4", "Month5", "Month6", "Month7", "Month8", "YearAVG", "wave")
+colnames(w4_final) <- c("ID", "Month9", "Month10", "Month11", "Month12", "Month1", "Month2", "Month3", "Month4", "Month5", "Month6", "Month7", "Month8", "YearAVG", "wave")
+colnames(w6_final) <- c("ID", "Month9", "Month10", "Month11", "Month12", "Month1", "Month2", "Month3", "Month4", "Month5", "Month6", "Month7", "Month8", "YearAVG", "wave")
+
+# Puts Waves 2,4,6 columns in correct order ("month1, month2...) and puts "wave" into the 2nd column position
+w1_final <- w1_final[c(1,15,2,3,4,5,6,7,8,9,10,11,12,13,14)]
+w2_final <- w2_final[c(1,15,6,7,8,9,10,11,12,13,2,3,4,5,14)]
+w3_final <- w3_final[c(1,15,2,3,4,5,6,7,8,9,10,11,12,13,14)]
+w4_final <- w4_final[c(1,15,6,7,8,9,10,11,12,13,2,3,4,5,14)]
+w5_final <- w5_final[c(1,15,2,3,4,5,6,7,8,9,10,11,12,13,14)]
+w6_final <- w6_final[c(1,15,6,7,8,9,10,11,12,13,2,3,4,5,14)]
+
+
+
+
+# Creates a master file and saves it
+master <- rbind(w1_final, w2_final, w3_final, w4_final, w5_final, w6_final)
+setwd("C:/Users/jadamek2/Desktop/LAB_NUC/QR_data")
+write.csv(master, "QR_master.csv")
+
+# Writes final data as a csv.
+write.csv(w1_final, "w1_final.csv")
+write.csv(w2_final, "w2_final.csv")
+write.csv(w3_final, "w3_final.csv")
+write.csv(w4_final, "w4_final.csv")
+write.csv(w5_final, "w5_final.csv")
+write.csv(w6_final, "w6_final.csv")
+
+
+########## Visualization ############
+
+data <- master
+# Taking the mean of each month by wave
+m1 <- rbind(mean(data$Month1[data$wave == 1]), mean(data$Month1[data$wave == 2]), mean(data$Month1[data$wave == 3]),
+            mean(data$Month1[data$wave == 4]), mean(data$Month1[data$wave == 5]), mean(data$Month1[data$wave == 6]))
+m2 <- rbind(mean(data$Month2[data$wave == 1]), mean(data$Month2[data$wave == 2]), mean(data$Month2[data$wave == 3]),
+            mean(data$Month2[data$wave == 4]), mean(data$Month2[data$wave == 5]), mean(data$Month2[data$wave == 6]))
+m3 <- rbind(mean(data$Month3[data$wave == 1]), mean(data$Month3[data$wave == 2]), mean(data$Month3[data$wave == 3]),
+            mean(data$Month3[data$wave == 4]), mean(data$Month3[data$wave == 5]), mean(data$Month3[data$wave == 6]))
+m4 <- rbind(mean(data$Month4[data$wave == 1]), mean(data$Month4[data$wave == 2]), mean(data$Month4[data$wave == 3]),
+            mean(data$Month4[data$wave == 4]), mean(data$Month4[data$wave == 5]), mean(data$Month4[data$wave == 6]))
+m5 <- rbind(mean(data$Month5[data$wave == 1]), mean(data$Month5[data$wave == 2]), mean(data$Month5[data$wave == 3]),
+            mean(data$Month5[data$wave == 4]), mean(data$Month5[data$wave == 5]), mean(data$Month5[data$wave == 6]))
+m6 <- rbind(mean(data$Month6[data$wave == 1]), mean(data$Month6[data$wave == 2]), mean(data$Month6[data$wave == 3]),
+            mean(data$Month6[data$wave == 4]), mean(data$Month6[data$wave == 5]), mean(data$Month6[data$wave == 6]))
+m7 <- rbind(mean(data$Month7[data$wave == 1]), mean(data$Month7[data$wave == 2]), mean(data$Month7[data$wave == 3]),
+            mean(data$Month7[data$wave == 4]), mean(data$Month7[data$wave == 5]), mean(data$Month7[data$wave == 6]))
+m8 <- rbind(mean(data$Month8[data$wave == 1]), mean(data$Month8[data$wave == 2]), mean(data$Month8[data$wave == 3]),
+            mean(data$Month8[data$wave == 4]), mean(data$Month8[data$wave == 5]), mean(data$Month8[data$wave == 6]))
+m9 <- rbind(mean(data$Month9[data$wave == 1]), mean(data$Month9[data$wave == 2]), mean(data$Month9[data$wave == 3]),
+            mean(data$Month9[data$wave == 4]), mean(data$Month9[data$wave == 5]), mean(data$Month9[data$wave == 6]))
+m10 <- rbind(mean(data$Month10[data$wave == 1]), mean(data$Month10[data$wave == 2]), mean(data$Month10[data$wave == 3]),
+             mean(data$Month10[data$wave == 4]), mean(data$Month10[data$wave == 5]), mean(data$Month10[data$wave == 6]))
+m11 <- rbind(mean(data$Month11[data$wave == 1]), mean(data$Month11[data$wave == 2]), mean(data$Month11[data$wave == 3]),
+             mean(data$Month11[data$wave == 4]), mean(data$Month11[data$wave == 5]), mean(data$Month11[data$wave == 6]))
+m12 <- rbind(mean(data$Month12[data$wave == 1]), mean(data$Month12[data$wave == 2]), mean(data$Month12[data$wave == 3]),
+             mean(data$Month12[data$wave == 4]), mean(data$Month12[data$wave == 5]), mean(data$Month12[data$wave == 6]))
+
+# Prepare the variables to be plotted
+wave <- cbind(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12)
+colnames(wave) <- paste("Month", 1:12)
+rownames(wave) <- paste("Wave", 1:6)
+master <- master[, -c(1,2,15)]
+monthAVGc <- colMeans(master, na.rm = TRUE)
+
+# Plotting the main master plot
+plot(monthAVGc,
+     main = "Average CLASSES per Month",
+     xlab = "Months",
+     ylab = "Average vists",
+     sub = "Across all waves", 
+     pch = 15,
+     col = "blue")
+legend("topright",legend=c("Average across waves"),
+       text.col=c("black"),pch=c(15),col=c("blue"))
+
+# Plotting the data
+par(mfrow=c(2,3))
+plot(wave[1,],
+     main = "Wave 1: Average CLASSES per Month",
+     xlab = "Months",
+     ylab = "Average CLASSES",
+     pch = 15,
+     col = "black")
+legend("topright",legend=c("January = M12"),
+       text.col=c("blue"),pch=c(17),col=c("black"))
+axis(1, seq(1,12,1))
+plot(wave[3,],
+     main = "Wave 3: Average CLASSES per Month",
+     xlab = "Months",
+     ylab = "Average CLASSES",
+     pch = 15,
+     col = "black")
+legend("topright",legend=c("January = M12"),
+       text.col=c("blue"),pch=c(17),col=c("black"))
+axis(1, seq(1,12,1))
+plot(wave[5,],
+     main = "Wave 5: Average CLASSES per Month",
+     xlab = "Months",
+     ylab = "Average CLASSES",
+     pch = 15,
+     col = "black")
+legend("topright",legend=c("January = M12"),
+       text.col=c("blue"),pch=c(17),col=c("black"))
+axis(1, seq(1,12,1))
+plot(wave[2,],
+     main = "Wave 2: Average CLASSES per Month",
+     xlab = "Months",
+     ylab = "Average CLASSES",
+     pch = 15,
+     col = "red")
+legend("topright",legend=c("January = M8"),
+       text.col=c("blue"),pch=c(17),col=c("red"))
+axis(1, seq(1,12,1))
+plot(wave[4,],
+     main = "Wave 4: Average CLASSES per Month",
+     xlab = "Months",
+     ylab = "Average CLASSES",
+     pch = 15,
+     col = "red")
+legend("topright",legend=c("January = M8"),
+       text.col=c("blue"),pch=c(17),col=c("red"))
+axis(1, seq(1,12,1))
+plot(wave[6,],
+     main = "Wave 6: Average CLASSES per Month",
+     xlab = "Months",
+     ylab = "Average CLASSES",
+     pch = 15,
+     col = "red")
+legend("topright",legend=c("Covid: M11 & M12"),
+       text.col=c("blue"),pch=c(17),col=c("red"))
+axis(1, seq(1,12,1))
+
+```
+
+
+9.	**QR_classes.R:** Each waves clean csv file (e.g., wave1_qr_clean.csv) was loaded into r 
+* “wave” column was added and names of month was changed -> see c. and d. above
+  + SIDE NOTE: The reason for repeating these two steps again is that it made it easier to aggregate the data first, then performed c. and d. in QR_step3.R 
+  + In this step, we don’t want to work with the aggregated data so we’re pulling in the non-modified csv file (e.g., wave1_qr_clean.csv) and thus have to repeat those 2 data cleaning steps.
+* Waves were then bind together for a master file containing all 6 waves.
+  + Saved as: QR_master_class.csv
+  + Each individual wave was also saved as w1_class.csv
+* QR_master_class.csv: File was open externally and classes were then cleaned for the “other” responses using rules per SPM:
+  + For those with “other” response – if they did NOT have a keyswipe that day give them a tallied variable that will be used in the future.
+  + Neighborhood walking does not count UNLESS it was during COVID time
+  + the unique responses for other may have some commonalities. So you can probably break them down
+  + COVID time online classes should only list the class or online class.
+  + This was all cleaned manually in excel. In total n =357 removed
+  + **SEE “List of classes removed & recoded.xlsx” file to see what was removed and what was recoded 
+  + Saved as: QR_master_class_cleaned
+* QR_Classes.R: the class cleaned filed above was loaded back into R
+  + Two files created: Class count by wave and class count overall
+  + Saved as: Class_frequency_bywave.csv
+  + Saved as: Class_frequency_overall.csv
+  
+
+```{r eval = FALSE,  linewidth=50}
+##### Libraries #####
+library(dplyr)
+
+##### Side Task: Prepare separate file containing only classes #####
+# Creates a file containing ID, month, day, year, class for each wave 
+## Pulls in each waves data
+setwd("C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave1")
+w1_class <- read.csv("wave1_qr_clean.csv")
+setwd("C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave2")
+w2_class <- read.csv("wave2_qr_clean.csv")
+setwd("C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave3")
+w3_class <- read.csv("wave3_qr_clean.csv")
+setwd("C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave4")
+w4_class <- read.csv("wave4_qr_clean.csv")
+setwd("C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave5")
+w5_class <- read.csv("wave5_qr_clean.csv")
+setwd("C:/Users/jadamek2/Desktop/LAB_NUC/QR_data/Wave6")
+w6_class <- read.csv("wave6_qr_clean.csv")
+
+# Adds column indicating wave
+w1_class$wave <- rep(1, nrow(w1_class))
+w2_class$wave <- rep(2, nrow(w2_class))
+w3_class$wave <- rep(3, nrow(w3_class))
+w4_class$wave <- rep(4, nrow(w4_class))
+w5_class$wave <- rep(5, nrow(w5_class))
+w6_class$wave <- rep(6, nrow(w6_class))
+
+# Puts Waves 2,4,6 columns in correct order ("month1, month2...) and puts "wave" into the 2nd column position
+w1_class <- w1_class[c(1,2,19,3,4,5,6,7,8,9,10,11,12,13,14,18,16,17,18)]
+w2_class <- w2_class[c(1,2,19,3,4,5,6,11,12,13,14,15,16,17,18,7,8,9,10)]
+w3_class <- w3_class[c(1,2,19,3,4,5,6,7,8,9,10,11,12,13,14,18,16,17,18)]
+w4_class <- w4_class[c(1,2,19,3,4,5,6,11,12,13,14,15,16,17,18,7,8,9,10)]
+w5_class <- w5_class[c(1,2,19,3,4,5,6,7,8,9,10,11,12,13,14,18,16,17,18)]
+w6_class <- w6_class[c(1,2,19,3,4,5,6,11,12,13,14,15,16,17,18,7,8,9,10)]
+
+# Labels Month 1, month 2 ... for each wave
+colnames(w1_class) <- c("run", "ID", "wave", "Class","Month", "day", "year", "Month1", "Month2", "Month3", "Month4", "Month5", "Month6", "Month7", "Month8", "Month9", "Month10", "Month11", "Month12")
+colnames(w3_class) <- c("run", "ID", "wave", "Class","Month", "day", "year", "Month1", "Month2", "Month3", "Month4", "Month5", "Month6", "Month7", "Month8", "Month9", "Month10", "Month11", "Month12")
+colnames(w5_class) <- c("run", "ID", "wave", "Class","Month", "day", "year", "Month1", "Month2", "Month3", "Month4", "Month5", "Month6", "Month7", "Month8", "Month9", "Month10", "Month11", "Month12")
+colnames(w2_class) <- c("run", "ID", "wave", "Class","Month", "day", "year", "Month1", "Month2", "Month3", "Month4", "Month5", "Month6", "Month7", "Month8", "Month9", "Month10", "Month11", "Month12")
+colnames(w4_class) <- c("run", "ID", "wave", "Class","Month", "day", "year", "Month1", "Month2", "Month3", "Month4", "Month5", "Month6", "Month7", "Month8", "Month9", "Month10", "Month11", "Month12")
+colnames(w6_class) <- c("run", "ID", "wave", "Class","Month", "day", "year", "Month1", "Month2", "Month3", "Month4", "Month5", "Month6", "Month7", "Month8", "Month9", "Month10", "Month11", "Month12")
+
+
+# Creates master dataframe of all waves and tallys them
+masterclass <- rbind(w1_class, w2_class, w3_class, w4_class, w5_class, w6_class)
+QR_count_bywave <- masterclass %>% count(wave, Class)
+
+
+## Saves file to directory #####
+setwd("C:/Users/jadamek2/Desktop/LAB_NUC/QR_data")
+write.csv(w1_class, "w1_class.csv")
+write.csv(w2_class, "w2_class.csv")
+write.csv(w3_class, "w3_class.csv")
+write.csv(w4_class, "w4_class.csv")
+write.csv(w5_class, "w5_class.csv")
+write.csv(w6_class, "w6_class.csv")
+write.csv(masterclass, "QR_master_class.csv")
+
+##### Cleaning the "other" class responses as per SPM rules (see document) ####
+## File QR_master_class.csv was open externally and classes were cleaned and saved as: QR_master_class_clean.csv
+## See QR_Class_Data_Processing.docx and List of classes removed & recoded.xlsx
+
+##### Importing cleanned class file back in ####
+setwd("S:/LAB_Documents/Visits_QR_data/QR_data/QR_Cleaned_Processed_Files")
+class_clean <- read.csv("QR_master_class_cleaned.csv")
+
+QR_count_bywave <- class_clean %>% count(wave, Class)
+QR_count_overall <- class_clean %>% count(Class)
+write.csv(QR_count_bywave, "Class_frequency_bywave.csv")
+write.csv(QR_count_overall, "Class_frequency_overall.csv")
+
+john <- data.frame(unique(class_clean$Class))
+colnames(john) <- "Classes"
+write.csv(john, "class_Descr.csv")
+
+```
+
+  
+  
+  
+Sean's Note (7/28/20 FLAM): Sean “Don’t worry about classes 4-hour splits” – its invalid with this data due to manual typing in. “The 4-hour rule is meant for the visits data”
+
+
+
+
+
+
+
+<!--chapter:end:01-QR_data.Rmd-->
+
+# Data Processing - Keyswipes Data
+
+1.	In -> CORTEX II/Data/PrimaryData-Attendance+Fitbit/Visit Data"
+* Opened up each waves raw file
+* Then opened up every individual ID file and added a column for their ID #
+  + Checked to make sure all data was refinery check in. 
+    1.	Anything else removed (e.g., childcare, corporate, WEST)
+  + Saved as: ID101.xlsx
+  + Previous raw file was kept as is and placed into Data\WaveX\Visit_Data\WaveX_visit data (mainly for Tiffs W1)
+
+2.	**Visits_pre.R**
+* Here we loaded in ALL the excel files in a specific folder and then bind them together in one data frame 
+* ** Wave3, for some reason this data was received differently from the refinery and is reflected in certain individual files. Use raw file BE FIT Dec – Jan.xls for reference.
+  + Files for ID’s 208, 211, 213, 222, 251 were deleted due to being blank
+  + ID’s 232, 224/225, 245, 256 had data in feb/2019 removed
+  + Wave4: Files for ID’s 214, 264, 282 were deleted due to being blank
+  
+```{r eval = FALSE,  linewidth=50}
+##### Libraries #####
+library(readxl)
+library(plyr)    # for binding multiple files
+library(dplyr)
+library(stringr) # for function str_replace_all
+
+
+##### Loading in multiple files and binding together ####
+setwd("C:/Users/jadamek2/Desktop/Visits/wave1")
+wave1 <- list.files(pattern = "*.xlsx", full.names = T)
+wave1 <- sapply(wave1, read_excel, simplify=FALSE) %>% bind_rows(.id = "ID")  # binding files together in one dataframe
+
+setwd("C:/Users/jadamek2/Desktop/Visits/wave2")
+wave2 <- list.files(pattern = "*.xlsx", full.names = T)
+wave2 <- sapply(wave2, read_excel, simplify=FALSE) %>% bind_rows(.id = "Client")
+
+setwd("C:/Users/jadamek2/Desktop/Visits/wave3")
+wave3 <- list.files(pattern = "*.xlsx", full.names = T)
+wave3 <- sapply(wave3, read_excel, simplify=FALSE) %>% bind_rows(.id = "Client")
+
+setwd("C:/Users/jadamek2/Desktop/Visits/wave4")
+wave4 <- list.files(pattern = "*.xlsx", full.names = T)
+wave4 <- sapply(wave4, read_excel, simplify=FALSE) %>% bind_rows(.id = "Client")
+
+setwd("C:/Users/jadamek2/Desktop/Visits/wave5")
+wave5 <- list.files(pattern = "*.xlsx", full.names = T)
+wave5 <- sapply(wave5, read_excel, simplify=FALSE) %>% bind_rows(.id = "Client")
+
+setwd("C:/Users/jadamek2/Desktop/Visits/wave6")
+wave6 <- list.files(pattern = "*.xlsx", full.names = T)
+wave6 <- sapply(wave6, read_excel, simplify=FALSE) %>% bind_rows(.id = "Client")
+```
+
+
+3.	**Visits_pre.R:** ##### Data cleaning #####
+* Changed class type for wave1$Date to match other waves
+* Cleaned the ID variable to remove the file name (e.g., ./215.xlsx -> 215)
+* Selected the needed columns (date,time,Id,payment)
+* Selected only visits from Be Fit Study. This ensured that things like childcare, corporate, or WEST swipes were not included in the database
+* Data was saved by wave as: wave1_cleaned.csv
+* File was open
+* ** Notes: 
+  + ID 285  7/5/2018 less than 4 hours
+  + ID 217 3/3/2018 less than 4 hours
+  + ID 217 3/17/2018 less than 4 hours
+  + ID 218 3/20/2018 less than 4 hours
+  + ID 218 3/27/2018 less than 4 hours
+  + ID 218 3/29/2018 less than 4 hours
+  + ID 218 4/9/2018 less than 4 hours
+  + ID 218 4/16/2018 less than 4 hours
+  + ID 218 11/26/2018 less than 4 hours
+  + ID 229 3/31/2018 less than 4 hours
+
+```{r eval = FALSE, linewidth=50}
+##### Libraries #####
+library(readxl)
+library(plyr)    # for binding multiple files
+library(dplyr)
+library(stringr) # for function str_replace_all
+
+
+##### Data Cleaning ####
+
+# Converts class type for Date to character for wave 1 so that its the same as wave 2-6
+wave1$Date <- as.character(wave1$Date)
+
+# Changes column name from Client to ID
+colnames(wave2)[5] <- "ID"
+colnames(wave3)[5] <- "ID"
+colnames(wave4)[5] <- "ID"
+colnames(wave5)[5] <- "ID"
+colnames(wave6)[5] <- "ID"
+
+# Clean ID column to only show ID# and not file extension 
+wave1$ID <- gsub(".*D","", wave1$ID)                # Removes everything before the number | gsub =before
+wave1$ID <- wave1$ID %>% str_replace_all('\\.', '') # Removes the period in the column
+wave1$ID <- sub("xlsx","", wave1$ID)                # Removes everything after the number   | sub = after
+
+wave2$ID <- gsub("/", "", wave2$ID)                 # Removes the / before the data
+wave2$ID <- wave2$ID %>% str_replace_all('\\.', '') 
+wave2$ID <- sub("xlsx","", wave2$ID)
+
+wave3$ID <- gsub("/","", wave3$ID)                
+wave3$ID <- wave3$ID %>% str_replace_all('\\.', '') 
+wave3$ID <- sub("xlsx","", wave3$ID) 
+
+wave4$ID <- gsub("/", "", wave4$ID)                
+wave4$ID <- wave4$ID %>% str_replace_all('\\.', '') 
+wave4$ID <- sub("xlsx","", wave4$ID) 
+
+wave5$ID <- gsub("/", "", wave5$ID)                
+wave5$ID <- wave5$ID %>% str_replace_all('\\.', '') 
+wave5$ID <- sub("xlsx","", wave5$ID) 
+
+wave6$ID <- gsub("/", "", wave6$ID)                
+wave6$ID <- wave6$ID %>% str_replace_all('\\.', '') 
+wave6$ID <- sub("xlsx","", wave6$ID) 
+
+# Removes the extra noise in the Time column
+## (.*) looks for any character 0 or more times until the first space, (?) is what makes it stop at the first space
+wave1$Time <- gsub(".*? ", " ", wave1$Time) 
+
+# Changes column "Check-In Time" to "Time" to remain consistent with the other waves
+colnames(wave1)[8] <- "Pricing Option"
+colnames(wave2)[6] <- "Time"
+colnames(wave3)[6] <- "Time"
+colnames(wave4)[6] <- "Time"
+colnames(wave5)[6] <- "Time"
+colnames(wave6)[6] <- "Time"
+
+# Select the needed columns (date,time,ID,Payment) then ensures dataset contains only those in Befit study
+w1 <- wave1[,c(1,3,2,8)]
+w1 <- subset(w1, `Pricing Option` == "Be Fit Study")
+
+w2 <- wave2[,c(1,5,6,7)]
+w2 <- subset(w2, `Pricing Option` == "Be Fit Study")
+
+w3 <- wave3[,c(1,5,6,7)]
+w3 <- subset(w3, `Pricing Option` == "Be Fit Study")
+
+w4 <- wave4[,c(1,5,6,7)]
+w4 <- subset(w4, `Pricing Option` == "Be Fit Study")
+
+w5 <- wave5[,c(1,5,6,7)]
+w5 <- subset(w5, `Pricing Option` == "Be Fit Study")
+
+w6 <- wave6[,c(1,5,6,7)]
+w6 <- subset(w6, `Pricing Option` == "Be Fit Study")
+
+# Writes the cleaned file to Visits folder
+setwd("C:/Users/jadamek2/Desktop/Visits")
+write.csv(w1, "wave1_cleaned.csv")
+write.csv(w2, "wave2_cleaned.csv")
+write.csv(w3, "wave3_cleaned.csv")
+write.csv(w4, "wave4_cleaned.csv")
+write.csv(w5, "wave5_cleaned.csv")
+write.csv(w6, "wave6_cleaned.csv")
+
+```
+
+4.	**Visits_Step1:**
+* Checked for ID’s that had duplicates and saved those duplicates by wave (e.g., wave1_duplicates.csv)
+* This file was open externally and dates were highlighted in the respectful wave1_cleaned.csv file
+* Dates were removed if <4 hours apart, otherwise they remained the same. Final file was saved as = wave1_final.csv
+  + Wave 1
+    1.	ID 115, 5/27/2017 - removed
+    2.	ID 115, 6/10/2017 - removed
+    3.	ID 115, 6/17/2017 - removed
+    4.	ID 115, 7/1/2017 - removed
+    5.	ID 115, 7/15/2017 - removed
+    6.	ID 115, 7/22/2017 - removed
+    7.	ID 115, 7/29/2017 - removed
+    8.	ID 115, 8/5/2017 - removed
+    9.	ID 115, 8/12/2017 - removed
+    10.	ID 116, 3/27/2017 – kept: both >4hrs apart
+    11.	ID 116, 3/29/2017 – kept: both >4hrs apart
+    12.	ID 116, 4/3/2017 – kept: both >4hrs apart
+    13.	ID 116, 4/12/2017 – kept: both >4hrs apart
+    14.	ID 116, 4/24/2017 – kept: both >4hrs apart
+    15.	ID 116, 4/26/2017 – kept: both >4hrs apart
+    16.	ID 132, 2/4/2017 - removed
+    17.	ID 135, 7/7/2017 – kept: both >4hrs apart
+    18.	ID 135, 12/20/2017 – kept: both >4hrs apart
+    19.	ID 141, 2/6/2017 – kept: both >4hrs apart
+    20.	ID 143, 3/3/2017 - removed
+    21.	ID 143, 3/10/2017 - removed
+    22.	ID 143, 4/14/2017 - removed
+    23.	ID 143, 4/21/2017 - removed
+    24.	ID 143, 5/5/2017 - removed
+    25.	ID 143, 5/12/2017 - removed
+    26.	ID 143, 5/19/2017 - removed
+    27.	ID 143, 6/2/2017 - removed
+    28.	ID 143, 6/16/2017 - removed
+    29.	ID 143, 6/30/2017 - removed
+    30.	ID 143, 7/7/2017 - removed
+    31.	ID 143, 8/4/2017 - removed
+    32.	ID 143, 8/11/2017 - removed
+    33.	ID 143, 8/18/2017 - removed
+    34.	ID 143, 9/1/2017 - removed
+    35.	ID 143, 10/30/2017 - removed
+    36.	ID 143, 11/6/2017 - removed
+    37.	ID 143, 11/13/2017 - removed
+    38.	ID 143, 11/20/2017 - removed
+    39.	ID 143, 11/27/2017 - removed
+    40.	ID 143, 12/4/2017 - removed
+    41.	ID 143, 12/11/2017 - removed
+    42.	ID 143, 12/18/2017 - removed
+    43.	ID 143, 1/8/2018 - removed
+    44.	ID 158, 4/24/2017 – kept: both >4hrs apart
+  + Wave 2
+    1.	ID 156, 3/19/2018 – kept: both >4hrs apart
+    2.	ID 156, 7/24/2017 - removed
+    3.	ID 156, 8/15/2017 - removed
+    4.	ID 167, 8/8/2017 - removed
+    5.	ID 169, 3/14/2018 – kept: both >4hrs apart
+    6.	ID 176, 6/17/2017 - removed
+    7.	ID 177, 9/11/2017 – kept: both >4hrs apart
+    8.	ID 177, 9/2/2017 - removed
+    9.	ID 178, 8/3/2017 - removed
+    10.	ID 178, 8/31/2017 - removed
+    11.	ID 179, 6/26/2017 - removed
+    12.	ID 182, 6/29/2017 - removed
+  + Wave 3
+    1.	ID 215, 5/14/2018 – kept: both >4hrs apart
+    2.	ID 215, 5/24/2018 – kept: both >4hrs apart
+    3.	ID 215, 6/18/2018 – kept: both >4hrs apart
+    4.	ID 215, 6/20/2018 – kept: both >4hrs apart
+    5.	ID 215, 6/21/2018 – kept: both >4hrs apart
+    6.	ID 215, 7/5/2018 – kept: both >4hrs apart
+    7.	ID 217, 3/17/2018 - removed
+    8.	ID 217, 3/29/2018 – kept: both >4hrs apart
+    9.	ID 217, 3/3/2018 - removed
+    10.	ID 217, 4/2/2018 - removed
+    11.	ID 217, 6/15/2018  – kept: both >4hrs apart
+    12.	ID 218, 11/14/2018 – kept: both >4hrs apart
+    13.	ID 218, 11/26/2018 - removed
+    14.	ID 218, 3/15/2018 – kept: both >4hrs apart
+    15.	ID 218, 3/20/2018 - removed
+    16.	ID 218, 3/27/2018 - removed
+    17.	ID 218, 3/29/2018 – removed 
+    18.	ID 218, 4/16/2018 - removed
+    19.	ID 218, 4/17/2018 – kept: both >4hrs apart
+    20.	ID 218, 4/9/2018 - removed
+    21.	ID 218, 5/21/2018 – removed 
+    22.	ID 218, 6/12/2018 - removed
+    23.	ID 218, 6/21/2018 – kept: both >4hrs apart
+    24.	ID 218, 6/7/2018 - removed
+    25.	ID 218, 8/6/2018 – kept: both >4hrs apart
+    26.	ID 224, 3/30/2018 - removed
+    27.	ID 229, 3/31/2018 - removed
+    28.	ID 230, 2/12/2018 - removed
+    29.	ID 230, 2/14/2018 – kept: both >4hrs apart
+    30.	ID 230, 2/8/2018 – kept: both >4hrs apart
+    31.	ID 232, 11/23/2018 – kept: both >4hrs apart
+    32.	ID 232, 3/28/2018 – kept: both >4hrs apart
+    33.	ID 232, 4/11/2018 – kept: both >4hrs apart
+    34.	ID 233, 3/9/2018 – kept: both >4hrs apart
+    35.	ID 248, 1/2/2019 – kept: both >4hrs apart
+    36.	ID 254, 3/12/2018 – kept: both >4hrs apart
+    37.	ID 254, 3/26/2018 – kept: both >4hrs apart
+    38.	ID 254, 4/3/2018 – removed 
+    39.	ID 256, 2/6/2018 - removed
+  + Wave 4/
+    1.	ID 285, 7/5/2018 - removed
+  + Wave 5
+    1.	ID 306, 2/5/2019 – removed
+    2.	ID 306, 3/19/2019 - removed
+  + Wave 6
+    1.	ID 358, 6/20/2019 – removed
+* Each “wave1_final.csv” was checked once again for formatting (date 48256) and 12-month range.
+* Wave1_final.csv is new master type file moving forward
+
+```{r eval = FALSE,  linewidth=50}
+
+library(dplyr)
+library(tidyr)
+
+# Set working directory and read in data
+setwd("C:/Users/jadamek2/Desktop/Visits")
+wave1 <- read.csv("wave1_cleaned.csv")
+wave2 <- read.csv("wave2_cleaned.csv")
+wave3 <- read.csv("wave3_cleaned.csv")
+wave4 <- read.csv("wave4_cleaned.csv")
+wave5 <- read.csv("wave5_cleaned.csv")
+wave6 <- read.csv("wave6_cleaned.csv")
+
+# Determining which ID's have duplicate check-In Dates
+check <- wave1 %>% group_by(ID,Date) %>% count(Date)
+w1d <- with(check, check[n > 1, ])
+
+check <- wave2 %>% group_by(ID,Date) %>% count(Date)
+w2d <- with(check, check[n > 1, ])
+
+check <- wave3 %>% group_by(ID,Date) %>% count(Date)
+w3d <- with(check, check[n > 1, ])
+
+check <- wave4 %>% group_by(ID,Date) %>% count(Date)
+w4d <- with(check, check[n > 1, ])
+
+check <- wave5 %>% group_by(ID,Date) %>% count(Date)
+w5d <- with(check, check[n > 1, ])
+
+check <- wave6 %>% group_by(ID,Date) %>% count(Date)
+w6d <- with(check, check[n > 1, ])
+
+# Writing file of all duplicate ID's to be checked
+write.csv(w1d, "wave1_duplicates.csv")
+write.csv(w2d, "wave2_duplicates.csv")
+write.csv(w3d, "wave3_duplicates.csv")
+write.csv(w4d, "wave4_duplicates.csv")
+write.csv(w5d, "wave5_duplicates.csv")
+write.csv(w6d, "wave6_duplicates.csv")
+
+##### See Data Processing Visits.docx 4.c ####
+# duplicate swipes on same day was checked for 4 hour rule
+
+# read in files after removing duplicates ####
+setwd("C:/Users/jadamek2/Desktop/Visits")
+wave1 <- read.csv("wave1_final.csv")
+wave2 <- read.csv("wave2_final.csv")
+wave3 <- read.csv("wave3_final.csv")
+wave4 <- read.csv("wave4_final.csv")
+wave5 <- read.csv("wave5_final.csv")
+wave6 <- read.csv("wave6_final.csv")
+```
+
+
+**** NEXT STEP IS TO MERGE QR AND VISITS TOGETHER BASED ON ID ****
+    
+
+<!--chapter:end:02-Keyswipes.Rmd-->
+
+# Data Processing - Merging QR & Keyswipe
+
+Merging data together
+
+a.	Read in final visit data from processing sheet (e.g., wave1_final.csv)
++ Added column indicating wave to each individual wave file prior to merging
++ Select columns: ID, Wave, Date, Pricing Option
++ Merged all wave files into new data frame: Visit_Master
++ Renamed ‘Pricing Option’ -> “Keyswipe”
++ Recoded “Be Fit Study” (which indicated a keyswipe) to “1”
+b.	For QR data, first we needed to import proper date format
++ Read in QR_CorrectDate.csv file 
++ Select columns “Run” and “CorrectDate”
++ Read in final QR data from processing sheet = QR_master_class_cleaned.csv
++ Merged the “CorrectDate” column to QR_master_class_cleaned file on the “Run” column 
++ Reordered the dataset to use only whats needed
++ Renamed “CorrectDate” to “Date”
++ Recoded “Class” to “1” 
+c.	Merging
++ Merged QR data and Keyswipe data on ID and Date
++ For all perfectly matching ID and Date this will be shown without any issues
++ For any observation where ID and Date did not match for QR and Keyswipe date => R will indicate this as NA in the column
++ Saved as: Final_Merged_raw.csv
+
+```{r eval=FALSE,  linewidth=50}
+##### Visits Data #####
+# Read in Visits data
+setwd("C:/Users/jadamek2/Desktop/LAB_NUC/Visits_QR_data/Visits")
+wave1_v <- read.csv("wave1_final.csv")
+wave2_v <- read.csv("wave2_final.csv")
+wave3_v <- read.csv("wave3_final.csv")
+wave4_v <- read.csv("wave4_final.csv")
+wave5_v <- read.csv("wave5_final.csv")
+wave6_v <- read.csv("wave6_final.csv")
+# Adds column indicating wave
+wave1_v$wave <- rep(1, nrow(wave1_v))
+wave2_v$wave <- rep(2, nrow(wave2_v))
+wave3_v$wave <- rep(3, nrow(wave3_v))
+wave4_v$wave <- rep(4, nrow(wave4_v))
+wave5_v$wave <- rep(5, nrow(wave5_v))
+wave6_v$wave <- rep(6, nrow(wave6_v))
+# Selects columns of interest
+wave1_v <- wave1_v[c(3,6,2,5)]
+wave2_v <- wave2_v[c(3,6,2,5)]
+wave3_v <- wave3_v[c(3,6,2,5)]
+wave4_v <- wave4_v[c(3,6,2,5)]
+wave5_v <- wave5_v[c(3,6,2,5)]
+wave6_v <- wave6_v[c(3,6,2,5)]
+# Merges all the waves into a single dataset
+visit_master <- rbind(wave1_v, wave2_v, wave3_v, wave4_v, wave5_v, wave6_v)
+colnames(visit_master)[4] <- "Keyswipe"  # Changes pricing.option column to keyswipes
+visit_master$Keyswipe <- "1"             # Give a value 1 to all valid swipes in dataset
+```
+
+
+# Cleaning
+
+a.	Cleanned wave.x and wave.y columns
++ Wave.x -> “Wave”
++ Wave.y was deleted
+b.	All NA’s -> Find and replace -> 0
++ Final cleaned saved as: Final_merged.csv
+
+```{r eval=FALSE, linewidth=50}
+##### QR Data #####
+# Read in QR data - for dates
+setwd("C:/Users/jadamek2/Desktop/LAB_NUC/Visits_QR_data/QR_data/QR_Cleaned_Processed_Files")
+data <- read.csv("QR_CorrectDate.csv")
+data <- data[c(1, 10)]
+
+# Read in QR master cleaned 
+setwd("C:/Users/jadamek2/Desktop/LAB_NUC/Visits_QR_data/QR_data")
+class_clean <- read.csv("QR_master_class_cleaned.csv")
+
+# Merge date format into QR file
+qr_merg <- merge(class_clean, data, by.x = "run", by.y = "Run")
+qr_master <- qr_merg[c(2,3,20,4)]
+colnames(qr_master)[3] <- "Date"
+qr_master$Class <- "1"  # Give a value 1 to all valid class attendence in dataset
+##### Merging Visits and QR Data #####
+final_merged <- merge(qr_master, visit_master, by = c("ID", "Date"), all = TRUE)
+final_merged <- final_merged[c(1,3,2,4,5,6)]
+setwd("C:/Users/jadamek2/Desktop/LAB_NUC/Visits_QR_data")
+write.csv(final_merged, "Final_merged_raw.csv")
+```
+
+
+# Aggregating
+
+a.	Read in Final_merged.csv
++ Selected only Class and Keyswipe column
++ Aggregated
++ Created a total combined column of class + keyswipes
+b.	Prepared to insert waves again
++ Copied wave 1 – 6 Id’s
++ Ran function to create wave column with correct ID
+c.	Saved as: Complete_Merged.csv
+
+```{r eval=FALSE,  linewidth=50}
+##### Aggregating #####
+
+# Get Data
+setwd("S:/LAB_Documents/Visits_QR_data")
+merg <- read.csv("Final_merged.csv")
+
+# The Below codes aggregates Class and keyswipes
+merg_select <- merg[-c(2,3)]                          # Makes dataframe of just the ID's class and keyswipe
+merg_select <- aggregate(.~ID, merg_select, sum)               
+merg_select$Total_Combined <- rowSums(merg_select[-1])            # This [-1] is to make sure the ID # isn't summed as well
+
+#Waves's
+wave1 <- c(100,	101,	102,	103,	104,	105,	106,	107,	108,	109,	110,	111,	112,	113,	114,	115,	116,	117,	118,	120,	121,	122,	123,
+           124,	125,	126,	127,	128,	129,	131,	132,	134,	135,	136,	137,	139,	141,	142,	143,	146,	147,	150,	151,	152,	153,	155,
+           157,	158,	161,	162)
+wave2 <- c(133, 138,  144,  149,  154,  156,  159,  160,  167,  168,  169,  170,  171,  172,  173,  174,  175,  176,  177,  178,  179,  181,  182,
+           183, 184,  185,  186,  187,  188,  189,  190,  191,  192,  193,  194,  195,  196,  197,  198,  199,  200,  201,  202,  204,  205,  206)
+wave3 <- c(207, 208,  209,  210,  211,  212,  213,  215,  216,  217,  218,  219,  220,  221,  222,  223,  224,  225,  226,  227,  229,  230,  231,
+           232, 233,  234,  237,  238,  239,  240,  241,  242,  243,  244,  245,  247,  248,  249,  250,  251,  252,  253,  254,  255,  256,  257, 
+           258)
+wave4 <- c(214,	259,	260,	261,	262,	263,	264,	265,	266,	267,	268,	269,	271,	273,	274,	275,	277,	278,	279,	280,	281,	282,	283,
+           284,	285,	287,	288,	289,	291)
+wave5 <- c(292,	293,	294,	295,	296,	297,	298,	299,	300,	301,	302,	303,	304,	305,	306,	307,	308,	309,	310,	311,	312,	313,	314)
+wave6 <- c(316,	317,	318,	319,	321,	322,	323,	324,	325,	326,	327,	328,	329,	330,	331,	332,	333,	334,	335,	336,	338,	339,	341,
+           342,	343,  344,	345,	347,	348,	349,	350,	351,	353,	354,	355,	356,	357,	358)
+
+
+#Identifing waves again
+merg_select$wave[merg_select$ID %in% wave1] <- 1
+merg_select$wave[merg_select$ID %in% wave2] <- 2
+merg_select$wave[merg_select$ID %in% wave3] <- 3
+merg_select$wave[merg_select$ID %in% wave4] <- 4
+merg_select$wave[merg_select$ID %in% wave5] <- 5
+merg_select$wave[merg_select$ID %in% wave6] <- 6
+
+merg_select <- merg_select[c(1,5,2,3,4)]
+
+write.csv(merg_select, "Complete_Merged.csv")
+
+
+```
+
+
+# Unique
+
+a.	Sean’s Unique visit request
++ Read in Final_merged.csv
++ Ran ifelse statement indicating that if Class == 1 (valid) AND keyswipe == 0 create a new column (unique_class) indicating “1” otherwise for all other occurrences “0”. 
++ This was then aggregated 
++ Saved as: Complete_Merged_unique.csv
++ Read into SPSS and saved as Total_Classes&Keyswipes.sav
+
+
+```{r eval=FALSE,  linewidth=50}
+setwd("S:/LAB_Documents/Visits_QR_data")
+uniq <- read.csv("Final_merged.csv")
+
+# If class is 1 but no overlap new column is a 1 otherwise its a 2
+uniq$unique_class <- ifelse(uniq$Class == 1 & uniq$Keyswipe == 0,  1, 0)
+
+
+uniq_ <- uniq[-c(2,3)]                          
+uniq_ <- aggregate(.~ID, uniq_, sum)              
+
+write.csv(uniq_, "Complete_Merged_unique.csv")
+```
+
+
+
+
+
+<!--chapter:end:03-Merge_Unique.Rmd-->
+
